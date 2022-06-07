@@ -4,8 +4,24 @@
       <div class="left">
         <h3>规划引领</h3>
         <div class="box" id="review_box">
-          <ul id="comment1"></ul>
-          <ul id="comment2"></ul>
+          <VueSeamlessScroll
+            :data="lefttopdata"
+            :class-option="seamlessScrollOption"
+            style="
+              height: 300px;
+              overflow: hidden;
+              width: 400px;
+              color: white;
+              font-size: 18px;
+              text-align: center;
+            "
+          >
+            <ul id="tbody">
+              <li v-for="(item, index) in lefttopdata" :key="index">
+                {{ item }}
+              </li>
+            </ul>
+          </VueSeamlessScroll>
         </div>
         <h3>项目建设</h3>
         <ul class="thead">
@@ -14,9 +30,34 @@
           <span style="width: 100px">项目数</span>
           <span style="width: 100px">完成进度</span>
         </ul>
-        <div id="table_box">
-          <ul id="tbody"></ul>
-          <ul id="tbody1"></ul>
+        <div class="box" id="table_box">
+          <VueSeamlessScroll
+            :data="leftBottom"
+            :class-option="seamlessScrollOption"
+            style="
+              height: 300px;
+              overflow: hidden;
+              width: 400px;
+              color: white;
+              font-size: 18px;
+              text-align: center;
+            "
+          >
+            <ul id="comment1">
+              <li v-for="(item, index) in leftBottom" :key="index">
+                <span>{{ item.index }}</span>
+                <span>{{ item.position }}</span>
+                <span>{{ item.num }}</span>
+                <span>
+                  <span class="spanP">
+                    <div class="spanS1" :style="{ width: item.jingdu }">
+                      {{ item.jingdu }}
+                    </div>
+                  </span>
+                </span>
+              </li>
+            </ul>
+          </VueSeamlessScroll>
         </div>
       </div>
       <div class="center">
@@ -28,14 +69,14 @@
         <div class="tab-class">
           <!-- 菜单 -->
           <div class="tab-menu">
-            <div class="tab-menu-span">投放</div>
-            <div class="tab-menu-span">收集</div>
-            <div class="tab-menu-span">运输</div>
-            <div class="tab-menu-span">处置</div>
+            <div class="tab-menu-span" @click="tabContent = 0">投放</div>
+            <div class="tab-menu-span" @click="tabContent = 1">收集</div>
+            <div class="tab-menu-span" @click="tabContent = 2">运输</div>
+            <div class="tab-menu-span" @click="tabContent = 3">处置</div>
           </div>
           <!-- tab list -->
           <div class="tab-list">
-            <div class="tab-list-span">
+            <div class="tab-list-span" v-show="tabContent === 0">
               <p>
                 <span class="name">收集车辆</span><span class="num">3214</span>
               </p>
@@ -61,7 +102,7 @@
                 <span class="name">收集车辆</span><span class="num">3214</span>
               </p>
             </div>
-            <div class="tab-list-span">
+            <div class="tab-list-span" v-show="tabContent === 1">
               <p>
                 <span class="name">定时定点小区</span
                 ><span class="num">5624</span>
@@ -95,7 +136,7 @@
                 ><span class="num">5624</span>
               </p>
             </div>
-            <div class="tab-list-span">
+            <div class="tab-list-span" v-show="tabContent === 2">
               <p>
                 <span class="name">劝导员数量</span
                 ><span class="num">8954</span>
@@ -129,7 +170,7 @@
                 ><span class="num">8954</span>
               </p>
             </div>
-            <div class="tab-list-span">
+            <div class="tab-list-span" v-show="tabContent === 3">
               <p>
                 <span class="name">省高标小区</span
                 ><span class="num">1562</span>
@@ -172,13 +213,71 @@
 
 <script>
 import * as echarts from "echarts";
+import VueSeamlessScroll from "vue-seamless-scroll";
 import "echarts-gl";
 export default {
+  components: {
+    VueSeamlessScroll,
+  },
   name: "HomeView",
+  computed: {
+    seamlessScrollOption() {
+      return {
+        step: 0.2, // 数值越大速度滚动越快
+        limitMoveNum: 2, // 开始无缝滚动的数据量 this.dataList.length
+        hoverStop: true, // 是否开启鼠标悬停stop
+        direction: 1, // 0向下 1向上 2向左 3向右
+        openWatch: true, // 开启数据实时监控刷新dom
+        singleHeight: 0, // 单步运动停止的高度(默认值0是无缝不停止的滚动) direction => 0/1
+        singleWidth: 0, // 单步运动停止的宽度(默认值0是无缝不停止的滚动) direction => 2/3
+        waitTime: 1000, // 单步运动停止的时间(默认值1000ms)
+      };
+    },
+  },
   data() {
     return {
       myChart: null,
+      tabContent: 0,
       color: ["#fecb9a", "#fefdce", "#fefa7d", "#cdccfb", "#cdf99d", "#fdcdcc"],
+      lefttopdata: [
+        "消息1 : 2006年1月John Resig等人创建了jQuery",
+        "消息1 : 2006年1月John Resig等人创建了jQuery",
+        "消息2 : 2007年7月，jQuery 1.1.3版发布",
+        "消息3 : 2008年5月，jQuery 1.2.6版发布",
+        "消息3 : 2008年5月，jQuery 1.2.6版发布",
+        "消息3 : 2008年5月，jQuery 1.2.6版发布",
+        "消息3 : 2008年5月，jQuery 1.2.6版发布",
+        "消息3 : 2008年5月，jQuery 1.2.6版发布",
+        "消息3 : 2008年5月，jQuery 1.2.6版发布",
+        "消息3 : 2008年5月，jQuery 1.2.6版发布",
+        "消息3 : 2008年5月，jQuery 1.2.6版发布",
+        "消息4 : 2010年1月，也是jQuery的四周年生日",
+      ],
+      leftBottom: [
+        { index: 1, position: "桐乡市", num: 5, jingdu: "10%" },
+        { index: 2, position: "桐乡市", num: 5, jingdu: "20%" },
+        { index: 3, position: "桐乡市", num: 5, jingdu: "30%" },
+        { index: 4, position: "桐乡市", num: 5, jingdu: "40%" },
+        { index: 5, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 6, position: "桐乡市", num: 5, jingdu: "60%" },
+        { index: 7, position: "桐乡市", num: 5, jingdu: "70%" },
+        { index: 8, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 9, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 10, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 12, position: "桐乡市", num: 5, jingdu: "50%" },
+      ],
     };
   },
   mounted() {
@@ -197,7 +296,7 @@ export default {
       this.myChart.showLoading();
       let mapName = "jx";
       // 引入JSON文件
-      this.$http.get("./jx.json").then((geoJson) => {
+      this.$http.get("jx.json").then((geoJson) => {
         const data = geoJson.data.features.map((item, index) => {
           const geoAreaName = item.properties.name; // geo文件中的地理名称
           return {
@@ -206,9 +305,13 @@ export default {
             selected: true,
             itemStyle: {
               areaColor: this.color[index] || "#046357",
+              opacity: 0.3, // 图形的不透明度 [ default: 1 ]
+              borderWidth: 1.5, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
+              borderColor: "#ffffff", // 图形描边的颜色。[ default: #333 ]
             },
           };
         });
+        console.log(data);
         echarts.registerMap(mapName, geoJson.data);
 
         // 隐藏动画加载效果。
@@ -289,7 +392,7 @@ export default {
               },
               itemStyle: {
                 // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
-                areaColor: "#00B2AC", // 地图板块的颜色
+                // areaColor: "#000", // 地图板块的颜色
                 opacity: 0.3, // 图形的不透明度 [ default: 1 ]
                 borderWidth: 1.5, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
                 borderColor: "#ffffff", // 图形描边的颜色。[ default: #333 ]
@@ -310,6 +413,18 @@ export default {
 };
 </script>
 <style lang="scss" scopd>
+.spanP {
+  border: solid 1px red;
+  height: 26px;
+  line-height: 26px;
+  display: flex;
+  justify-content: space-around;
+  .spanS1 {
+    background: red;
+    height: 26px;
+    color: #000;
+  }
+}
 .chart-wrapper {
   z-index: 1;
   width: 100%;
@@ -356,13 +471,15 @@ h3 {
 }
 #table_box {
   position: relative;
-  width: 400px;
+  // width: 400px;
   height: 375px;
   background-color: transparent;
-  margin: auto;
-  overflow: hidden;
+  overflow: hid den;
   color: #fff;
   border-radius: 5px;
+}
+#table_box ul {
+  padding: 0 !important;
 }
 #table_box span {
   width: 100px;
@@ -393,15 +510,9 @@ h3 {
   color: #fff;
   border-radius: 5px;
 }
-/* .box ul {
-        position: absolute;
-        top: 0;
-        left: 0;
-        } */
 .box ul li {
   line-height: 50px;
   list-style: none;
-  padding: 0 30px;
   box-sizing: border-box;
   cursor: pointer;
 }
@@ -418,11 +529,13 @@ h3 {
   width: 80px;
   height: 30px;
   line-height: 30px;
+  border: solid 1px #fff;
+  border-radius: 4px;
   cursor: pointer;
   text-align: center;
 }
 
-.tab-menu-span-hover {
+.tab-menu-span:hover {
   border: solid 1px rgb(11, 113, 247);
   border-radius: 5px;
 }
@@ -438,7 +551,6 @@ h3 {
   position: absolute;
   top: 0;
   width: 100%;
-  display: none;
 }
 .tab-list-span .name {
   display: inline-block;
