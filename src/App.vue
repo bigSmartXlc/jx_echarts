@@ -4,10 +4,10 @@
       <router-link to="/" class="topleft menu"
         ><span>规划管理</span></router-link
       >
-      <router-link to="/" class="topleft menu"
+      <router-link to="/scatter3D" class="topleft menu"
         ><span>分类投放</span></router-link
       >
-      <router-link to="/" class="topleft menu"
+      <router-link to="/about" class="topleft menu"
         ><span>分类收运</span></router-link
       >
       <div class="topcenter">
@@ -17,7 +17,7 @@
       <router-link to="/" class="topright menu"
         ><span>处置利用</span></router-link
       >
-      <router-link to="/" class="topright menu"
+      <router-link to="/line" class="topright menu"
         ><span>辅助决策</span></router-link
       >
       <router-link to="/" class="topright menu"

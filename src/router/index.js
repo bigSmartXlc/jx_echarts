@@ -16,6 +16,18 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
+  {
+    path: "/line",
+    name: "line",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Test-line.vue"),
+  },
+  {
+    path: "/scatter3D",
+    name: "scatter3D",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/scatter3D.vue"),
+  },
 ];
 
 const router = new VueRouter({
