@@ -184,9 +184,9 @@ export default {
           zlevel: 15,
           effect: {
             show: true,
-            constantSpeed: 30,
+            constantSpeed: 80,
             symbol: "pin",
-            symbolSize: 3,
+            symbolSize: 10,
             trailLength: 0,
           },
           lineStyle: {
