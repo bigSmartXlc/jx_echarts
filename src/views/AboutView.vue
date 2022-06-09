@@ -1,6 +1,26 @@
 <template>
-  <div>
-    <div id="main" style="width: 100%; height: 800px"></div>
+  <div class="fzjc">
+    <div class="left">
+      <div class="leftdiv">
+        <h3>垃圾生产量</h3>
+        <div id="leftbar"></div>
+      </div>
+      <div class="leftdiv">
+        <h3>项目建设</h3>
+        <div></div>
+      </div>
+    </div>
+    <div id="main"></div>
+    <div class="right">
+      <div class="rightdiv">
+        <h3>质量评价</h3>
+        <div id="rightline"></div>
+      </div>
+      <div class="rightdiv">
+        <h3>红黑榜</h3>
+        <div></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -31,8 +51,204 @@ export default {
   },
   mounted() {
     this.map();
+    this.leftbar();
+    this.rightline();
   },
   methods: {
+    rightline() {
+      var chartDom = document.getElementById("rightline");
+      var myChart = echarts.init(chartDom);
+      var option;
+
+      const colors = ["#5470C6", "#91CC75", "#EE6666"];
+      option = {
+        color: colors,
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "cross",
+          },
+        },
+        grid: {
+          right: "20%",
+        },
+        toolbox: {
+          feature: {
+            dataView: { show: true, readOnly: false },
+            restore: { show: true },
+            saveAsImage: { show: true },
+          },
+        },
+        legend: {
+          data: ["Evaporation", "Precipitation", "Temperature"],
+        },
+        xAxis: [
+          {
+            type: "category",
+            axisTick: {
+              alignWithLabel: true,
+            },
+            // prettier-ignore
+            data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          },
+        ],
+        yAxis: [
+          {
+            type: "value",
+            name: "Evaporation",
+            position: "right",
+            alignTicks: true,
+            axisLine: {
+              show: true,
+              lineStyle: {
+                color: colors[0],
+              },
+            },
+            axisLabel: {
+              formatter: "{value} ml",
+            },
+          },
+          {
+            type: "value",
+            name: "Precipitation",
+            position: "right",
+            alignTicks: true,
+            offset: 80,
+            axisLine: {
+              show: true,
+              lineStyle: {
+                color: colors[1],
+              },
+            },
+            axisLabel: {
+              formatter: "{value} ml",
+            },
+          },
+          {
+            type: "value",
+            name: "温度",
+            position: "left",
+            alignTicks: true,
+            axisLine: {
+              show: true,
+              lineStyle: {
+                color: colors[2],
+              },
+            },
+            axisLabel: {
+              formatter: "{value} °C",
+            },
+          },
+        ],
+        series: [
+          {
+            name: "Evaporation",
+            type: "bar",
+            data: [
+              2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4,
+              3.3,
+            ],
+          },
+          {
+            name: "Precipitation",
+            type: "bar",
+            yAxisIndex: 1,
+            data: [
+              2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0,
+              2.3,
+            ],
+          },
+          {
+            name: "Temperature",
+            type: "line",
+            yAxisIndex: 2,
+            data: [
+              2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2,
+            ],
+          },
+        ],
+      };
+
+      option && myChart.setOption(option);
+    },
+    leftbar() {
+      var chartDom = document.getElementById("leftbar");
+      var myChart = echarts.init(chartDom);
+      var option;
+
+      option = {
+        title: {
+          text: "Rainfall vs Evaporation",
+          subtext: "Fake Data",
+        },
+        tooltip: {
+          trigger: "axis",
+        },
+        legend: {
+          data: ["Rainfall", "Evaporation"],
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            dataView: { show: true, readOnly: false },
+            magicType: { show: true, type: ["line", "bar"] },
+            restore: { show: true },
+            saveAsImage: { show: true },
+          },
+        },
+        calculable: true,
+        xAxis: [
+          {
+            type: "category",
+            // prettier-ignore
+            data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          },
+        ],
+        yAxis: [
+          {
+            type: "value",
+          },
+        ],
+        series: [
+          {
+            name: "Rainfall",
+            type: "bar",
+            data: [
+              2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4,
+              3.3,
+            ],
+            markPoint: {
+              data: [
+                { type: "max", name: "Max" },
+                { type: "min", name: "Min" },
+              ],
+            },
+            markLine: {
+              data: [{ type: "average", name: "Avg" }],
+            },
+          },
+          {
+            name: "Evaporation",
+            type: "bar",
+            data: [
+              2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0,
+              2.3,
+            ],
+            markPoint: {
+              data: [
+                { name: "Max", value: 182.2, xAxis: 7, yAxis: 183 },
+                { name: "Min", value: 2.3, xAxis: 11, yAxis: 3 },
+              ],
+            },
+            markLine: {
+              data: [{ type: "average", name: "Avg" }],
+            },
+          },
+        ],
+      };
+
+      option && myChart.setOption(option);
+    },
     map() {
       // 初始化图表
       var myChart = echarts.init(document.getElementById("main"));
@@ -229,7 +445,7 @@ export default {
                 panMouseButton: "left", // 平移操作使用的鼠标按键，支持：'left' 鼠标左键（默认）;'middle' 鼠标中键 ;'right' 鼠标右键(注意：如果设置为鼠标右键则会阻止默认的右键菜单。)
                 rotateMouseButton: "left", // 旋转操作使用的鼠标按键，支持：'left' 鼠标左键;'middle' 鼠标中键（默认）;'right' 鼠标右键(注意：如果设置为鼠标右键则会阻止默认的右键菜单。)
 
-                distance: 200, // [ default: 100 ] 默认视角距离主体的距离，对于 grid3D 和 geo3D 等其它组件来说是距离中心原点的距离,对于 globe 来说是距离地球表面的距离。在 projection 为'perspective'的时候有效。
+                distance: 150, // [ default: 100 ] 默认视角距离主体的距离，对于 grid3D 和 geo3D 等其它组件来说是距离中心原点的距离,对于 globe 来说是距离地球表面的距离。在 projection 为'perspective'的时候有效。
                 minDistance: 40, // [ default: 40 ] 视角通过鼠标控制能拉近到主体的最小距离。在 projection 为'perspective'的时候有效。
                 maxDistance: 400, // [ default: 400 ] 视角通过鼠标控制能拉远到主体的最大距离。在 projection 为'perspective'的时候有效。
 
@@ -315,6 +531,9 @@ export default {
     opacity: 1;
   }
 }
+h3 {
+  margin: 0;
+}
 .returnBtn {
   font-size: 14px;
   color: rgba(255, 255, 255, 0.8);
@@ -329,5 +548,36 @@ export default {
   animation-timing-function: linear;
   animation-duration: 2; /*动画持续时间*/
   -webkit-animation: shake 3s; /*针对webkit内核*/
+}
+.fzjc {
+  display: flex;
+  height: calc(100% - 90px);
+  .left {
+    width: 30%;
+    .leftdiv {
+      height: 50%;
+      width: 100%;
+      #leftbar {
+        border: solid 1px #0167dd;
+        width: 100%;
+        height: calc(100% - 22px);
+      }
+    }
+  }
+  #main {
+    width: 40%;
+  }
+  .right {
+    width: 30%;
+    .rightdiv {
+      width: 100%;
+      height: 50%;
+      #rightline {
+        border: solid 1px #0167dd;
+        width: 100%;
+        height: calc(100% - 22px);
+      }
+    }
+  }
 }
 </style>

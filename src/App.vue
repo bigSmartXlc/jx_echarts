@@ -7,7 +7,7 @@
       <router-link to="/scatter3D" class="topleft menu"
         ><span>分类投放</span></router-link
       >
-      <router-link to="/about" class="topleft menu"
+      <router-link to="/line" class="topleft menu"
         ><span>过程监管</span></router-link
       >
       <div class="topcenter">
@@ -17,14 +17,14 @@
       <router-link to="/" class="topright menu"
         ><span>处置利用</span></router-link
       >
-      <router-link to="/line" class="topright menu"
+      <router-link to="/about" class="topright menu"
         ><span>辅助决策</span></router-link
       >
       <router-link to="/" class="topright menu"
         ><span>公共服务</span></router-link
       >
     </div>
-    <router-view />
+    <router-view style="margin: 0 10px" />
   </div>
 </template>
 

@@ -76,7 +76,10 @@
           </div>
           <!-- tab list -->
           <div class="tab-list">
-            <div class="tab-list-span" v-show="tabContent === 0">
+            <div
+              class="tab-list-span animate__animated animate__flipInY"
+              v-show="tabContent === 0"
+            >
               <p>
                 <span class="name">收集车辆</span><span class="num">3214</span>
               </p>
@@ -102,7 +105,10 @@
                 <span class="name">收集车辆</span><span class="num">3214</span>
               </p>
             </div>
-            <div class="tab-list-span" v-show="tabContent === 1">
+            <div
+              class="tab-list-span animate__animated animate__flipInY"
+              v-show="tabContent === 1"
+            >
               <p>
                 <span class="name">定时定点小区</span
                 ><span class="num">5624</span>
@@ -136,7 +142,10 @@
                 ><span class="num">5624</span>
               </p>
             </div>
-            <div class="tab-list-span" v-show="tabContent === 2">
+            <div
+              class="tab-list-span animate__animated animate__flipInY"
+              v-show="tabContent === 2"
+            >
               <p>
                 <span class="name">劝导员数量</span
                 ><span class="num">8954</span>
@@ -170,7 +179,10 @@
                 ><span class="num">8954</span>
               </p>
             </div>
-            <div class="tab-list-span" v-show="tabContent === 3">
+            <div
+              class="tab-list-span animate__animated animate__flipInY"
+              v-show="tabContent === 3"
+            >
               <p>
                 <span class="name">省高标小区</span
                 ><span class="num">1562</span>
@@ -204,6 +216,7 @@
                 ><span class="num">1562</span>
               </p>
             </div>
+            <div style="clear: both"></div>
           </div>
         </div>
       </div>
@@ -383,6 +396,7 @@ export default {
             regions: data,
             viewControl: {
               projection: "perspective",
+              distance: 130,
             },
           },
           series: [
@@ -474,7 +488,7 @@ export default {
   },
 };
 </script>
-<style lang="scss" scopd>
+<style lang="scss" scoped>
 .spanP {
   border: solid 1px red;
   height: 26px;
@@ -515,7 +529,7 @@ h3 {
 }
 .left {
   width: 28%;
-  height: 900px;
+  height: calc(100% - 90px);
   text-align: center;
   z-index: 10;
 }
@@ -528,12 +542,11 @@ h3 {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   width: 28%;
-  height: 900px;
+  height: calc(100% - 90px);
   z-index: 10;
 }
 #table_box {
   position: relative;
-  // width: 400px;
   height: 375px;
   background-color: transparent;
   overflow: hid den;
@@ -565,7 +578,6 @@ h3 {
 .box {
   position: relative;
   width: 400px;
-  height: 375px;
   background-color: transparent;
   margin: auto;
   overflow: hidden;
@@ -601,18 +613,16 @@ h3 {
   border: solid 1px rgb(11, 113, 247);
   border-radius: 5px;
 }
-
+.tab-class {
+  width: 100%;
+}
 .tab-list {
-  position: relative;
+  width: 100%;
 }
 
 .tab-list-span {
   color: #fff;
-  padding: 20px 10px;
-  height: 200px;
-  position: absolute;
-  top: 0;
-  width: 100%;
+  margin: 0 10px;
 }
 .tab-list-span .name {
   display: inline-block;

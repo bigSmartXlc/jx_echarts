@@ -1,43 +1,96 @@
 <template>
-  <div style="width: 100%; height: 100%" class="container">
+  <div class="container">
     <div class="left">
       <ul>
-        <li>
+        <li @click="trash = 1">
           <div><img src="../assets/images/line/2.png" alt="" srcset="" /></div>
-          <div>回收</div>
+          <div :class="{ typeActive: trash == 1 }">回收</div>
         </li>
-        <li>
+        <li @click="trash = 2">
           <div><img src="../assets/images/line/5.png" alt="" srcset="" /></div>
-          <div>有害</div>
+          <div :class="{ typeActive: trash == 2 }">有害</div>
         </li>
-        <li>
+        <li @click="trash = 3">
           <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div>餐厨</div>
+          <div :class="{ typeActive: trash == 3 }">餐厨</div>
         </li>
-        <li>
+        <li @click="trash = 4">
           <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div>生鲜</div>
+          <div :class="{ typeActive: trash == 4 }">生鲜</div>
         </li>
-        <li>
+        <li @click="trash = 5">
           <div><img src="../assets/images/line/3.png" alt="" srcset="" /></div>
-          <div>其他</div>
+          <div :class="{ typeActive: trash == 5 }">其他</div>
         </li>
-        <li>
+        <li @click="trash = 6">
           <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div>大件</div>
+          <div :class="{ typeActive: trash == 6 }">大件</div>
         </li>
-        <li>
+        <li @click="trash = 7">
           <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div>园林</div>
+          <div :class="{ typeActive: trash == 7 }">园林</div>
         </li>
-        <li>
+        <li @click="trash = 8">
           <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div>装修</div>
+          <div :class="{ typeActive: trash == 8 }">装修</div>
         </li>
       </ul>
     </div>
-    <div id="chart-box" style="height: 100%; width: 100%"></div>
-    <div class="right"></div>
+    <div id="chart-box"></div>
+    <div style="width: 30%">
+      <div class="topbtn">
+        <span :class="[{ active: table == 1 }, 'sort']" @click="table = 1"
+          >地磅称重</span
+        ><span :class="[{ active: table == 2 }, 'sort']" @click="table = 2"
+          >车辆载重</span
+        >
+      </div>
+      <div class="right">
+        <ul
+          v-show="table == 1"
+          class="thead animate__animated animate__flipInY"
+        >
+          <span style="width: 40px">序号</span>
+          <span style="width: 145px">中转站名称</span>
+          <span style="width: 80px">车牌</span>
+          <span style="width: 110px">来源/去向</span>
+          <span style="width: 65px">重量</span>
+          <span style="width: 105px">时间</span>
+        </ul>
+        <ul
+          v-show="table == 2"
+          class="thead animate__animated animate__flipInY"
+        >
+          <span style="width: 40px">序号</span>
+          <span style="width: 145px">组织机构</span>
+          <span style="width: 80px">车牌</span>
+          <span style="width: 110px">运输次数</span>
+          <span style="width: 65px">运输总重量</span>
+          <span style="width: 105px">次均装重量</span>
+        </ul>
+        <VueSeamlessScroll
+          :data="leftBottom"
+          :class-option="seamlessScrollOption"
+          style="
+            overflow: hidden;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+          "
+        >
+          <div class="table">
+            <div class="tbody" v-for="(item, index) in leftBottom" :key="index">
+              <span style="width: 40px">{{ item.index }}</span>
+              <span style="width: 145px">{{ item.position }}</span>
+              <span style="width: 80px">{{ item.num }}</span>
+              <span style="width: 110px">{{ item.jingdu }}</span>
+              <span style="width: 65px">{{ item.wieght }}</span>
+              <span style="width: 105px">{{ item.time }}</span>
+            </div>
+          </div>
+        </VueSeamlessScroll>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -45,19 +98,165 @@
 import * as echarts from "echarts/lib/echarts.js";
 import "echarts-gl";
 import yls_json from "./jx.json";
+import VueSeamlessScroll from "vue-seamless-scroll";
 export default {
+  components: {
+    VueSeamlessScroll,
+  },
   data() {
-    return { echarts, data: {}, yls_json };
+    return {
+      echarts,
+      data: {},
+      yls_json,
+      table: 1,
+      trash: 1,
+      leftBottom: [
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
+      ],
+    };
+  },
+  computed: {
+    seamlessScrollOption() {
+      return {
+        step: 0.2, // 数值越大速度滚动越快
+        limitMoveNum: 2, // 开始无缝滚动的数据量 this.dataList.length
+        hoverStop: true, // 是否开启鼠标悬停stop
+        direction: 1, // 0向下 1向上 2向左 3向右
+        openWatch: true, // 开启数据实时监控刷新dom
+        singleHeight: 0, // 单步运动停止的高度(默认值0是无缝不停止的滚动) direction => 0/1
+        singleWidth: 0, // 单步运动停止的宽度(默认值0是无缝不停止的滚动) direction => 2/3
+        waitTime: 1000, // 单步运动停止的时间(默认值1000ms)
+      };
+    },
   },
   mounted() {
     this.drawFeixian();
-    this.getFeixian();
+    // this.getFeixian();
+    // this.getWieght();
     //下钻参考https://blog.csdn.net/qq_23447231/article/details/121928744
     // chart.on("click", function (params) {
     //   console.log(params);
     // });
   },
   methods: {
+    //点击左侧分类
+    getType(el) {
+      console.log(el);
+    },
+    //地磅称重 // 车辆载重
+    getWieght() {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/siBusinessWeight/selectStationJob",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: "400000000",
+          garbageType: "40",
+          start: "2022-05-19",
+        },
+      }).then((res) => {
+        console.log(1, res);
+      });
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/vehicleLoadAnalysis/selectVehicleLoadAnalysis",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: "400000000",
+          garbageType: "40",
+          startTime: "2022-05-19",
+        },
+      }).then((res) => {
+        console.log(2, res);
+      });
+    },
     //飞线
     getFeixian() {
       this.$http({
@@ -288,9 +487,13 @@ export default {
 ul {
   list-style: none;
 }
+.typeActive {
+  color: rgb(135, 247, 199);
+}
 .container {
   display: flex;
   justify-content: space-around;
+  height: calc(100% - 90px);
   .left {
     width: 70px;
     background: rgba(255, 255, 255, 0.13);
@@ -298,9 +501,14 @@ ul {
     ul {
       height: 100%;
       padding: 0;
+      margin: 0;
+      color: #fff;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: space-evenly;
+      li {
+        cursor: pointer;
+      }
     }
     img {
       width: 34px;
@@ -308,6 +516,59 @@ ul {
   }
   #chart-box {
     width: calc(100% - 70px);
+  }
+  .topbtn {
+    margin-bottom: 5px;
+    span {
+      cursor: pointer;
+      display: inline-block;
+      width: 100px;
+      height: 30px;
+      line-height: 30px;
+      color: #66bbf9;
+    }
+  }
+  .active {
+    border-radius: 8px;
+    border: solid 1px #66bbf9;
+  }
+  .right {
+    border: solid 1px rgb(11, 100, 233);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    z-index: 10;
+    height: calc(100% - 37px);
+    overflow: hidden;
+    position: relative;
+    .thead {
+      padding: 0;
+      display: flex;
+      margin: 0;
+      justify-content: space-around;
+    }
+    .thead span {
+      display: inline-block;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #03a7f0;
+    }
+    .table {
+      width: 100%;
+      .tbody {
+        width: 100%;
+        height: 70px;
+        line-height: 70px;
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 3px;
+        background: rgba(255, 255, 255, 0.13);
+        span {
+          font-size: 14px;
+          font-weight: 600;
+        }
+      }
+    }
   }
 }
 </style>
