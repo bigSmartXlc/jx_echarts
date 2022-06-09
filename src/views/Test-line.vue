@@ -1,34 +1,38 @@
 <template>
-  <div>
-    <div>
+  <div style="width: 100%; height: 100%" class="container">
+    <div class="left">
       <ul>
         <li>
-          <div><img src="" alt="" srcset="" /></div>
-          <div></div>
+          <div><img src="../assets/images/line/2.png" alt="" srcset="" /></div>
+          <div>回收</div>
         </li>
         <li>
-          <div><img src="" alt="" srcset="" /></div>
-          <div></div>
+          <div><img src="../assets/images/line/5.png" alt="" srcset="" /></div>
+          <div>有害</div>
         </li>
         <li>
-          <div><img src="" alt="" srcset="" /></div>
-          <div></div>
+          <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
+          <div>餐厨</div>
         </li>
         <li>
-          <div><img src="" alt="" srcset="" /></div>
-          <div></div>
+          <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
+          <div>生鲜</div>
         </li>
         <li>
-          <div><img src="" alt="" srcset="" /></div>
-          <div></div>
+          <div><img src="../assets/images/line/3.png" alt="" srcset="" /></div>
+          <div>其他</div>
         </li>
         <li>
-          <div><img src="" alt="" srcset="" /></div>
-          <div></div>
+          <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
+          <div>大件</div>
         </li>
         <li>
-          <div><img src="" alt="" srcset="" /></div>
-          <div></div>
+          <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
+          <div>园林</div>
+        </li>
+        <li>
+          <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
+          <div>装修</div>
         </li>
       </ul>
     </div>
@@ -279,4 +283,27 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+ul {
+  list-style: none;
+}
+.container {
+  display: flex;
+  justify-content: space-around;
+  .left {
+    width: 70px;
+    ul {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    img {
+      width: 34px;
+    }
+  }
+  #chart-box {
+    width: calc(100% - 70px);
+  }
+}
+</style>
