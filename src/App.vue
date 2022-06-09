@@ -8,7 +8,7 @@
         ><span>分类投放</span></router-link
       >
       <router-link to="/about" class="topleft menu"
-        ><span>分类收运</span></router-link
+        ><span>过程监管</span></router-link
       >
       <div class="topcenter">
         <img src="./assets/images/u338.svg" alt="" srcset="" />
