@@ -37,6 +37,7 @@
       </ul>
     </div>
     <div id="chart-box" style="height: 100%; width: 100%"></div>
+    <div class="right"></div>
   </div>
 </template>
 
@@ -292,8 +293,11 @@ ul {
   justify-content: space-around;
   .left {
     width: 70px;
+    background: rgba(255, 255, 255, 0.13);
+    border-radius: 5px;
     ul {
       height: 100%;
+      padding: 0;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
