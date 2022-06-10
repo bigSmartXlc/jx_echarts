@@ -209,14 +209,13 @@ export default {
     };
   },
   watch: {
+    lines_coord(val) {
+      if (val.length > 0) {
+        this.drawFeixian();
+      }
+    },
     garbageType() {
-      this.getFeixian().then(() => {
-        this.lines_coord = [];
-        // this.chart.clear();
-        setTimeout(() => {
-          this.drawFeixian();
-        }, 1000);
-      });
+      this.getFeixian();
     },
   },
   computed: {
@@ -240,7 +239,7 @@ export default {
         this.drawFeixian();
       }, 1000);
     });
-    this.getWieght();
+    // this.getWieght();
     //下钻参考https://blog.csdn.net/qq_23447231/article/details/121928744
     // chart.on("click", function (params) {
     //   console.log(params);
@@ -291,20 +290,23 @@ export default {
         },
       })
         .then((res) => {
-          var result = eval("(" + res.data + ")").result;
-          // var result = JSON.parse(res.data);
-          console.log(result);
-          if (result) {
-            Object.values(result).forEach((item) => {
-              item.forEach((num) => {
-                if (Number(num.lng) !== 0) {
-                  var start = [Number(num.lng), Number(num.lat)];
-                  var end = [Number(num.factoryLng), Number(num.factoryLat)];
-                  var coords = [start, end];
-                  this.lines_coord.push({ coords });
-                }
+          this.lines_coord = [];
+          if (typeof res.data === "string") {
+            var result = eval("(" + res.data + ")").result;
+            if (result) {
+              Object.values(result).forEach((item) => {
+                item.forEach((num) => {
+                  if (Number(num.lng) !== 0) {
+                    var start = [Number(num.lng), Number(num.lat)];
+                    var end = [Number(num.factoryLng), Number(num.factoryLat)];
+                    var coords = [start, end];
+                    this.lines_coord.push({ coords });
+                  }
+                });
               });
-            });
+            }
+          } else if (typeof res.data === "object") {
+            alert(res.data.message);
           }
         })
         .catch((err) => {
@@ -315,8 +317,8 @@ export default {
     drawFeixian() {
       let data = yls_json;
       echarts.registerMap("yls", data);
-      console.log(this.lines_coord);
       this.chart = echarts.init(document.getElementById("chart-box"));
+      this.chart.showLoading();
       //地市取简称
       // data.features.forEach(v => {
       //     v.properties.name = v.properties.name.indexOf('版纳')>-1 ?v.properties.name.substr(0,4) : v.properties.name.substr(0,2);
@@ -460,6 +462,7 @@ export default {
           },
         ],
       };
+      this.chart.hideLoading();
       this.chart.setOption(option);
     },
   },
