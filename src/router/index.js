@@ -23,6 +23,12 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/Test-line.vue"),
   },
   {
+    path: "/line3d",
+    name: "line3d",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/line-3d.vue"),
+  },
+  {
     path: "/scatter3D",
     name: "scatter3D",
     component: () =>

@@ -7,7 +7,7 @@
       <router-link to="/scatter3D" class="topleft menu"
         ><span>分类投放</span></router-link
       >
-      <router-link to="/line" class="topleft menu"
+      <router-link to="/line3d" class="topleft menu"
         ><span>过程监管</span></router-link
       >
       <div class="topcenter">
@@ -52,11 +52,7 @@
   z-index: 2;
   .menu {
     display: inline-block;
-    width: 130px;
-  }
-  .topcenter {
-    display: inline-block;
-    width: 800px;
+    min-width: 80px;
   }
   .topleft {
     margin-left: 10px;
@@ -77,11 +73,11 @@
   text-align: center;
 }
 .center-title > .topleft {
-  transform: skewX(45deg);
+  transform: skewX(23deg);
 }
 .center-title > .topleft > span {
   display: inline-block;
-  transform: skewX(-45deg);
+  transform: skewX(-23deg);
 }
 .center-title > .topcenter {
   background: linear-gradient(0deg, #bff5ff 0%, #00ece4 100%);
@@ -90,11 +86,13 @@
   position: relative;
   font-size: xx-large;
   border: none;
-  min-width: 400px;
   height: 81px;
   padding-top: 10px;
   margin-top: 10px;
   background-size: contain;
+  display: inline-block;
+  width: 50%;
+  min-width: 500px;
 }
 .center-title > .topcenter > img {
   position: absolute;
@@ -104,10 +102,10 @@
   width: 100%;
 }
 .center-title > .topright {
-  transform: skewX(-45deg);
+  transform: skewX(-23deg);
 }
 .center-title > .topright > span {
   display: inline-block;
-  transform: skewX(45deg);
+  transform: skewX(23deg);
 }
 </style>
