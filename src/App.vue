@@ -12,7 +12,7 @@
       >
       <div class="topcenter">
         <img src="./assets/images/u338.svg" alt="" srcset="" />
-        <span>指悦数据管理平台</span>
+        <span>嘉兴市生活垃圾分类信息化监管平台</span>
       </div>
       <router-link to="/" class="topright menu"
         ><span>处置利用</span></router-link
@@ -41,15 +41,29 @@
 }
 
 .center-title {
-  display: flex;
+  // display: flex;
   margin: 0 auto;
-  justify-content: space-around;
+  // justify-content: space-around;
   width: 90%;
   height: 90px;
   font-weight: normal;
   overflow: hidden;
   position: relative;
   z-index: 2;
+  .menu {
+    display: inline-block;
+    width: 130px;
+  }
+  .topcenter {
+    display: inline-block;
+    width: 800px;
+  }
+  .topleft {
+    margin-left: 10px;
+  }
+  .topright {
+    margin-right: 10px;
+  }
 }
 .center-title > a {
   background: transparent;

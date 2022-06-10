@@ -7,7 +7,22 @@
       </div>
       <div class="leftdiv">
         <h3>项目建设</h3>
-        <div></div>
+        <div>
+          <div>
+            <span>序号</span>
+            <span>指标名称</span>
+            <span>额定值</span>
+            <span>实际值</span>
+            <span>负载率 </span>
+          </div>
+          <div v-for="(item, index) in leftdivdata" :key="index">
+            <span>{{ item.index }}</span
+            ><span>{{ item.name }}</span
+            ><span>{{ item.num }}</span
+            ><span>{{ item.realnum }}</span
+            ><span>{{ item.persont }}</span>
+          </div>
+        </div>
       </div>
     </div>
     <div id="main"></div>
@@ -46,6 +61,15 @@ export default {
         "#fc8452",
         "#9a60b4",
         "#ea7ccc",
+      ],
+      leftdivdata: [
+        {
+          index: 1,
+          name: "收集运输中转处置",
+          num: 10,
+          realnum: 9,
+          persont: "90%",
+        },
       ],
     };
   },

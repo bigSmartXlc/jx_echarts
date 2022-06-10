@@ -2,37 +2,41 @@
   <div class="container">
     <div class="left">
       <ul>
-        <li @click="trash = 1">
+        <li @click="garbageType = 10">
           <div><img src="../assets/images/line/2.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive: trash == 1 }">回收</div>
+          <div :class="{ typeActive: garbageType == 10 }">回收</div>
         </li>
-        <li @click="trash = 2">
+        <li @click="garbageType = 20">
           <div><img src="../assets/images/line/5.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive: trash == 2 }">有害</div>
+          <div :class="{ typeActive: garbageType == 20 }">有害</div>
         </li>
-        <li @click="trash = 3">
+        <li @click="garbageType = 30">
           <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive: trash == 3 }">餐厨</div>
+          <div :class="{ typeActive: garbageType == 30 }">餐厨</div>
         </li>
-        <li @click="trash = 4">
+        <li @click="garbageType = 31">
           <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive: trash == 4 }">生鲜</div>
+          <div :class="{ typeActive: garbageType == 31 }">厨余</div>
         </li>
-        <li @click="trash = 5">
+        <li @click="garbageType = 32">
+          <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
+          <div :class="{ typeActive: garbageType == 32 }">生鲜</div>
+        </li>
+        <li @click="garbageType = 40">
           <div><img src="../assets/images/line/3.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive: trash == 5 }">其他</div>
+          <div :class="{ typeActive: garbageType == 40 }">其他</div>
         </li>
-        <li @click="trash = 6">
+        <li @click="garbageType = 70">
           <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive: trash == 6 }">大件</div>
+          <div :class="{ typeActive: garbageType == 70 }">大件</div>
         </li>
-        <li @click="trash = 7">
+        <li @click="garbageType = 60">
           <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive: trash == 7 }">园林</div>
+          <div :class="{ typeActive: garbageType == 60 }">园林</div>
         </li>
-        <li @click="trash = 8">
+        <li @click="garbageType = 80">
           <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive: trash == 8 }">装修</div>
+          <div :class="{ typeActive: garbageType == 80 }">装修</div>
         </li>
       </ul>
     </div>
@@ -109,7 +113,9 @@ export default {
       data: {},
       yls_json,
       table: 1,
-      trash: 1,
+      garbageType: 10,
+      chart: null,
+      lines_coord: [],
       leftBottom: [
         {
           index: 1,
@@ -202,6 +208,17 @@ export default {
       ],
     };
   },
+  watch: {
+    garbageType() {
+      this.getFeixian().then(() => {
+        this.lines_coord = [];
+        // this.chart.clear();
+        setTimeout(() => {
+          this.drawFeixian();
+        }, 1000);
+      });
+    },
+  },
   computed: {
     seamlessScrollOption() {
       return {
@@ -217,19 +234,19 @@ export default {
     },
   },
   mounted() {
-    this.drawFeixian();
-    // this.getFeixian();
-    // this.getWieght();
+    // this.drawFeixian();
+    this.getFeixian().then(() => {
+      setTimeout(() => {
+        this.drawFeixian();
+      }, 1000);
+    });
+    this.getWieght();
     //下钻参考https://blog.csdn.net/qq_23447231/article/details/121928744
     // chart.on("click", function (params) {
     //   console.log(params);
     // });
   },
   methods: {
-    //点击左侧分类
-    getType(el) {
-      console.log(el);
-    },
     //地磅称重 // 车辆载重
     getWieght() {
       this.$http({
@@ -238,8 +255,10 @@ export default {
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
           deptId: "400000000",
+          // garbageType: this.garbageType.toString(),
           garbageType: "40",
           start: "2022-05-19",
+          end: "2022-06-10",
         },
       }).then((res) => {
         console.log(1, res);
@@ -250,7 +269,8 @@ export default {
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
           deptId: "400000000",
-          garbageType: "40",
+          garbageType: this.garbageType.toString(),
+          deptIdEnd: "499999999",
           startTime: "2022-05-19",
         },
       }).then((res) => {
@@ -258,100 +278,45 @@ export default {
       });
     },
     //飞线
-    getFeixian() {
+    async getFeixian() {
       this.$http({
         method: "post",
         url: "api/v1/jky/pjProjectGarbage",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
           deptId: "400000000",
-          garbageType: "40",
+          garbageType: this.garbageType.toString(),
+          // garbageType: "40",
+          deptIdEnd: "499999999",
         },
-      }).then((res) => {
-        console.log(res);
-      });
+      })
+        .then((res) => {
+          var result = eval("(" + res.data + ")").result;
+          // var result = JSON.parse(res.data);
+          console.log(result);
+          if (result) {
+            Object.values(result).forEach((item) => {
+              item.forEach((num) => {
+                if (Number(num.lng) !== 0) {
+                  var start = [Number(num.lng), Number(num.lat)];
+                  var end = [Number(num.factoryLng), Number(num.factoryLat)];
+                  var coords = [start, end];
+                  this.lines_coord.push({ coords });
+                }
+              });
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
+
     drawFeixian() {
       let data = yls_json;
       echarts.registerMap("yls", data);
-      const chart = echarts.init(document.getElementById("chart-box"));
-      // const coord = data.features.map((val) => {
-      //   return {
-      //     name: val.properties.name,
-      //     value: val.properties.center.concat(1),
-      //     symbolSize: 8,
-      //     itemStyle: {
-      //       normal: {
-      //         color: "#F58158",
-      //       },
-      //     },
-      //   };
-      // });
-      let coord = [
-        {
-          name: "榆北曹家滩矿业",
-          value: [120.862654, 30.607652, 1],
-          symbolSize: 8,
-          itemStyle: {
-            normal: {
-              color: "#F58158",
-            },
-          },
-        },
-        {
-          name: "榆北煤业",
-          value: [120.611522, 30.602797, 1],
-          symbolSize: 8,
-          itemStyle: {
-            normal: {
-              color: "#F58158",
-            },
-          },
-        },
-        {
-          name: "陕西小保当矿业有限公司",
-          value: [120.776508, 30.943419, 1],
-          symbolSize: 8,
-          itemStyle: {
-            normal: {
-              color: "#F58158",
-            },
-          },
-        },
-      ];
-      let lines_coord = [];
-      coord.forEach((v, index) => {
-        index > 0 &&
-          lines_coord.push({
-            coords: [v.value, coord[0].value],
-          });
-      });
-      lines_coord = [
-        {
-          coords: [
-            [120.862654, 30.607652],
-            [120.776508, 30.943419],
-          ],
-        },
-        {
-          coords: [
-            [120.611522, 30.602797],
-            [120.776508, 30.943419],
-          ],
-        },
-        {
-          coords: [
-            [120.776508, 30.943419],
-            [120.862654, 30.607652],
-          ],
-        },
-        {
-          coords: [
-            [120.776508, 30.943419],
-            [120.611522, 30.602797],
-          ],
-        },
-      ];
+      console.log(this.lines_coord);
+      this.chart = echarts.init(document.getElementById("chart-box"));
       //地市取简称
       // data.features.forEach(v => {
       //     v.properties.name = v.properties.name.indexOf('版纳')>-1 ?v.properties.name.substr(0,4) : v.properties.name.substr(0,2);
@@ -359,7 +324,11 @@ export default {
 
       const option = {
         title: {
-          text: "嘉兴市",
+          text: "当前位置-嘉兴市",
+          // textAlign: "center",
+          textStyle: {
+            color: "#fff",
+          },
         },
         geo: {
           map: "yls",
@@ -394,34 +363,34 @@ export default {
           },
         },
         series: [
-          {
-            name: "地点",
-            type: "effectScatter",
-            coordinateSystem: "geo",
-            zlevel: 2,
-            rippleEffect: {
-              brushType: "stroke",
-            },
-            label: {
-              normal: {
-                show: true,
-                formatter: "{b}",
-                position: "right",
-                textStyle: {
-                  color: "#fff",
-                  fontSize: 9,
-                },
-              },
-            },
-            symbolSize: 8,
-            showEffectOn: "render",
-            itemStyle: {
-              normal: {
-                color: "#46bee9",
-              },
-            },
-            data: coord.slice(0, 3),
-          },
+          //   {
+          //     name: "地点",
+          //     type: "effectScatter",
+          //     coordinateSystem: "geo",
+          //     zlevel: 2,
+          //     rippleEffect: {
+          //       brushType: "stroke",
+          //     },
+          //     label: {
+          //       normal: {
+          //         show: true,
+          //         formatter: "{b}",
+          //         position: "right",
+          //         textStyle: {
+          //           color: "#fff",
+          //           fontSize: 9,
+          //         },
+          //       },
+          //     },
+          //     symbolSize: 8,
+          //     showEffectOn: "render",
+          //     itemStyle: {
+          //       normal: {
+          //         color: "#46bee9",
+          //       },
+          //     },
+          //     data: coord.slice(0, 3),
+          //   },
           // {
           //   type: "effectScatter",
           //   coordinateSystem: "geo",
@@ -473,11 +442,25 @@ export default {
                 curveness: 0.3,
               },
             },
-            data: lines_coord.slice(0, 4),
+            // label: {
+            //   show: true,
+            //   position: "middle",
+            //   formatter: (params) => {
+            //     console.log(params);
+            //     return params.data.coords[0];
+            //   },
+            // },
+            emphasis: {
+              lineStyle: {
+                disabled: false,
+                color: "#cb7f26",
+              },
+            },
+            data: this.lines_coord,
           },
         ],
       };
-      chart.setOption(option);
+      this.chart.setOption(option);
     },
   },
 };
