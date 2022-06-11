@@ -227,6 +227,7 @@
 <script>
 import * as echarts from "echarts";
 import VueSeamlessScroll from "vue-seamless-scroll";
+import yls_json from "./ljpt_xz.json";
 import "echarts-gl";
 export default {
   components: {
@@ -298,9 +299,9 @@ export default {
   },
   methods: {
     setCityChart() {
-      if (this.myChart) {
-        this.myChart.dispose(); // 销毁实例，实例销毁后无法再被使用。
-      }
+      // if (this.myChart) {
+      //   this.myChart.dispose(); // 销毁实例，实例销毁后无法再被使用。
+      // }
       // 初始化图表
       this.myChart = echarts.init(document.getElementById("chart-city"));
       // JSON文件(地图数据)路径
@@ -310,180 +311,181 @@ export default {
       let mapName = "jx";
       // 引入JSON文件
       var linedata = [];
-      this.$http.get("jx.json").then((geoJson) => {
-        // const data = geoJson.data.features.map((item, index) => {
-        //   linedata.push(item.properties.centroid);
-        //   const geoAreaName = item.properties.name; // geo文件中的地理名称
-        //   return {
-        //     name: geoAreaName,
-        //     value: item.properties.centroid,
-        //     itemStyle: {
-        //       color: this.color[index] || "#046357",
-        //     },
-        //   };
-        // });
-        const data = geoJson.data.features.map((item, index) => {
+      // this.$http.get("mapjson/ljpt_xz.geojson").then((geoJson) => {
+      // const data = geoJson.data.features.map((item, index) => {
+      //   linedata.push(item.properties.centroid);
+      //   const geoAreaName = item.properties.name; // geo文件中的地理名称
+      //   return {
+      //     name: geoAreaName,
+      //     value: item.properties.centroid,
+      //     itemStyle: {
+      //       color: this.color[index] || "#046357",
+      //     },
+      //   };
+      // });
+      const data = yls_json.features.map((item, index) => {
+        if (item.properties.centroid) {
           linedata.push([...item.properties.centroid, 1]);
-          const geoAreaName = item.properties.name; // geo文件中的地理名称
-          return {
-            name: geoAreaName,
-            // value: item.properties.centroid,
-            itemStyle: {
-              color: this.color[index] || "#046357",
-            },
-          };
-        });
-        echarts.registerMap(mapName, geoJson.data);
-        // 隐藏动画加载效果。
-        this.myChart.hideLoading();
-
-        // 图表配置项
-        var option = {
-          selectedMode: "multiple", // 选中效果固话
-          tooltip: {
-            // 提示框
-            show: true,
-            trigger: "item",
-            formatter: function (params) {
-              return params.name;
-            },
+        }
+        const geoAreaName = item.properties.name; // geo文件中的地理名称
+        return {
+          name: geoAreaName,
+          // value: item.properties.centroid,
+          itemStyle: {
+            color: this.color[index] || "#046357",
           },
-          geo3D: {
-            show: true,
-            map: mapName,
-            boxHeight: 2,
-            shading: "realistic",
-            label: {
-              // 标签的相关设置
-              show: true, // (地图上的城市名称)是否显示标签 [ default: false ]
-              distance: 2,
-              formatter(param) {
-                const city = param.name;
-                return `{sty1|${city}}`;
-              },
-              rich: {
-                sty1: {
-                  color: "#ffffff",
-                  align: "center",
-                },
-              },
-              textStyle: {
-                // 标签的字体样式
-                color: "#fff", // 地图初始化区域字体颜色
-                fontSize: 18,
-                opacity: 1, // 字体透明度
-              },
-            },
-            itemStyle: {
-              // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
-              opacity: 1, // 图形的不透明度 [ default: 1 ]
-              borderWidth: 1, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
-              borderColor: "#A74A11", // 图形描边的颜色。[ default: #333 ]
-            },
-            emphasis: {
-              // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
-              label: {
-                // label高亮时的配置
-                show: true,
-                textStyle: {
-                  color: "#A74A11", // 高亮时标签颜色变为 白色
-                },
-              },
-              itemStyle: {
-                color: "#e11111",
-              },
-            },
-            regions: data,
-            viewControl: {
-              projection: "perspective",
-              distance: 130,
-            },
-          },
-          series: [
-            // {
-            //   name: "map3D",
-            //   type: "map3D", // map3D / map
-            //   zoom: 0.7,
-            //   map: mapName,
-            //   emphasis: {
-            //     // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
-            //     label: {
-            //       // label高亮时的配置
-            //       show: true,
-            //       textStyle: {
-            //         color: "#fff", // 高亮时标签颜色变为 白色
-            //         fontSize: 15, // 高亮时标签字体 变大
-            //       },
-            //     },
-            //     itemStyle: {
-            //       // itemStyle高亮时的配置
-            //       areaColor: "#66ffff", // 高亮时地图板块颜色改变
-            //     },
-            //   },
-            //   tooltip: {
-            //     //提示框组件。
-            //     alwaysShowContent: true,
-            //     hoverAnimation: true,
-            //     trigger: "item", //触发类型 散点图
-            //     enterable: true, //鼠标是否可进入提示框
-            //     transitionDuration: 1, //提示框移动动画过渡时间
-            //     triggerOn: "click",
-            //     formatter: function (params) {
-            //       console.log(params);
-            //       if (params.name) {
-            //         var str = `
-            //       <div class="map-tooltip">
-            //         <div class="city-name">${params.name}</div>
-            //       </div>
-            //       `;
-            //         return str;
-            //       }
-            //     },
-            //     // backgroundColor: 'rgba(30, 54, 124,1)',
-            //     // backgroundColor: '#01FEDD',
-            //     borderWidth: "1px",
-            //     borderRadius: "4",
-            //     borderColor: "#00B2AC",
-            //     textStyle: {
-            //       color: "#00B2AC",
-            //     },
-            //     padding: [5, 10],
-            //   },
-            //   itemStyle: {
-            //     // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
-            //     // areaColor: "#000", // 地图板块的颜色
-            //     opacity: 0.3, // 图形的不透明度 [ default: 1 ]
-            //     borderWidth: 1.5, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
-            //     borderColor: "#ffffff", // 图形描边的颜色。[ default: #333 ]
-            //   },
-            //   data: data,
-            //   viewControl: {
-            //     distance: 130, // 地图视角 控制初始大小
-            //     rotateSensitivity: 1, // 旋转
-            //     zoomSensitivity: 1, // 缩放
-            //   },
-            // },
-            {
-              type: "scatter3D",
-              name: mapName,
-              coordinateSystem: "geo3D",
-              zlevel: 5,
-              symbolSize: 12,
-              rippleEffect: {
-                period: 6,
-                brushType: "stroke",
-                scale: 8,
-              },
-              itemStyle: {
-                color: "#FF5722",
-                opacity: 1,
-              },
-              data: linedata,
-            },
-          ],
         };
-        this.myChart.setOption(option);
       });
+      echarts.registerMap(mapName, yls_json);
+      // 隐藏动画加载效果。
+      this.myChart.hideLoading();
+      // 图表配置项
+      var option = {
+        selectedMode: "multiple", // 选中效果固话
+        tooltip: {
+          // 提示框
+          show: true,
+          trigger: "item",
+          formatter: function (params) {
+            return params.name;
+          },
+        },
+        geo3D: {
+          show: true,
+          map: mapName,
+          boxHeight: 2,
+          shading: "realistic",
+          label: {
+            // 标签的相关设置
+            show: true, // (地图上的城市名称)是否显示标签 [ default: false ]
+            distance: 2,
+            formatter(param) {
+              const city = param.name;
+              return `{sty1|${city}}`;
+            },
+            rich: {
+              sty1: {
+                color: "#ffffff",
+                align: "center",
+              },
+            },
+            textStyle: {
+              // 标签的字体样式
+              color: "#fff", // 地图初始化区域字体颜色
+              fontSize: 18,
+              opacity: 1, // 字体透明度
+            },
+          },
+          itemStyle: {
+            // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
+            opacity: 1, // 图形的不透明度 [ default: 1 ]
+            borderWidth: 1, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
+            borderColor: "#A74A11", // 图形描边的颜色。[ default: #333 ]
+          },
+          emphasis: {
+            // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
+            label: {
+              // label高亮时的配置
+              show: true,
+              textStyle: {
+                color: "#A74A11", // 高亮时标签颜色变为 白色
+              },
+            },
+            itemStyle: {
+              color: "#e11111",
+            },
+          },
+          regions: data,
+          viewControl: {
+            projection: "perspective",
+            distance: 130,
+          },
+        },
+        series: [
+          // {
+          //   name: "map3D",
+          //   type: "map3D", // map3D / map
+          //   zoom: 0.7,
+          //   map: mapName,
+          //   emphasis: {
+          //     // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
+          //     label: {
+          //       // label高亮时的配置
+          //       show: true,
+          //       textStyle: {
+          //         color: "#fff", // 高亮时标签颜色变为 白色
+          //         fontSize: 15, // 高亮时标签字体 变大
+          //       },
+          //     },
+          //     itemStyle: {
+          //       // itemStyle高亮时的配置
+          //       areaColor: "#66ffff", // 高亮时地图板块颜色改变
+          //     },
+          //   },
+          //   tooltip: {
+          //     //提示框组件。
+          //     alwaysShowContent: true,
+          //     hoverAnimation: true,
+          //     trigger: "item", //触发类型 散点图
+          //     enterable: true, //鼠标是否可进入提示框
+          //     transitionDuration: 1, //提示框移动动画过渡时间
+          //     triggerOn: "click",
+          //     formatter: function (params) {
+          //       console.log(params);
+          //       if (params.name) {
+          //         var str = `
+          //       <div class="map-tooltip">
+          //         <div class="city-name">${params.name}</div>
+          //       </div>
+          //       `;
+          //         return str;
+          //       }
+          //     },
+          //     // backgroundColor: 'rgba(30, 54, 124,1)',
+          //     // backgroundColor: '#01FEDD',
+          //     borderWidth: "1px",
+          //     borderRadius: "4",
+          //     borderColor: "#00B2AC",
+          //     textStyle: {
+          //       color: "#00B2AC",
+          //     },
+          //     padding: [5, 10],
+          //   },
+          //   itemStyle: {
+          //     // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
+          //     // areaColor: "#000", // 地图板块的颜色
+          //     opacity: 0.3, // 图形的不透明度 [ default: 1 ]
+          //     borderWidth: 1.5, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
+          //     borderColor: "#ffffff", // 图形描边的颜色。[ default: #333 ]
+          //   },
+          //   data: data,
+          //   viewControl: {
+          //     distance: 130, // 地图视角 控制初始大小
+          //     rotateSensitivity: 1, // 旋转
+          //     zoomSensitivity: 1, // 缩放
+          //   },
+          // },
+          {
+            type: "scatter3D",
+            name: mapName,
+            coordinateSystem: "geo3D",
+            zlevel: 5,
+            symbolSize: 12,
+            rippleEffect: {
+              period: 6,
+              brushType: "stroke",
+              scale: 8,
+            },
+            itemStyle: {
+              color: "#FF5722",
+              opacity: 1,
+            },
+            data: linedata,
+          },
+        ],
+      };
+      this.myChart.setOption(option);
+      // });
     },
   },
 };

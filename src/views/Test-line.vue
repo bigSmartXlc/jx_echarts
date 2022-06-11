@@ -464,6 +464,9 @@ export default {
       };
       this.chart.hideLoading();
       this.chart.setOption(option);
+      this.chart.on("click", (res) => {
+        console.log(res);
+      });
     },
   },
 };

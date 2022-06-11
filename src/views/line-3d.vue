@@ -41,6 +41,13 @@
       </ul>
     </div>
     <div id="chart-box"></div>
+    <img
+      id="bgimg"
+      v-show="false"
+      src="../assets/images/ebg.jpg"
+      alt=""
+      srcset=""
+    />
     <div class="rightContainer">
       <div class="right">
         <div class="topbtn">
@@ -101,7 +108,7 @@
 <script>
 import * as echarts from "echarts/lib/echarts.js";
 import "echarts-gl";
-import yls_json from "./jx.json";
+import yls_json from "./ljpt_xz.json";
 import VueSeamlessScroll from "vue-seamless-scroll";
 export default {
   components: {
@@ -129,6 +136,7 @@ export default {
       lines_coord: [],
       scatter_coords: [],
       scatter_coord: [],
+      selectcity: null,
       leftBottom: [
         {
           index: 1,
@@ -244,9 +252,6 @@ export default {
     this.getFeixian(10);
     // this.getWieght();
     //下钻参考https://blog.csdn.net/qq_23447231/article/details/121928744
-    // chart.on("click", function (params) {
-    //   console.log(params);
-    // });
   },
   methods: {
     //地磅称重 // 车辆载重
@@ -370,17 +375,27 @@ export default {
     drawFeixian(linecolor) {
       let data = yls_json;
       echarts.registerMap("yls", data);
-      console.log(this.scatter_coord);
       if (this.chart != null && this.chart != "" && this.chart != undefined) {
         this.chart.dispose(); //销毁
       }
       this.chart = echarts.init(document.getElementById("chart-box"));
       this.chart.showLoading();
+      var bg = document.getElementById("bgimg");
       //地市取简称
       // data.features.forEach(v => {
       //     v.properties.name = v.properties.name.indexOf('版纳')>-1 ?v.properties.name.substr(0,4) : v.properties.name.substr(0,2);
       // })
-
+      const map3Ddata = yls_json.features.map((item, index) => {
+        const geoAreaName = item.properties.name; // geo文件中的地理名称
+        return {
+          name: geoAreaName,
+          // value: item.properties.centroid,
+          itemStyle: {
+            // color: this.color[index] || "#046357",
+            color: "#046357",
+          },
+        };
+      });
       const option = {
         title: {
           text: "当前位置-嘉兴市",
@@ -392,140 +407,118 @@ export default {
         },
         geo3D: {
           map: "yls",
+          show: false,
+          regionHeight: 0.1,
           zoom: 1,
           label: {
-            show: true,
+            show: false,
+            distance: 0,
+            formatter(param) {
+              const city = param.name;
+              return `{sty1|${city}}`;
+            },
+            rich: {
+              sty1: {
+                color: "#ffffff",
+                align: "center",
+              },
+            },
             textStyle: {
               fontSize: 12,
               color: "#f51c0b",
             },
           },
           itemStyle: {
-            color: "rgba(107,91,237,.7)",
-            opacity: 0.1,
+            // color: "rgba(107,91,237,.7)",
+            opacity: 0,
             borderWidth: 1.5,
-            borderColor: "#0b7ef5",
+            // borderColor: "#0b7ef5",
           },
           emphasis: {
+            label: {
+              show: false,
+              formatter: (params) => {
+                this.selectcity = params.name;
+                return `{sty1|${params.name}}`;
+              },
+              rich: {
+                sty1: {
+                  color: "#ffffff",
+                  align: "center",
+                },
+              },
+            },
             itemStyle: {
               // color: "#14e9c0",
               opacity: 0.1,
               borderWidth: 1.5,
-              borderColor: "#14e9c0",
+              borderColor: "#ffffff",
             },
           },
           viewControl: {
+            distance: 110,
             zoomSensitivity: 0,
             panSensitivity: 0,
-            rotateSensitivity: 0,
+            // rotateSensitivity: 0,
           },
           zlevel: -11,
         },
         series: [
-          //   {
-          //     name: "地点",
-          //     type: "effectScatter",
-          //     coordinateSystem: "geo",
-          //     zlevel: 2,
-          //     rippleEffect: {
-          //       brushType: "stroke",
-          //     },
-          //     label: {
-          //       normal: {
-          //         show: true,
-          //         formatter: "{b}",
-          //         position: "right",
-          //         textStyle: {
-          //           color: "#fff",
-          //           fontSize: 9,
-          //         },
-          //       },
-          //     },
-          //     symbolSize: 8,
-          //     showEffectOn: "render",
-          //     itemStyle: {
-          //       normal: {
-          //         color: "#46bee9",
-          //       },
-          //     },
-          //     data: coord.slice(0, 3),
-          //   },
-          // {
-          //   type: "effectScatter",
-          //   coordinateSystem: "geo",
-          //   zlevel: 15,
-          //   symbolSize: 12,
-          //   rippleEffect: {
-          //     period: 6,
-          //     brushType: "stroke",
-          //     scale: 8,
-          //   },
-          //   itemStyle: {
-          //     color: "#FF5722",
-          //     opacity: 1,
-          //   },
-          //   data: lines_coord.slice(0, 4),
-          // },
-          // {
-          //   type: "lines3D",
-          //   coordinateSystem: "geo3D",
-          //   zlevel: 15,
-          //   effect: {
-          //     show: true,
-          //     constantSpeed: 80,
-          //     symbol: "pin",
-          //     symbolSize: 10,
-          //     trailLength: 0,
-          //   },
-          //   lineStyle: {
-          //     normal: {
-          //       color: new echarts.graphic.LinearGradient(
-          //         0,
-          //         0,
-          //         0,
-          //         1,
-          //         [
-          //           {
-          //             offset: 0,
-          //             color: "#58B3CC",
-          //           },
-          //           {
-          //             offset: 1,
-          //             color: "#F58158",
-          //           },
-          //         ],
-          //         false
-          //       ),
-          //       width: 2,
-          //       opacity: 0.4,
-          //       curveness: 0.3,
-          //     },
-          //   },
-          //   // label: {
-          //   //   show: true,
-          //   //   position: "middle",
-          //   //   formatter: (params) => {
-          //   //     console.log(params);
-          //   //     return params.data.coords[0];
-          //   //   },
-          //   // },
-          //   emphasis: {
-          //     lineStyle: {
-          //       disabled: false,
-          //       color: "#cb7f26",
-          //     },
-          //   },
-          //   data: this.lines_coord,
-          // },
+          {
+            name: "yls",
+            type: "map3D", // map3D / map
+            zoom: 0.7,
+            map: "yls",
+            // regionHeight: -3,
+            emphasis: {
+              // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
+              label: {
+                // label高亮时的配置
+                show: true,
+                textStyle: {
+                  color: "#fff", // 高亮时标签颜色变为 白色
+                  fontSize: 15, // 高亮时标签字体 变大
+                },
+              },
+              itemStyle: {
+                color: "#ffffff",
+                opacity: 1,
+              },
+            },
+            groundPlane: {
+              //工作台
+              // show: true,
+            },
+            shading: "realistic",
+            // shading: "color",
+            realisticMaterial: {
+              detailTexture: bg, // 纹理贴图
+              textureTiling: 1, // 纹理平铺，1是拉伸，数字表示纹理平铺次数
+            },
+            itemStyle: {
+              color: "rgba(107,91,237,.7)",
+              // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
+              // areaColor: "#000", // 地图板块的颜色
+              opacity: 1, // 图形的不透明度 [ default: 1 ]
+              borderWidth: 2, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
+              borderColor: "#ffffff", // 图形描边的颜色。[ default: #333 ]
+            },
+            data: map3Ddata,
+            viewControl: {
+              distance: 110, // 地图视角 控制初始大小
+              rotateSensitivity: 1, // 旋转
+              zoomSensitivity: 1, // 缩放
+            },
+          },
           {
             type: "lines3D",
             coordinateSystem: "geo3D",
             zlevel: 100,
             effect: {
               show: true,
-              period: 6,
-              // constantSpeed: 30,
-              trailWidth: 6,
+              // period: 6,
+              constantSpeed: 5,
+              trailWidth: 4,
               trailLength: 0.2,
             },
             lineStyle: {
@@ -571,6 +564,9 @@ export default {
       };
       this.chart.hideLoading();
       this.chart.setOption(option);
+      this.chart.on("click", (res) => {
+        console.log(res);
+      });
     },
   },
 };
