@@ -564,7 +564,7 @@ export default {
             viewControl: {
               distance: 110, // 地图视角 控制初始大小
               rotateSensitivity: 1, // 旋转
-              zoomSensitivity: 0, // 缩放
+              zoomSensitivity: 1, // 缩放
             },
           },
           {
@@ -639,7 +639,15 @@ ul {
 .typeActive1 {
   color: #316fb8;
 }
-.typeActive1:after {
+.typeActive1:after,
+.typeActive2:after,
+.typeActive3:after,
+.typeActive4:after,
+.typeActive5:after,
+.typeActive6:after,
+.typeActive7:after,
+.typeActive8:after,
+.typeActive9:after {
   content: "";
   display: inline-block;
   border-right: solid 10px red;

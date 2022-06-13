@@ -12,8 +12,8 @@
       >
       <div class="topcenter">
         <img src="./assets/images/u338.svg" alt="" srcset="" />
-        <!-- <span>嘉兴市生活垃圾分类信息化监管平台</span> -->
-        <span>测试</span>
+        <span>嘉兴市生活垃圾分类信息化监管平台</span>
+        <!-- <span>测试</span> -->
       </div>
       <router-link to="/chuzhi" class="topright menu"
         ><span>处置利用</span></router-link
@@ -92,7 +92,7 @@
   margin-top: 10px;
   background-size: contain;
   display: inline-block;
-  width: 50%;
+  // width: 50%;
   min-width: 500px;
 }
 .center-title > .topcenter > img {
