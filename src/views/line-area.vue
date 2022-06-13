@@ -1,5 +1,5 @@
 <template>
-  <div class="container1">
+  <div class="container">
     <div class="left">
       <ul>
         <li @click="garbageType = 10">
@@ -49,89 +49,57 @@
       srcset=""
     />
     <div class="rightContainer">
-      <div class="topbtn">
-        <span :class="[{ active: table == 1 }, 'sort']" @click="table = 1"
-          >地磅称重</span
-        ><span :class="[{ active: table == 2 }, 'sort']" @click="table = 2"
-          >车辆载重</span
+      <div class="right">
+        <div class="topbtn">
+          <span :class="[{ active: table == 1 }, 'sort']" @click="table = 1"
+            >地磅称重</span
+          ><span :class="[{ active: table == 2 }, 'sort']" @click="table = 2"
+            >车辆载重</span
+          >
+        </div>
+        <ul
+          v-show="table == 1"
+          class="thead animate__animated animate__flipInY"
         >
-      </div>
-      <div class="right" :key="rightkey">
-        <div v-show="table == 1" class="tableone">
-          <ul class="thead">
-            <span style="width: 40px">序号</span>
-            <span style="width: 145px">中转站名称</span>
-            <span style="width: 80px">车牌</span>
-            <span style="width: 110px">来源/去向</span>
-            <span style="width: 65px">重量</span>
-            <span style="width: 105px">时间</span>
-          </ul>
-
-          <VueSeamlessScroll
-            :data="leftBottom"
-            :class-option="seamlessScrollOption"
-            key="top"
-            style="
-              max-height: 720px;
-              overflow: hidden;
-              color: white;
-              font-size: 18px;
-              text-align: center;
-            "
-          >
-            <div v-show="table == 1" class="table">
-              <div
-                class="tbody"
-                v-for="(item, index) in leftBottom"
-                :key="index"
-              >
-                <span style="width: 40px">{{ item.index }}</span>
-                <span style="width: 145px">{{ item.position }}</span>
-                <span style="width: 80px">{{ item.num }}</span>
-                <span style="width: 110px">{{ item.jingdu }}</span>
-                <span style="width: 65px">{{ item.wieght }}</span>
-                <span style="width: 105px">{{ item.time }}</span>
-              </div>
+          <span style="width: 40px">序号</span>
+          <span style="width: 145px">中转站名称</span>
+          <span style="width: 80px">车牌</span>
+          <span style="width: 110px">来源/去向</span>
+          <span style="width: 65px">重量</span>
+          <span style="width: 105px">时间</span>
+        </ul>
+        <ul
+          v-show="table == 2"
+          class="thead animate__animated animate__flipInY"
+        >
+          <span style="width: 40px">序号</span>
+          <span style="width: 145px">组织机构</span>
+          <span style="width: 80px">车牌</span>
+          <span style="width: 110px">运输次数</span>
+          <span style="width: 65px">运输总重量</span>
+          <span style="width: 105px">次均装重量</span>
+        </ul>
+        <VueSeamlessScroll
+          :data="leftBottom"
+          :class-option="seamlessScrollOption"
+          style="
+            overflow: hidden;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+          "
+        >
+          <div class="table">
+            <div class="tbody" v-for="(item, index) in leftBottom" :key="index">
+              <span style="width: 40px">{{ item.index }}</span>
+              <span style="width: 145px">{{ item.position }}</span>
+              <span style="width: 80px">{{ item.num }}</span>
+              <span style="width: 110px">{{ item.jingdu }}</span>
+              <span style="width: 65px">{{ item.wieght }}</span>
+              <span style="width: 105px">{{ item.time }}</span>
             </div>
-          </VueSeamlessScroll>
-        </div>
-        <div v-show="table == 2" class="tabletwo">
-          <ul class="thead">
-            <span style="width: 40px">序号</span>
-            <span style="width: 145px">组织机构</span>
-            <span style="width: 80px">车牌</span>
-            <span style="width: 110px">运输次数</span>
-            <span style="width: 110px">运输总重量</span>
-            <span style="width: 105px">次均装重量</span>
-          </ul>
-          <VueSeamlessScroll
-            :data="leftBottom"
-            :class-option="seamlessScrollOption"
-            key="bottom"
-            style="
-              max-height: 720px;
-              overflow: hidden;
-              color: white;
-              font-size: 18px;
-              text-align: center;
-            "
-          >
-            <div class="table">
-              <div
-                class="tbody"
-                v-for="(item, index) in leftBottom"
-                :key="index"
-              >
-                <span style="width: 40px">{{ item.index }}</span>
-                <span style="width: 145px">{{ item.position }}</span>
-                <span style="width: 80px">{{ item.num }}</span>
-                <span style="width: 110px">{{ item.jingdu }}</span>
-                <span style="width: 110px">{{ item.wieght }}</span>
-                <span style="width: 105px">{{ item.time }}</span>
-              </div>
-            </div>
-          </VueSeamlessScroll>
-        </div>
+          </div>
+        </VueSeamlessScroll>
       </div>
     </div>
   </div>
@@ -141,7 +109,6 @@
 import * as echarts from "echarts/lib/echarts.js";
 import "echarts-gl";
 import yls_json from "./ljpt_xz.json";
-import anime from "animejs";
 import VueSeamlessScroll from "vue-seamless-scroll";
 export default {
   components: {
@@ -149,10 +116,9 @@ export default {
   },
   data() {
     return {
-      rightkey: "rightkey",
       echarts,
       data: {},
-      yls_json,
+      mapdata: {},
       table: 1,
       color: [
         "#4d82c1",
@@ -228,6 +194,38 @@ export default {
           time: "2022-02-08",
           wieght: 900,
         },
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
+        {
+          index: 1,
+          position: "桐乡市",
+          num: 5,
+          jingdu: "10%",
+          time: "2022-02-08",
+          wieght: 900,
+        },
       ],
     };
   },
@@ -235,23 +233,12 @@ export default {
     garbageType(val) {
       this.getFeixian(val);
     },
-    table(val) {
-      var target = val === 1 ? ".tableone" : ".tabletwo";
-      anime({
-        targets: target,
-        rotateY: 360,
-        duration: 2000,
-      });
-      setTimeout(() => {
-        this.rightkey += Math.random();
-      }, 1000);
-    },
   },
   computed: {
     seamlessScrollOption() {
       return {
-        step: 1, // 数值越大速度滚动越快
-        // limitMoveNum: 2, // 开始无缝滚动的数据量 this.dataList.length
+        step: 0.2, // 数值越大速度滚动越快
+        limitMoveNum: 2, // 开始无缝滚动的数据量 this.dataList.length
         hoverStop: true, // 是否开启鼠标悬停stop
         direction: 1, // 0向下 1向上 2向左 3向右
         openWatch: true, // 开启数据实时监控刷新dom
@@ -261,9 +248,20 @@ export default {
       };
     },
   },
+  created() {
+    this.mapdata = {
+      type: "FeatureCollection",
+      features: [],
+    };
+    var data = yls_json.features;
+    this.mapdata.features = data.filter(
+      (item) => item.properties.name === this.$route.params.areaName
+    );
+  },
   mounted() {
+    console.log(this.mapdata);
+    this.drawFeixian("#046357");
     // this.getFeixian(10);
-    this.drawFeixian();
     // this.getWieght();
     //下钻参考https://blog.csdn.net/qq_23447231/article/details/121928744
   },
@@ -307,6 +305,7 @@ export default {
         data: {
           deptId: "400000000",
           garbageType: garbageType.toString(),
+          // garbageType: "40",
           deptIdEnd: "499999999",
         },
       })
@@ -385,30 +384,35 @@ export default {
         });
     },
 
-    drawFeixian(linecolor = "#b0f7f7fc") {
-      let data = yls_json;
+    drawFeixian(linecolor) {
+      debugger
+      let data = this.mapdata;
       echarts.registerMap("yls", data);
       if (this.chart != null && this.chart != "" && this.chart != undefined) {
         this.chart.dispose(); //销毁
       }
       this.chart = echarts.init(document.getElementById("chart-box"));
       this.chart.showLoading();
-      // var bg = document.getElementById("bgimg");
-      const map3Ddata = yls_json.features.map((item) => {
-        const geoAreaName = item.properties.name; // geo文件中的地理名称
-        return {
-          name: geoAreaName,
-          // value: item.properties.centroid,
-          itemStyle: {
-            // color: this.color[index] || "#046357",
-            color: "#1acbfc",
-          },
-        };
-      });
+      var bg = document.getElementById("bgimg");
+      //地市取简称
+      // data.features.forEach(v => {
+      //     v.properties.name = v.properties.name.indexOf('版纳')>-1 ?v.properties.name.substr(0,4) : v.properties.name.substr(0,2);
+      // })
+      // const map3Ddata = yls_json.features.map((item) => {
+      //   const geoAreaName = item.properties.name; // geo文件中的地理名称
+      //   return {
+      //     name: geoAreaName,
+      //     // value: item.properties.centroid,
+      //     itemStyle: {
+      //       // color: this.color[index] || "#046357",
+      //       color: "#046357",
+      //     },
+      //   };
+      // });
       const option = {
         title: {
-          text: "当前位置-嘉兴市",
-          left: 200,
+          text: `当前位置-${this.$route.params.areaName}`,
+          left: 100,
           top: 160,
           textStyle: {
             color: "#fff",
@@ -417,19 +421,19 @@ export default {
         geo3D: {
           map: "yls",
           show: false,
-          regionHeight: 2.9,
+          regionHeight: 0.1,
           zoom: 1,
-          left: 0,
           label: {
-            show: true,
+            show: false,
             distance: 0,
             formatter(param) {
+              console.log(param);
               const city = param.name;
               return `{sty1|${city}}`;
             },
             rich: {
               sty1: {
-                color: "#8d0121",
+                color: "#ffffff",
                 align: "center",
               },
             },
@@ -438,34 +442,33 @@ export default {
               color: "#f51c0b",
             },
           },
-          // itemStyle: {
-          //   color: "#ff8701",
-          //   opacity: 0,
-          //   borderWidth: 1.5,
-          //   // borderColor: "#0b7ef5",
-          // },
-          // emphasis: {
-          //   label: {
-          //     show: false,
-          //     formatter: (params) => {
-          //       console.log(1);
-          //       this.selectcity = params.name;
-          //       return `{sty1|${params.name}}`;
-          //     },
-          //     rich: {
-          //       sty1: {
-          //         color: "#8d0121",
-          //         align: "center",
-          //       },
-          //     },
-          //   },
-          //   itemStyle: {
-          //     // color: "#14e9c0",
-          //     opacity: 0.1,
-          //     borderWidth: 1.5,
-          //     borderColor: "#ffffff",
-          //   },
-          // },
+          itemStyle: {
+            // color: "rgba(107,91,237,.7)",
+            opacity: 0,
+            borderWidth: 1.5,
+            // borderColor: "#0b7ef5",
+          },
+          emphasis: {
+            label: {
+              show: false,
+              formatter: (params) => {
+                this.selectcity = params.name;
+                return `{sty1|${params.name}}`;
+              },
+              rich: {
+                sty1: {
+                  color: "#ffffff",
+                  align: "center",
+                },
+              },
+            },
+            itemStyle: {
+              // color: "#14e9c0",
+              opacity: 0.1,
+              borderWidth: 1.5,
+              borderColor: "#ffffff",
+            },
+          },
           viewControl: {
             distance: 110,
             zoomSensitivity: 0,
@@ -481,38 +484,19 @@ export default {
             zoom: 0.7,
             map: "yls",
             // regionHeight: -3,
-            label: {
-              show: true,
-              distance: 0,
-              formatter(param) {
-                const city = param.name;
-                return `{sty1|${city}}`;
-              },
-              rich: {
-                sty1: {
-                  color: "#fff801",
-                  align: "center",
-                  fontSize: 14,
-                  fontWeight: 700,
-                },
-              },
-              // textStyle:{
-              //     color:'#f73205'
-              // }
-            },
             emphasis: {
               // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
               label: {
                 // label高亮时的配置
                 show: true,
                 textStyle: {
-                  color: "#f73205", // 高亮时标签颜色变为 白色
-                  fontSize: 18, // 高亮时标签字体 变大
+                  color: "#fff", // 高亮时标签颜色变为 白色
+                  fontSize: 15, // 高亮时标签字体 变大
                 },
               },
               itemStyle: {
-                color: "#0b7ef5",
-                opacity: 0.5,
+                color: "#ffffff",
+                opacity: 1,
               },
             },
             groundPlane: {
@@ -521,85 +505,79 @@ export default {
             },
             shading: "realistic",
             // shading: "color",
-            // realisticMaterial: {
-            //   detailTexture: bg, // 纹理贴图
-            //   textureTiling: 1, // 纹理平铺，1是拉伸，数字表示纹理平铺次数
-            // },
+            realisticMaterial: {
+              detailTexture: bg, // 纹理贴图
+              textureTiling: 1, // 纹理平铺，1是拉伸，数字表示纹理平铺次数
+            },
             itemStyle: {
-              color: "#ff8701",
+              color: "rgba(107,91,237,.7)",
               // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
               // areaColor: "#000", // 地图板块的颜色
-              opacity: 0.5, // 图形的不透明度 [ default: 1 ]
+              opacity: 1, // 图形的不透明度 [ default: 1 ]
               borderWidth: 2, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
               borderColor: "#ffffff", // 图形描边的颜色。[ default: #333 ]
             },
-            data: map3Ddata,
+            data: this.mapdata,
             viewControl: {
               distance: 110, // 地图视角 控制初始大小
               rotateSensitivity: 1, // 旋转
-              zoomSensitivity: 0, // 缩放
+              zoomSensitivity: 1, // 缩放
             },
           },
-          {
-            type: "lines3D",
-            coordinateSystem: "geo3D",
-            zlevel: 100,
-            effect: {
-              show: true,
-              // period: 6,
-              constantSpeed: 5,
-              trailWidth: 4,
-              trailLength: 0.2,
-            },
-            lineStyle: {
-              color: linecolor,
-              width: 2,
-              opacity: 1,
-              curveness: 0.2,
-            },
-            emphasis: {
-              lineStyle: {
-                disabled: false,
-                color: "#cb7f26",
-              },
-            },
-            data: this.lines_coord,
-          },
-          {
-            type: "scatter3D",
-            coordinateSystem: "geo3D",
-            zlevel: 1,
-            effect: "symbol",
-            symbolSize: "7",
-            rippleEffect: {
-              period: 6,
-              brushType: "stroke",
-              scale: 8,
-            },
-            emphasis: {
-              itemStyle: {
-                color: "#ff1863",
-              },
-              label: {
-                show: true,
-              },
-            },
-            itemStyle: {
-              color: "#FF5722",
-              opacity: 1,
-            },
-            data: this.scatter_coord,
-          },
+          // {
+          //   type: "lines3D",
+          //   coordinateSystem: "geo3D",
+          //   zlevel: 100,
+          //   effect: {
+          //     show: true,
+          //     // period: 6,
+          //     constantSpeed: 5,
+          //     trailWidth: 4,
+          //     trailLength: 0.2,
+          //   },
+          //   lineStyle: {
+          //     color: linecolor,
+          //     width: 2,
+          //     opacity: 1,
+          //     curveness: 0.2,
+          //   },
+          //   emphasis: {
+          //     lineStyle: {
+          //       disabled: false,
+          //       color: "#cb7f26",
+          //     },
+          //   },
+          //   data: this.lines_coord,
+          // },
+          // {
+          //   type: "scatter3D",
+          //   coordinateSystem: "geo3D",
+          //   zlevel: 1,
+          //   effect: "symbol",
+          //   symbolSize: "7",
+          //   rippleEffect: {
+          //     period: 6,
+          //     brushType: "stroke",
+          //     scale: 8,
+          //   },
+          //   emphasis: {
+          //     itemStyle: {
+          //       color: "#ff1863",
+          //     },
+          //     label: {
+          //       show: true,
+          //     },
+          //   },
+          //   itemStyle: {
+          //     color: "#FF5722",
+          //     opacity: 1,
+          //   },
+          //   data: this.scatter_coord,
+          // },
         ],
       };
       this.chart.hideLoading();
       this.chart.setOption(option);
-      this.chart.on("click", (res) => {
-        console.log(res.name, yls_json);
-        this.$router.push({
-          path: `/line3d-area/${res.name}`,
-        });
-      });
     },
   },
 };
@@ -636,9 +614,8 @@ ul {
 .typeActive9 {
   color: #97885e;
 }
-.container1 {
-  height: calc(100% - 110px);
-  font-weight: 700%;
+.container {
+  height: calc(100% - 90px);
   width: 100%;
   .left {
     z-index: 100;
@@ -670,17 +647,13 @@ ul {
   #chart-box {
     display: inline-block;
     position: absolute;
-    left: 0px;
+    right: 80px;
     top: -60px;
-    width: 80%;
+    width: calc(100% - 100px);
     height: 100%;
   }
   .topbtn {
     margin-bottom: 5px;
-    height: 50px;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 50px;
     span {
       cursor: pointer;
       display: inline-block;
@@ -698,7 +671,7 @@ ul {
     width: 25%;
     position: absolute;
     right: 10px;
-    height: 80%;
+    height: calc(100% - 100px);
     .right {
       border: solid 1px rgb(11, 100, 233);
       background: rgba(255, 255, 255, 0.2);
@@ -709,15 +682,13 @@ ul {
       .thead {
         padding: 0;
         display: flex;
-        height: 40px;
         margin: 0;
-        line-height: 40px;
         justify-content: space-around;
       }
       .thead span {
         display: inline-block;
         text-align: center;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 700;
         color: #03a7f0;
       }
@@ -729,7 +700,7 @@ ul {
           line-height: 70px;
           display: flex;
           justify-content: space-around;
-          margin-bottom: 10px;
+          margin-bottom: 3px;
           background: rgba(255, 255, 255, 0.13);
           span {
             font-size: 14px;
@@ -737,10 +708,6 @@ ul {
           }
         }
       }
-    }
-    .right span:hover {
-      background-color: #587e8f;
-      border-radius: 5px;
     }
   }
 }

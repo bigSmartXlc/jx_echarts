@@ -12,15 +12,16 @@
       >
       <div class="topcenter">
         <img src="./assets/images/u338.svg" alt="" srcset="" />
-        <span>嘉兴市生活垃圾分类信息化监管平台</span>
+        <!-- <span>嘉兴市生活垃圾分类信息化监管平台</span> -->
+        <span>测试</span>
       </div>
-      <router-link to="/" class="topright menu"
+      <router-link to="/chuzhi" class="topright menu"
         ><span>处置利用</span></router-link
       >
       <router-link to="/about" class="topright menu"
         ><span>辅助决策</span></router-link
       >
-      <router-link to="/" class="topright menu"
+      <router-link to="/gonggong" class="topright menu"
         ><span>公共服务</span></router-link
       >
     </div>
@@ -52,13 +53,13 @@
   z-index: 2;
   .menu {
     display: inline-block;
-    min-width: 80px;
+    min-width: 100px;
   }
   .topleft {
-    margin-left: 10px;
+    margin-left: 20px;
   }
   .topright {
-    margin-right: 10px;
+    margin-right: 20px;
   }
 }
 .center-title > a {
@@ -73,11 +74,11 @@
   text-align: center;
 }
 .center-title > .topleft {
-  transform: skewX(23deg);
+  transform: skewX(35deg);
 }
 .center-title > .topleft > span {
   display: inline-block;
-  transform: skewX(-23deg);
+  transform: skewX(-35deg);
 }
 .center-title > .topcenter {
   background: linear-gradient(0deg, #bff5ff 0%, #00ece4 100%);
@@ -102,10 +103,10 @@
   width: 100%;
 }
 .center-title > .topright {
-  transform: skewX(-23deg);
+  transform: skewX(-35deg);
 }
 .center-title > .topright > span {
   display: inline-block;
-  transform: skewX(23deg);
+  transform: skewX(35deg);
 }
 </style>

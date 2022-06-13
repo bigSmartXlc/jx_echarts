@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "animate.css";
+import "@/assets/css/main.scss";
 
 // axios
 import axios from "axios";
