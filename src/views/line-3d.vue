@@ -2,41 +2,68 @@
   <div class="container1">
     <div class="left">
       <ul>
-        <li @click="garbageType = 10">
+        <li
+          @click="garbageType = 10"
+          :class="{ typeActive1: garbageType == 10 }"
+        >
           <div><img src="../assets/images/line/2.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive1: garbageType == 10 }">回收</div>
+          <div>回收</div>
         </li>
-        <li @click="garbageType = 20">
+        <li
+          @click="garbageType = 20"
+          :class="{ typeActive2: garbageType == 20 }"
+        >
           <div><img src="../assets/images/line/5.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive2: garbageType == 20 }">有害</div>
+          <div>有害</div>
         </li>
-        <li @click="garbageType = 30">
+        <li
+          @click="garbageType = 30"
+          :class="{ typeActive3: garbageType == 30 }"
+        >
           <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive3: garbageType == 30 }">餐厨</div>
+          <div>餐厨</div>
         </li>
-        <li @click="garbageType = 31">
+        <li
+          @click="garbageType = 31"
+          :class="{ typeActive4: garbageType == 31 }"
+        >
           <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive4: garbageType == 31 }">厨余</div>
+          <div>厨余</div>
         </li>
-        <li @click="garbageType = 32">
+        <li
+          @click="garbageType = 32"
+          :class="{ typeActive5: garbageType == 32 }"
+        >
           <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive5: garbageType == 32 }">生鲜</div>
+          <div>生鲜</div>
         </li>
-        <li @click="garbageType = 40">
+        <li
+          @click="garbageType = 40"
+          :class="{ typeActive6: garbageType == 40 }"
+        >
           <div><img src="../assets/images/line/3.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive6: garbageType == 40 }">其他</div>
+          <div>其他</div>
         </li>
-        <li @click="garbageType = 70">
-          <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive7: garbageType == 70 }">大件</div>
+        <li
+          @click="garbageType = 70"
+          :class="{ typeActive7: garbageType == 70 }"
+        >
+          <div><img src="../assets/images/line/1.png" alt="" srcset="" /></div>
+          <div>大件</div>
         </li>
-        <li @click="garbageType = 60">
-          <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive8: garbageType == 60 }">园林</div>
+        <li
+          @click="garbageType = 60"
+          :class="{ typeActive8: garbageType == 60 }"
+        >
+          <div><img src="../assets/images/line/6.png" alt="" srcset="" /></div>
+          <div>园林</div>
         </li>
-        <li @click="garbageType = 80">
-          <div><img src="../assets/images/line/4.png" alt="" srcset="" /></div>
-          <div :class="{ typeActive9: garbageType == 80 }">装修</div>
+        <li
+          @click="garbageType = 80"
+          :class="{ typeActive9: garbageType == 80 }"
+        >
+          <div><img src="../assets/images/line/7.png" alt="" srcset="" /></div>
+          <div>装修</div>
         </li>
       </ul>
     </div>
@@ -155,15 +182,15 @@ export default {
       yls_json,
       table: 1,
       color: [
-        "#4d82c1",
-        "#c84139",
-        "#5ca864",
-        "#5ca864",
-        "#5ca864",
-        "#040404",
-        "#da9141",
-        "#9ab575",
-        "#97885e",
+        "#316fb8",
+        "#be1a10",
+        "#31923b",
+        "#31923b",
+        "#31923b",
+        "#333333",
+        "#d1730f",
+        "#6c9336",
+        "#81703d",
       ],
       garbageType: 10,
       chart: null,
@@ -548,12 +575,12 @@ export default {
               show: true,
               // period: 6,
               constantSpeed: 5,
-              trailWidth: 4,
+              trailWidth: 1,
               trailLength: 0.2,
             },
             lineStyle: {
               color: linecolor,
-              width: 2,
+              width: 1,
               opacity: 1,
               curveness: 0.2,
             },
@@ -610,31 +637,42 @@ ul {
   list-style: none;
 }
 .typeActive1 {
-  color: #4d82c1;
+  color: #316fb8;
+}
+.typeActive1:after {
+  content: "";
+  display: inline-block;
+  border-right: solid 10px red;
+  border-top: solid 10px transparent;
+  border-bottom: solid 10px transparent;
+  border-left: 0;
+  position: absolute;
+  right: 0px;
+  top: 30px;
 }
 .typeActive2 {
-  color: #c84139;
+  color: #be1a10;
 }
 .typeActive3 {
-  color: rgb(135, 247, 199);
+  color: #31923b;
 }
 .typeActive4 {
-  color: rgb(135, 247, 199);
+  color: #31923b;
 }
 .typeActive5 {
-  color: rgb(135, 247, 199);
+  color: #31923b;
 }
 .typeActive6 {
-  color: rgb(5, 5, 5);
+  color: #333333;
 }
 .typeActive7 {
-  color: #da9141;
+  color: #d1730f;
 }
 .typeActive8 {
-  color: #9ab575;
+  color: #6c9336;
 }
 .typeActive9 {
-  color: #97885e;
+  color: #81703d;
 }
 .container1 {
   height: calc(100% - 110px);
@@ -665,6 +703,7 @@ ul {
     }
     img {
       width: 34px;
+      height: 34px;
     }
   }
   #chart-box {
@@ -729,7 +768,7 @@ ul {
           line-height: 70px;
           display: flex;
           justify-content: space-around;
-          margin-bottom: 10px;
+          margin-bottom: 30px;
           background: rgba(255, 255, 255, 0.13);
           span {
             font-size: 14px;
