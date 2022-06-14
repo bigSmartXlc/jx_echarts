@@ -149,13 +149,39 @@ export default {
     this.getTree(this.formfiled.selectdate);
   },
   mounted() {
-    // this.drawFeixian();
-    // this.gethuanjie();
-    // this.drawTimeline();
+    this.drawFeixian();
+    this.gethuanjie();
+    this.drawTimeline();
     this.getVideoUrl();
+    this.getlineport();
     //下钻参考https://blog.csdn.net/qq_23447231/article/details/121928744
   },
   methods: {
+    // 获取轨迹点
+    getlineport() {
+      let params = new FormData();
+      params.append("carName", "浙F73039");
+      params.append("date", this.formfiled.selectdate);
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/siCarTrack/getPoints2",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        // headers: {
+        //   "Content-Type": " multipart/form-data",
+        // },
+        // data: params,
+        data: {
+          carName: "浙F73039",
+          date: this.formfiled.selectdate,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     //获取汽车实时画面
     getVideoUrl() {
       this.$http({
@@ -251,8 +277,8 @@ export default {
           console.log(err);
         });
     },
+    // 获取车辆
     getTree(val) {
-      // 获取车辆
       let params = new FormData();
       params.append("lnglatTime", val);
       this.$http({
