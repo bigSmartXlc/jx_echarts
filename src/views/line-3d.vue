@@ -495,8 +495,8 @@ export default {
           // },
           viewControl: {
             distance: 110,
-            zoomSensitivity: 0,
-            panSensitivity: 0,
+            zoomSensitivity: 1,
+            panSensitivity: 1,
             // rotateSensitivity: 0,
           },
           zlevel: -11,
@@ -563,8 +563,8 @@ export default {
             data: map3Ddata,
             viewControl: {
               distance: 110, // 地图视角 控制初始大小
-              rotateSensitivity: 1, // 旋转
-              zoomSensitivity: 1, // 缩放
+              rotateSensitivity: 0, // 旋转
+              zoomSensitivity: 0, // 缩放
             },
           },
           {

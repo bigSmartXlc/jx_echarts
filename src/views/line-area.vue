@@ -149,12 +149,28 @@ export default {
     this.getTree(this.formfiled.selectdate);
   },
   mounted() {
-    this.drawFeixian();
-    this.gethuanjie();
-    this.drawTimeline();
+    // this.drawFeixian();
+    // this.gethuanjie();
+    // this.drawTimeline();
+    this.getVideoUrl();
     //下钻参考https://blog.csdn.net/qq_23447231/article/details/121928744
   },
   methods: {
+    //获取汽车实时画面
+    getVideoUrl() {
+      this.$http({
+        method: "get",
+        url: "api/v1/jky/pjcamera/getUrlAddress",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        params: { carName: "浙F73039" },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     //日期转换
     dateSwitch(date) {
       if (typeof date === "string") {
