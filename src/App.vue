@@ -92,7 +92,7 @@
   margin-top: 10px;
   background-size: contain;
   display: inline-block;
-  // width: 50%;
+  width: 40%;
   min-width: 500px;
 }
 .center-title > .topcenter > img {

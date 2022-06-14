@@ -19,7 +19,8 @@
         </ul>
       </div>
       <div class="dateselect">
-        <span>日期</span><input type="date" name="bday" />
+        <span>日期</span
+        ><input type="date" placeholder="" v-model="formfiled.selectdate" />
       </div>
       <div class="huanjie">
         <div>
@@ -40,7 +41,23 @@
           </ul>
         </div>
       </div>
-      <div class="areatree"></div>
+      <div class="areatree">
+        <div
+          class="selectdata"
+          @click="typeopen == 3 ? (typeopen = 0) : (typeopen = 3)"
+        >
+          {{ $route.params.areaName }}
+        </div>
+        <ul v-show="typeopen == 3">
+          <li
+            v-for="(item, index) in carlist"
+            :key="index"
+            @click="carSelect(item)"
+          >
+            {{ item.vehicleName }}
+          </li>
+        </ul>
+      </div>
     </div>
     <div id="chart-box"></div>
     <img
@@ -51,7 +68,12 @@
       srcset=""
     />
     <div class="rightContainer">
-      <div class="right"></div>
+      <div class="right">
+        <div class="top">
+          <div id="timeline"></div>
+          <div id="topchart"></div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -63,6 +85,7 @@ import yls_json from "./ljpt_xz.json";
 export default {
   data() {
     return {
+      carlist: [],
       typelist: [
         { name: "可回收物", key: 10 },
         { name: "有害垃圾", key: 20 },
@@ -77,9 +100,10 @@ export default {
       formfiled: {
         garbageName: "请选择回收类型",
         garbageType: "",
-        selectdata: "",
+        selectdate: "",
         vehicleModelListName: "请选择回收环节",
         vehicleModelList: "",
+        vehicleName: "",
       },
       typeopen: 0,
       huanjie: [],
@@ -105,7 +129,11 @@ export default {
       selectcity: null,
     };
   },
-  watch: {},
+  watch: {
+    "formfiled.selectdate": function (val) {
+      this.getTree(val);
+    },
+  },
   computed: {},
   created() {
     this.mapdata = {
@@ -116,13 +144,29 @@ export default {
     this.mapdata.features = data.filter(
       (item) => item.properties.name === this.$route.params.areaName
     );
+    var date = new Date();
+    this.formfiled.selectdate = this.dateSwitch(date);
+    this.getTree(this.formfiled.selectdate);
   },
   mounted() {
     this.drawFeixian();
-    this.getTree();
+    this.gethuanjie();
+    this.drawTimeline();
     //下钻参考https://blog.csdn.net/qq_23447231/article/details/121928744
   },
   methods: {
+    //日期转换
+    dateSwitch(date) {
+      if (typeof date === "string") {
+        return date;
+      }
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? "0" + m : m;
+      var d = date.getDate();
+      d = d < 10 ? "0" + d : d;
+      return y + "-" + m + "-" + d;
+    },
     typeSelect(item) {
       this.formfiled.garbageName = item.name;
       this.formfiled.garbageType = item.key;
@@ -133,24 +177,11 @@ export default {
       this.formfiled.vehicleModelList = item.paramCode;
       this.typeopen = 0;
     },
-    //tree
-    getTree() {
-      // this.$http({
-      //   method: "post",
-      //   url: "api/v1/jky/pjcar/pjcarTree",
-      //   baseURL: "http://o792k95b.xiaomy.net/",
-      //   data: {
-      //     deptId: "400000000",
-      //     // garbageType: garbageType.toString(),
-      //     lnglatTime: "2022-06-12",
-      //   },
-      // })
-      //   .then((res) => {
-      //     console.log(res);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
+    carSelect(item) {
+      this.formfiled.vehicleName = item.vehicleName;
+    },
+    gethuanjie() {
+      // 获取流程环节
       this.$http({
         method: "get",
         url: "api/v1/jky/searchDisposalLink",
@@ -158,8 +189,81 @@ export default {
         data: {},
       })
         .then((res) => {
-          console.log(res.data.result);
           this.huanjie = res.data.result;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //待定
+    getgjtree() {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/pjcar/pjcarTree",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          lnglatTime: "2022-05-19",
+          deptId: "400000000",
+          // vehicleModelList: "",
+          // garbageType: "",
+        },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //轨迹
+    getguiji() {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/siCarTrack/getPoints2",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          date: this.formfiled.selectdate,
+          carNum: "400000000",
+          // vehicleModelList: "",
+          // garbageType: "",
+        },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getTree(val) {
+      // 获取车辆
+      let params = new FormData();
+      params.append("lnglatTime", val);
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/pjcar/pjCarTreeVal",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        headers: {
+          "Content-Type": " multipart/form-data",
+        },
+        data: params,
+      })
+        .then((res) => {
+          if (typeof res.data === "string") {
+            var result = eval("(" + res.data + ")").result;
+            if (result) {
+              Object.values(result).forEach((item) => {
+                item.forEach((num) => {
+                  if (num.flag != 0) {
+                    this.carlist.push(num);
+                  }
+                });
+              });
+            }
+          } else if (typeof res.data === "object") {
+            this.drawFeixian(this.color[0]);
+            alert(res.data.message);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -173,21 +277,6 @@ export default {
       }
       this.chart = echarts.init(document.getElementById("chart-box"));
       this.chart.showLoading();
-      //地市取简称
-      // data.features.forEach(v => {
-      //     v.properties.name = v.properties.name.indexOf('版纳')>-1 ?v.properties.name.substr(0,4) : v.properties.name.substr(0,2);
-      // })
-      // const map3Ddata = yls_json.features.map((item) => {
-      //   const geoAreaName = item.properties.name; // geo文件中的地理名称
-      //   return {
-      //     name: geoAreaName,
-      //     // value: item.properties.centroid,
-      //     itemStyle: {
-      //       // color: this.color[index] || "#046357",
-      //       color: "#046357",
-      //     },
-      //   };
-      // });
       const option = {
         title: {
           text: `当前位置-${this.$route.params.areaName}`,
@@ -262,6 +351,89 @@ export default {
       this.chart.hideLoading();
       this.chart.setOption(option);
     },
+    drawTimeline() {
+      var timeLineChart = echarts.init(document.getElementById("topchart"));
+      var timeLinePart = echarts.init(document.getElementById("timeline"));
+      const data = [];
+      for (let i = 0; i < 5; ++i) {
+        data.push(Math.round(Math.random() * 200));
+      }
+      const option = {
+        xAxis: { max: "dataMax" },
+        yAxis: {
+          type: "category",
+          show: false,
+        },
+        series: [
+          {
+            realtimeSort: true,
+            name: "X",
+            type: "bar",
+            data: data,
+            label: {
+              show: true,
+              position: "right",
+              valueAnimation: true,
+            },
+            itemStyle: {
+              color: {
+                type: "linear",
+                x: 0,
+                y: 0,
+                x2: 1,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: "red", // 0% 处的颜色
+                  },
+                  {
+                    offset: 1,
+                    color: "blue", // 100% 处的颜色
+                  },
+                ],
+                global: false, // 缺省为 false
+              },
+            },
+          },
+        ],
+      };
+      const lineOption = {
+        timeline: {
+          top: 80,
+          bottom: 80,
+          right: 0,
+          currentIndex: 2,
+          inverse: true,
+          axisType: "category",
+          orient: "vertical",
+          label: {
+            position: "left",
+            color: "#ffffff",
+          },
+          // itemStyle: {
+          //   color: "#316BF3",
+          // },
+          controlStyle: {
+            show: false,
+          },
+          progress: {
+            label: {
+              color: "#316BF3",
+            },
+          },
+          data: [
+            "2002-01-01",
+            "2003-01-01",
+            "2004-01-01",
+            "2005-01-01",
+            "2006-01-01",
+          ],
+        },
+      };
+      timeLineChart.setOption(option);
+      timeLinePart.setOption(lineOption);
+    },
   },
 };
 </script>
@@ -311,6 +483,15 @@ ul {
         background: linear-gradient(45deg, #0875f2, #c2cbf1);
       }
     }
+    .areatree {
+      ul {
+        max-height: 700px;
+        overflow: auto;
+        li {
+          background: linear-gradient(45deg, #27a37a, #84ca91);
+        }
+      }
+    }
   }
   #chart-box {
     display: inline-block;
@@ -336,7 +517,7 @@ ul {
     border: solid 1px #66bbf9;
   }
   .rightContainer {
-    width: 25%;
+    width: 35%;
     position: absolute;
     right: 10px;
     height: calc(100% - 100px);
@@ -347,6 +528,23 @@ ul {
       z-index: 10;
       height: 100%;
       overflow: hidden;
+      .top {
+        position: relative;
+        width: 100%;
+        height: 50%;
+        #topchart {
+          width: 75%;
+          height: 400px;
+          position: absolute;
+          right: 0;
+        }
+        #timeline {
+          width: 25%;
+          height: 400px;
+          position: absolute;
+          left: 0;
+        }
+      }
     }
   }
 }

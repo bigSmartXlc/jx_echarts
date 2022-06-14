@@ -656,7 +656,6 @@ ul {
   border-left: 0;
   position: absolute;
   right: 0px;
-  top: 30px;
 }
 .typeActive2 {
   color: #be1a10;
