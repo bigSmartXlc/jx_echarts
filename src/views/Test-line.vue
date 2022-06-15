@@ -315,6 +315,7 @@ export default {
     },
 
     drawFeixian() {
+      console.log(this.lines_coord);
       let data = yls_json;
       echarts.registerMap("yls", data);
       this.chart = echarts.init(document.getElementById("chart-box"));

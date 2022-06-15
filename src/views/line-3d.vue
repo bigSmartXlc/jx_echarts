@@ -291,7 +291,7 @@ export default {
   mounted() {
     // this.getFeixian(10);
     this.drawFeixian();
-    // this.getWieght();
+    this.getWieght();
     //下钻参考https://blog.csdn.net/qq_23447231/article/details/121928744
   },
   methods: {
@@ -574,7 +574,7 @@ export default {
             effect: {
               show: true,
               // period: 6,
-              constantSpeed: 5,
+              constantSpeed: 1.5,
               trailWidth: 1,
               trailLength: 0.2,
             },
@@ -615,14 +615,19 @@ export default {
               color: "#FF5722",
               opacity: 1,
             },
-            data: this.scatter_coord,
+            //"lat": "30.700509810427338",
+            // "lng": "121.25209824179306",
+            data: this.scatter_coord || [
+              "121.25209824179306",
+              "30.700509810427338",
+              "0",
+            ],
           },
         ],
       };
       this.chart.hideLoading();
       this.chart.setOption(option);
       this.chart.on("click", (res) => {
-        console.log(res.name, yls_json);
         this.$router.push({
           path: `/line3d-area/${res.name}`,
         });
@@ -650,12 +655,10 @@ ul {
 .typeActive9:after {
   content: "";
   display: inline-block;
-  border-right: solid 10px red;
-  border-top: solid 10px transparent;
-  border-bottom: solid 10px transparent;
-  border-left: 0;
-  position: absolute;
-  right: 0px;
+  border-bottom: solid 10px red;
+  border-left: solid 10px transparent;
+  border-right: solid 10px transparent;
+  border-top: 0;
 }
 .typeActive2 {
   color: #be1a10;

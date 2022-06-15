@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container1">
     <div class="left">
       <div class="typelist">
         <div
@@ -60,18 +60,14 @@
       </div>
     </div>
     <div id="chart-box"></div>
-    <img
-      id="bgimg"
-      v-show="false"
-      src="../assets/images/ebg.jpg"
-      alt=""
-      srcset=""
-    />
     <div class="rightContainer">
       <div class="right">
         <div class="top">
           <div id="timeline"></div>
           <div id="topchart"></div>
+        </div>
+        <div style="max-width: 550px">
+          <video id="videoPlayer" class="video-js" muted></video>
         </div>
       </div>
     </div>
@@ -80,6 +76,7 @@
 
 <script>
 import * as echarts from "echarts/lib/echarts.js";
+import videojs from "video.js";
 import "echarts-gl";
 import yls_json from "./ljpt_xz.json";
 export default {
@@ -146,37 +143,120 @@ export default {
     );
     var date = new Date();
     this.formfiled.selectdate = this.dateSwitch(date);
-    this.getTree(this.formfiled.selectdate);
+    this.getTree("2022-06-14");
   },
   mounted() {
-    this.drawFeixian();
+    // this.drawFeixian();
     this.gethuanjie();
     this.drawTimeline();
     this.getVideoUrl();
     this.getlineport();
-    //下钻参考https://blog.csdn.net/qq_23447231/article/details/121928744
+    this.getTimelineData();
+    //下钻参考https://blog.csdn.net/qq_23447231/article/details/1219287442022-04-12
   },
   methods: {
     // 获取轨迹点
-    getlineport() {
-      let params = new FormData();
-      params.append("carName", "浙F73039");
-      params.append("date", this.formfiled.selectdate);
+    getTimelineData() {
       this.$http({
         method: "post",
-        url: "api/v1/jky/siCarTrack/getPoints2",
+        url: "api/v1/jky/timeline",
         baseURL: "http://o792k95b.xiaomy.net/",
-        // headers: {
-        //   "Content-Type": " multipart/form-data",
-        // },
-        // data: params,
         data: {
-          carName: "浙F73039",
-          date: this.formfiled.selectdate,
+          date: "2022-04-12",
+          carNum: "浙FF5129",
         },
       })
         .then((res) => {
           console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    // 获取轨迹点
+    getlineport() {
+      // let params = new FormData();
+      // params.append("carName", "浙FF5129");
+      // params.append("date", "2022-4-12");
+      this.$http
+        .post(
+          "http://o792k95b.xiaomy.net/api/v1/jky/siCarTrack/getPoints2?carNum=浙FF5129&date=2022-04-12"
+          // params
+        )
+        .then((res) => {
+          // var data = res.data.result;
+          var data = [
+            ["121.2522100", "30.7005377", "2022-04-12 00:01:03"],
+            ["121.2522100", "30.7005377", "2022-04-12 00:10:03"],
+            ["121.2522100", "30.7005377", "2022-04-12 00:20:03"],
+            ["121.2522100", "30.7005377", "2022-04-12 00:30:03"],
+            ["121.2522100", "30.7005377", "2022-04-12 00:40:03"],
+            ["121.2522100", "30.7005377", "2022-04-12 00:50:03"],
+            ["121.2522100", "30.7005377", "2022-04-12 01:00:03"],
+            ["121.2522100", "30.7005377", "2022-04-12 01:10:03"],
+            ["121.2522100", "30.7005377", "2022-04-12 01:20:03"],
+            ["121.2522100", "30.7005377", "2022-04-12 01:30:03"],
+            ["121.2522100", "30.7005377", "2022-04-12 01:40:03"],
+            ["121.2522100", "30.7005377", "2022-04-12 01:50:03"],
+            ["121.2522100", "30.7005377", "2022-04-12 02:00:04"],
+            ["121.2522100", "30.7005377", "2022-04-12 02:10:04"],
+            ["121.2522100", "30.7005377", "2022-04-12 02:20:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 02:30:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 02:40:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 02:50:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 03:00:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 03:10:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 03:20:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 03:30:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 03:40:35"],
+            ["121.2522100", "30.7005377", "2022-04-12 03:50:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 04:00:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 04:10:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 04:20:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 04:30:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 04:40:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 04:50:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 05:00:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 05:10:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 05:20:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 05:30:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 05:40:05"],
+            ["121.2522100", "30.7005377", "2022-04-12 05:50:06"],
+            ["121.2522100", "30.7005377", "2022-04-12 06:00:06"],
+            ["121.2522100", "30.7005377", "2022-04-12 06:10:36"],
+            ["121.2522100", "30.7005377", "2022-04-12 06:20:06"],
+            ["121.2522100", "30.7005377", "2022-04-12 06:30:06"],
+            ["121.2522100", "30.7005377", "2022-04-12 06:40:06"],
+            ["121.2522100", "30.7005377", "2022-04-12 06:50:06"],
+            ["121.2522100", "30.7005377", "2022-04-12 07:00:06"],
+            ["121.2522100", "30.7005377", "2022-04-12 07:10:06"],
+            ["121.2522100", "30.7005377", "2022-04-12 07:20:07"],
+            ["121.2522100", "30.7005377", "2022-04-12 07:30:07"],
+            ["121.2522100", "30.7005377", "2022-04-12 07:40:07"],
+            ["121.2522100", "30.7005377", "2022-04-12 07:50:07"],
+            ["121.2522100", "30.7005377", "2022-04-12 08:00:07"],
+            ["121.2522100", "30.7005377", "2022-04-12 08:10:07"],
+            ["121.2522100", "30.7005377", "2022-04-12 08:20:07"],
+            ["121.2522100", "30.7005377", "2022-04-12 08:30:07"],
+            ["121.2522100", "30.7005377", "2022-04-12 08:40:07"],
+            ["121.2522101", "30.7005377", "2022-04-12 08:50:07"],
+          ];
+          var linedata = [];
+          data.forEach((item, index) => {
+            if (index < data.length - 2) {
+              linedata.push({
+                coords: [
+                  [item[0], item[1]],
+                  [
+                    data[index + 1][0] || item[0],
+                    data[index + 1][1] || item[1],
+                  ],
+                ],
+              });
+            }
+          });
+          console.log(linedata);
+          this.drawFeixian(linedata);
         })
         .catch((err) => {
           console.log(err);
@@ -188,14 +268,32 @@ export default {
         method: "get",
         url: "api/v1/jky/pjcamera/getUrlAddress",
         baseURL: "http://o792k95b.xiaomy.net/",
-        params: { carName: "浙F73039" },
+        params: { carName: "浙FF5129", rowId: "92971" },
       })
         .then((res) => {
-          console.log(res);
+          console.log(res.data.result);
+          this.getVideo(res.data.result);
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+    getVideo(url) {
+      let options = {
+        width: 550,
+        height: 380,
+        autoplay: true, // 设置自动播放
+        controls: true, // 显示播放的控件
+        sources: [
+          //如果需要切换视频源，src需要动态设置
+          {
+            src: url,
+            type: "application/x-mpegURL", // 告诉videojs,这是一个m3u8流
+          },
+        ],
+      };
+      // videojs的第一个参数表示的是，文档中video的id
+      videojs("videoPlayer", options, function onPlayerReady() {});
     },
     //日期转换
     dateSwitch(date) {
@@ -222,13 +320,12 @@ export default {
     carSelect(item) {
       this.formfiled.vehicleName = item.vehicleName;
     },
+    // 获取流程环节
     gethuanjie() {
-      // 获取流程环节
       this.$http({
         method: "get",
         url: "api/v1/jky/searchDisposalLink",
         baseURL: "http://o792k95b.xiaomy.net/",
-        data: {},
       })
         .then((res) => {
           this.huanjie = res.data.result;
@@ -246,26 +343,6 @@ export default {
         data: {
           lnglatTime: "2022-05-19",
           deptId: "400000000",
-          // vehicleModelList: "",
-          // garbageType: "",
-        },
-      })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    //轨迹
-    getguiji() {
-      this.$http({
-        method: "post",
-        url: "api/v1/jky/siCarTrack/getPoints2",
-        baseURL: "http://o792k95b.xiaomy.net/",
-        data: {
-          date: this.formfiled.selectdate,
-          carNum: "400000000",
           // vehicleModelList: "",
           // garbageType: "",
         },
@@ -303,15 +380,14 @@ export default {
               });
             }
           } else if (typeof res.data === "object") {
-            this.drawFeixian(this.color[0]);
-            alert(res.data.message);
+            this.drawFeixian();
           }
         })
         .catch((err) => {
           console.log(err);
         });
     },
-    drawFeixian() {
+    drawFeixian(linedata = []) {
       let data = this.mapdata;
       echarts.registerMap("yls", data);
       if (this.chart != null && this.chart != "" && this.chart != undefined) {
@@ -322,7 +398,7 @@ export default {
       const option = {
         title: {
           text: `当前位置-${this.$route.params.areaName}`,
-          left: 200,
+          left: 220,
           top: 160,
           textStyle: {
             color: "#fff",
@@ -334,12 +410,11 @@ export default {
           regionHeight: 0.1,
           zoom: 1,
           top: 190,
-          left: 200,
+          left: 300,
           label: {
             show: false,
             distance: 0,
             formatter(param) {
-              console.log(param);
               const city = param.name;
               return `{sty1|${city}}`;
             },
@@ -388,7 +463,59 @@ export default {
             // rotateSensitivity: 0,
           },
         },
-        series: [],
+        series: [
+          {
+            type: "lines",
+            coordinateSystem: "geo",
+            zlevel: 15,
+            effect: {
+              show: false,
+              constantSpeed: 80,
+              symbol: "pin",
+              symbolSize: 10,
+              trailLength: 0,
+            },
+            lineStyle: {
+              normal: {
+                color: new echarts.graphic.LinearGradient(
+                  0,
+                  0,
+                  0,
+                  1,
+                  [
+                    {
+                      offset: 0,
+                      color: "#58B3CC",
+                    },
+                    {
+                      offset: 1,
+                      color: "#F58158",
+                    },
+                  ],
+                  false
+                ),
+                width: 2,
+                opacity: 0.4,
+                curveness: 0,
+              },
+            },
+            // label: {
+            //   show: true,
+            //   position: "middle",
+            //   formatter: (params) => {
+            //     console.log(params);
+            //     return params.data.coords[0];
+            //   },
+            // },
+            emphasis: {
+              lineStyle: {
+                disabled: false,
+                color: "#cb7f26",
+              },
+            },
+            data: linedata,
+          },
+        ],
       };
       this.chart.hideLoading();
       this.chart.setOption(option);
@@ -453,6 +580,11 @@ export default {
             position: "left",
             color: "#ffffff",
           },
+          emphasis: {
+            checkpointStyle: {
+              color: "#B03A5B",
+            },
+          },
           // itemStyle: {
           //   color: "#316BF3",
           // },
@@ -481,17 +613,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+html {
+  overflow-y: scroll;
+}
 ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-.container {
-  height: calc(100% - 90px);
+.container1 {
   width: 100%;
   .left {
     z-index: 100;
-    width: 150px;
+    width: 200px;
     display: inline-block;
     background: rgba(255, 255, 255, 0.13);
     position: absolute;
@@ -499,7 +633,7 @@ ul {
     top: 100px;
     margin: 0 10px;
     padding: 10px;
-    height: calc(100% - 125px);
+    height: calc(100% - 150px);
     border-radius: 5px;
     color: aliceblue;
     .selectdata {
@@ -527,7 +661,7 @@ ul {
     }
     .areatree {
       ul {
-        max-height: 700px;
+        max-height: 600px;
         overflow: auto;
         li {
           background: linear-gradient(45deg, #27a37a, #84ca91);
@@ -541,7 +675,7 @@ ul {
     right: 80px;
     top: -60px;
     width: calc(100% - 100px);
-    height: 100%;
+    height: 99%;
   }
   .topbtn {
     margin-bottom: 5px;
@@ -559,10 +693,11 @@ ul {
     border: solid 1px #66bbf9;
   }
   .rightContainer {
+    // display: none;
     width: 35%;
     position: absolute;
-    right: 10px;
-    height: calc(100% - 100px);
+    right: 50px;
+    height: calc(100% - 150px);
     .right {
       border: solid 1px rgb(11, 100, 233);
       background: rgba(255, 255, 255, 0.2);
