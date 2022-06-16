@@ -58,12 +58,12 @@
 
     var pl = new BMapGL.Polyline(point,{strokeColor:"blue", strokeWeight:6, strokeOpacity:0.5});
 
-    var trackAni = new BMapGLLib.TrackAnimation(bmap, pl, {
-        overallView: true, // 动画完成后自动调整视野到总览
-        tilt: 30,          // 轨迹播放的角度，默认为55
-        duration: 5000,   // 动画持续时长，默认为10000，单位ms
-        delay: 3000        // 动画开始的延迟，默认0，单位ms
-    });
-
+    // var trackAni = new BMapGLLib.TrackAnimation(bmap, pl, {
+    //     overallView: true, // 动画完成后自动调整视野到总览
+    //     tilt: 30,          // 轨迹播放的角度，默认为55
+    //     duration: 5000,   // 动画持续时长，默认为10000，单位ms
+    //     delay: 3000        // 动画开始的延迟，默认0，单位ms
+    // });
+    bmap.addOverlay(pl); 
     // trackAni.start();
 </script>

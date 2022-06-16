@@ -16,6 +16,7 @@
         }
     </style>
     <script type="text/javascript" src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=eae1ItjXiOnR6CvVFg5iR4WuGfG6d380"></script>
+    <script type="text/javascript" src="//api.map.baidu.com/library/TrackAnimation/src/TrackAnimation_min.js"></script>
     <title>3D棱柱</title>
 </head>
 
@@ -27,12 +28,12 @@
 <script type="text/javascript">
     // 百度地图API功能
     var map = new BMapGL.Map("allmap");
-    var point = new BMapGL.Point(116.404, 39.925);
-    map.centerAndZoom(point, 10);
-    map.setTilt(50);
+    var point = new BMapGL.Point(116.297611, 40.047363);
+    map.centerAndZoom(point, 12);
+    map.setTilt(35);
     map.enableScrollWheelZoom();
     var bd = new BMapGL.Boundary();
-    bd.get('北京市', function (rs) {
+    bd.get('海淀区', function (rs) {
         var count = rs.boundaries.length; //行政区域的点有多少个
         var pointArray = [];
         for (var i = 0; i < count; i++) {
@@ -44,7 +45,7 @@
                 var lat = points[j].split(',')[1];
                 path.push(new BMapGL.Point(lng, lat));
             }
-            var prism = new BMapGL.Prism(path, 5000, {
+            var prism = new BMapGL.Prism(path, 1000, {
                 topFillColor: '#5679ea',
                 topFillOpacity: 0.5,
                 sideFillColor: '#5679ea',
@@ -1151,4 +1152,46 @@
         }
     }];
     map.setMapStyleV2({styleJson: styleJson});
+    var path = [{
+        'lng': 116.297611,
+        'lat': 40.047363
+    }, {
+        'lng': 116.302839,
+        'lat': 40.048219
+    }, {
+        'lng': 116.308301,
+        'lat': 40.050566
+    }, {
+        'lng': 116.305732,
+        'lat': 40.054957
+    }, {
+        'lng': 116.304754,
+        'lat': 40.057953
+    }, {
+        'lng': 116.306487,
+        'lat': 40.058312
+    }, {
+        'lng': 116.307223,
+        'lat': 40.056379
+    }];
+
+    var point = [];
+    for (var i = 0; i < path.length; i++) {
+        var poi = new BMapGL.Point(path[i].lng, path[i].lat);
+        point.push(poi);
+        var marker = new BMapGL.Marker(poi); //创建标注
+        map.addOverlay(marker); //将标注添加到地图中
+    }
+
+
+    var pl = new BMapGL.Polyline(point,{strokeColor:"blue", strokeWeight:6, strokeOpacity:0.5});
+
+    var trackAni = new BMapGLLib.TrackAnimation(map, pl, {
+        overallView: true, // 动画完成后自动调整视野到总览
+        tilt: 35,          // 轨迹播放的角度，默认为55
+        duration: 5000,   // 动画持续时长，默认为10000，单位ms
+        delay: 3000        // 动画开始的延迟，默认0，单位ms
+    });
+    // map.addOverlay(pl); 
+    trackAni.start();
 </script>

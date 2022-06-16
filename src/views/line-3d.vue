@@ -629,8 +629,15 @@ export default {
       this.chart.setOption(option);
       this.chart.on("click", (res) => {
         this.$router.push({
-          path: `/line3d-area/${res.name}`,
+          name: "line3d-area",
+          query: {
+            areaName: res.name,
+            garbageType: this.garbageType,
+          },
         });
+        // this.$router.push({
+        //   path: `/line3d-area/${res.name}`,
+        // });
       });
     },
   },

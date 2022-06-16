@@ -17,6 +17,12 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
   {
+    path: "/bmaplk",
+    name: "bmaplk",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/bmap-lk.vue"),
+  },
+  {
     path: "/line",
     name: "line",
     component: () =>
@@ -29,7 +35,7 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/line-3d.vue"),
   },
   {
-    path: "/line3d-area/:areaName",
+    path: "/line3d-area",
     name: "line3d-area",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/line-area.vue"),
