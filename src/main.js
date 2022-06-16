@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 import "animate.css";
 import "@/assets/css/main.scss";
+import "video.js/dist/video-js.css";
 
 // axios
 import axios from "axios";

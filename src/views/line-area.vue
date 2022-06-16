@@ -66,8 +66,37 @@
           <div id="timeline"></div>
           <div id="topchart"></div>
         </div>
-        <div style="max-width: 550px">
-          <video id="videoPlayer" class="video-js" muted></video>
+        <div class="videocontainer" :class="{ active: isactive }">
+          <div class="titleContainer" v-show="isactive">
+            <div class="videoPoint">
+              <span></span><span></span><span></span> <span></span><span></span
+              ><span></span>
+            </div>
+            <div class="videoTitle">{{ carName }}车载监控</div>
+            <div class="videoOff" @click="isactive = false">关闭</div>
+          </div>
+          <div class="videoContiner">
+            <div style="width: 100%">
+              <video
+                id="videoPlayer"
+                ref="videoPlayer"
+                class="video-js"
+                muted
+              ></video>
+            </div>
+            <div class="urlList" v-show="isactive">
+              <ul>
+                <li
+                  v-for="(item, index) in urlList"
+                  :key="index"
+                  @click="toggleUrl(item)"
+                  :class="{ urlActive: item == videoUrl }"
+                >
+                  车载视频{{ index + 1 }}
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -82,7 +111,22 @@ import yls_json from "./ljpt_xz.json";
 export default {
   data() {
     return {
+      videoOptions: {
+        controls: true, // 是否显示控制条
+        preload: "auto",
+        sources: [
+          {
+            src: "xxx",
+            type: "application/x-mpegURL",
+          },
+        ],
+      },
+      isactive: true,
       carlist: [],
+      carName: "收集-浙F10BY2",
+      videoUrl: "",
+      urlList: [],
+      player: null,
       typelist: [
         { name: "可回收物", key: 10 },
         { name: "有害垃圾", key: 20 },
@@ -143,15 +187,15 @@ export default {
     );
     var date = new Date();
     this.formfiled.selectdate = this.dateSwitch(date);
-    this.getTree("2022-06-14");
+    // this.getTree("2022-06-14");
   },
   mounted() {
     // this.drawFeixian();
-    this.gethuanjie();
-    this.drawTimeline();
+    // this.gethuanjie();
+    // this.drawTimeline();
     this.getVideoUrl();
-    this.getlineport();
-    this.getTimelineData();
+    // this.getlineport();
+    // this.getTimelineData();
     //下钻参考https://blog.csdn.net/qq_23447231/article/details/1219287442022-04-12
   },
   methods: {
@@ -266,34 +310,108 @@ export default {
     getVideoUrl() {
       this.$http({
         method: "get",
-        url: "api/v1/jky/pjcamera/getUrlAddress",
+        url: `api/v1/jky/getGpsHslUrl/${this.carName}`,
         baseURL: "http://o792k95b.xiaomy.net/",
-        params: { carName: "浙FF5129", rowId: "92971" },
+        // params: { carName: "浙FF5129", rowId: "92971" },
       })
         .then((res) => {
-          console.log(res.data.result);
-          this.getVideo(res.data.result);
+          if (res.data.result && res.data.result.length > 0) {
+            this.videoUrl = res.data.result[0];
+            this.urlList = res.data.result;
+            this.player = videojs(
+              this.$refs.videoPlayer,
+              {
+                controls: true, // 是否显示控制条
+                preload: "auto",
+                sources: [
+                  {
+                    src: this.videoUrl,
+                    type: "application/x-mpegURL",
+                  },
+                ],
+              },
+              function onPlayerReady() {
+                this.on("loadstart", function () {
+                  console.log("开始请求数据 ");
+                });
+                this.on("progress", function () {
+                  console.log("正在请求数据 ");
+                });
+                this.on("loadedmetadata", function () {
+                  console.log("获取资源长度完成 ");
+                });
+                this.on("canplaythrough", function () {
+                  console.log("视频源数据加载完成");
+                  this.play();
+                });
+                this.on("waiting", function () {
+                  console.log("等待数据");
+                });
+                this.on("play", function () {
+                  console.log("视频开始播放");
+                });
+                this.on("playing", function () {
+                  console.log("视频播放中");
+                });
+                this.on("pause", function () {
+                  console.log("视频暂停播放");
+                });
+                this.on("ended", function () {
+                  console.log("视频播放结束");
+                });
+                this.on("error", function () {
+                  console.log("加载错误");
+                });
+                this.on("seeking", function () {
+                  console.log("视频跳转中");
+                });
+                this.on("seeked", function () {
+                  console.log("视频跳转结束");
+                });
+                this.on("ratechange", function () {
+                  console.log("播放速率改变");
+                });
+                this.on("timeupdate", function () {
+                  console.log("播放时长改变");
+                });
+                this.on("volumechange", function () {
+                  console.log("音量改变");
+                });
+                this.on("stalled", function () {
+                  console.log("网速异常");
+                });
+              }
+            );
+          }
         })
         .catch((err) => {
           console.log(err);
         });
+      // this.$http({
+      //   method: "get",
+      //   url: `api/v1/jky/pjcamera/getUrlAddress`,
+      //   baseURL: "http://o792k95b.xiaomy.net/",
+      //   params: { carName: "浙FF5129", rowId: "92971" },
+      // })
+      //   .then((res) => {
+      //     if (res.data.result && res.data.result.length > 0) {
+      //       this.videoUrl = res.data.result;
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     },
-    getVideo(url) {
-      let options = {
-        width: 550,
-        height: 380,
-        autoplay: true, // 设置自动播放
-        controls: true, // 显示播放的控件
-        sources: [
-          //如果需要切换视频源，src需要动态设置
-          {
-            src: url,
-            type: "application/x-mpegURL", // 告诉videojs,这是一个m3u8流
-          },
-        ],
-      };
-      // videojs的第一个参数表示的是，文档中video的id
-      videojs("videoPlayer", options, function onPlayerReady() {});
+    // 切换视角
+    toggleUrl(item) {
+      if (item != this.videoUrl) {
+        this.videoUrl = item;
+        // this.player.src({ src: this.videoUrl, type: "application/x-mpegURL" });
+        this.player.load({ src: this.videoUrl, type: "application/x-mpegURL" });
+        // setTimeout(() => {
+        //   this.player.play();
+        // }, 1000);
+      }
     },
     //日期转换
     dateSwitch(date) {
@@ -689,8 +807,12 @@ ul {
     }
   }
   .active {
-    border-radius: 8px;
-    border: solid 1px #66bbf9;
+    position: fixed;
+    left: 200px;
+    top: 200px;
+    z-index: 200;
+    width: 70%;
+    height: 70%;
   }
   .rightContainer {
     // display: none;
@@ -720,6 +842,67 @@ ul {
           height: 400px;
           position: absolute;
           left: 0;
+        }
+      }
+      .videocontainer {
+        border: #0875f2;
+        .titleContainer {
+          background: #455dc7;
+          display: flex;
+          justify-content: space-between;
+          .videoTitle {
+            height: 50px;
+            min-width: 200px;
+            font-weight: 700;
+            color: aliceblue;
+            line-height: 50px;
+            background-image: url("../assets/images/videotitle.svg");
+            background-size: cover;
+          }
+          .videoOff {
+            height: 50px;
+            min-width: 150px;
+            font-weight: 700;
+            color: aliceblue;
+            line-height: 50px;
+            background-image: url("../assets/images/videoOff.svg");
+            background-size: cover;
+          }
+          .videoPoint {
+            height: 50px;
+            line-height: 50px;
+            display: flex;
+            min-width: 100px;
+            justify-content: space-around;
+            span {
+              display: inline-block;
+              margin-top: 20px;
+              width: 10px;
+              height: 10px;
+              border-radius: 5px;
+              background: #0875f2;
+            }
+          }
+        }
+        .videoContiner {
+          height: calc(100% - 50px);
+          display: flex;
+          justify-content: space-between;
+          .urlList {
+            cursor: pointer;
+            z-index: 1000;
+            width: 250px;
+            height: 100%;
+            background: #0875f2;
+            ul > li {
+              height: 30px;
+              margin: 10px auto;
+              color: #fff;
+            }
+            li.urlActive {
+              background: linear-gradient(90deg, #455dc7, #0875f2);
+            }
+          }
         }
       }
     }
