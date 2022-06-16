@@ -145,7 +145,7 @@ export default {
       formfiled: {
         garbageName: "请选择回收类型",
         garbageType: "",
-        selectdate: "",
+        selectdate: "2022-04-12",
         vehicleModelListName: "请选择回收环节",
         vehicleModelList: "",
         vehicleName: "",
@@ -193,7 +193,7 @@ export default {
     console.log(this.$route.query.areaName, this.mapdata);
     this.centerMap = this.mapdata.features[0].properties;
     var date = new Date();
-    this.formfiled.selectdate = this.dateSwitch(date);
+    // this.formfiled.selectdate = this.dateSwitch(date);
     this.getTree(this.formfiled.selectdate);
     this.formfiled.garbageType = this.$route.query.garbageType;
     this.typelist.forEach((item) => {
