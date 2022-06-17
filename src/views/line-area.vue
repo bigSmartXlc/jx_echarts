@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 <template>
   <div class="container1">
     <div class="left">
@@ -20,7 +21,7 @@
       </div>
       <div class="dateselect">
         <span>日期</span
-        ><input type="date" placeholder="" v-model="formfiled.selectdate" />
+        ><input type="date" placeholder="" v-model="formfiled1.selectdate" />
       </div>
       <div class="huanjie">
         <div>
@@ -78,7 +79,6 @@
           <div class="videoContiner">
             <div style="width: 100%">
               <video
-                id="videoPlayer"
                 ref="videoPlayer"
                 class="video-js"
                 @click="isactive == false ? (isactive = true) : ''"
@@ -115,6 +115,7 @@ export default {
   data() {
     return {
       ak: "eae1ItjXiOnR6CvVFg5iR4WuGfG6d380",
+      bmap: null,
       videoOptions: {
         controls: true, // 是否显示控制条
         preload: "auto",
@@ -127,7 +128,7 @@ export default {
       },
       isactive: false,
       carlist: [],
-      carName: "收集-浙F10BY2",
+      carName: "洒-浙FV2129",
       videoUrl: "",
       urlList: [],
       player: null,
@@ -144,11 +145,13 @@ export default {
       ],
       formfiled: {
         garbageName: "请选择回收类型",
-        garbageType: "",
-        selectdate: "2022-04-12",
         vehicleModelListName: "请选择回收环节",
-        vehicleModelList: "",
         vehicleName: "",
+      },
+      formfiled1: {
+        vehicleModelList: "",
+        selectdate: "2022-04-12",
+        garbageType: "",
       },
       typeopen: 0,
       huanjie: [],
@@ -176,8 +179,18 @@ export default {
     };
   },
   watch: {
-    "formfiled.selectdate": function (val) {
-      this.getTree(val);
+    formfiled1: {
+      handler(val) {
+        //逻辑处理
+        console.log(val);
+        this.getcarteamTree(val);
+      },
+      deep: true,
+    },
+    "formfiled.vehicleName": function () {
+      this.drawTimeline();
+      this.getVideoUrl();
+      this.getlineport();
     },
   },
   computed: {},
@@ -190,12 +203,10 @@ export default {
     this.mapdata.features = data.filter(
       (item) => item.properties.name === this.$route.query.areaName
     );
-    console.log(this.$route.query.areaName, this.mapdata);
     this.centerMap = this.mapdata.features[0].properties;
     var date = new Date();
-    // this.formfiled.selectdate = this.dateSwitch(date);
-    this.getTree(this.formfiled.selectdate);
-    this.formfiled.garbageType = this.$route.query.garbageType;
+    // this.formfiled1.selectdate = this.dateSwitch(date);
+    this.formfiled1.garbageType = this.$route.query.garbageType;
     this.typelist.forEach((item) => {
       if (item.key == this.$route.query.garbageType) {
         this.formfiled.garbageName = item.name;
@@ -204,10 +215,6 @@ export default {
   },
   mounted() {
     this.gethuanjie();
-    this.drawTimeline();
-    this.getVideoUrl();
-    // this.getlineport();
-    // this.getTimelineData();
     this.initMap();
     //下钻参考https://blog.csdn.net/qq_23447231/article/details/1219287442022-04-12
   },
@@ -217,18 +224,21 @@ export default {
       // 传入密钥获取地图回调。
       BMPGL(this.ak)
         .then((BMapGL) => {
-          var map = new BMapGL.Map("chart-box", {
+          this.bmap = new BMapGL.Map("chart-box", {
             enableDblclickZoom: false,
             displayOptions: {
               building: false,
             },
           });
-          map.centerAndZoom(new BMapGL.Point(...this.centerMap.center), 12);
-          map.enableScrollWheelZoom(true);
-          map.setTilt(35);
-          map.enableScrollWheelZoom();
+          this.bmap.centerAndZoom(
+            new BMapGL.Point(...this.centerMap.center),
+            12
+          );
+          this.bmap.enableScrollWheelZoom(true);
+          this.bmap.setTilt(35);
+          this.bmap.enableScrollWheelZoom();
           var bd = new BMapGL.Boundary();
-          bd.get(this.centerMap.name, function (rs) {
+          bd.get(this.centerMap.name, (rs) => {
             var count = rs.boundaries.length; //行政区域的点有多少个
             for (var i = 0; i < count; i++) {
               var path = [];
@@ -245,7 +255,8 @@ export default {
                 sideFillColor: "#5679ea",
                 sideFillOpacity: 0.9,
               });
-              map.addOverlay(prism);
+              prism.disableMassClear();
+              this.bmap.addOverlay(prism);
             }
           });
           var styleJson = [
@@ -1505,13 +1516,13 @@ export default {
               },
             },
           ];
-          map.setMapStyleV2({ styleJson: styleJson });
+          this.bmap.setMapStyleV2({ styleJson: styleJson });
         })
         .catch((err) => {
           console.log(err);
         });
     },
-    // 获取轨迹点
+    // 获取时间线节点数据
     getTimelineData() {
       this.$http({
         method: "post",
@@ -1529,6 +1540,26 @@ export default {
           console.log(err);
         });
     },
+    //获取车辆组织树
+    getcarteamTree() {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/pjcar/pjcarTree",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          lnglatTime: "2022-05-19",
+          deptId: "400000000",
+          vehicleModelList: this.formfiled1.vehicleModelList,
+          garbageType: this.formfiled.garbageType,
+        },
+      })
+        .then((res) => {
+          this.getTree();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     // 获取轨迹点
     getlineport() {
       // let params = new FormData();
@@ -1536,83 +1567,45 @@ export default {
       // params.append("date", "2022-4-12");
       this.$http
         .post(
-          "http://o792k95b.xiaomy.net/api/v1/jky/siCarTrack/getPoints2?carNum=浙FF5129&date=2022-04-12"
+          "http://o792k95b.xiaomy.net/api/v1/jky/siCarTrack/getPoints2?carNum=洒-浙FV2129&date=2022-06-13"
           // params
         )
         .then((res) => {
-          // var data = res.data.result;
-          var data = [
-            ["121.2522100", "30.7005377", "2022-04-12 00:01:03"],
-            ["121.2522100", "30.7005377", "2022-04-12 00:10:03"],
-            ["121.2522100", "30.7005377", "2022-04-12 00:20:03"],
-            ["121.2522100", "30.7005377", "2022-04-12 00:30:03"],
-            ["121.2522100", "30.7005377", "2022-04-12 00:40:03"],
-            ["121.2522100", "30.7005377", "2022-04-12 00:50:03"],
-            ["121.2522100", "30.7005377", "2022-04-12 01:00:03"],
-            ["121.2522100", "30.7005377", "2022-04-12 01:10:03"],
-            ["121.2522100", "30.7005377", "2022-04-12 01:20:03"],
-            ["121.2522100", "30.7005377", "2022-04-12 01:30:03"],
-            ["121.2522100", "30.7005377", "2022-04-12 01:40:03"],
-            ["121.2522100", "30.7005377", "2022-04-12 01:50:03"],
-            ["121.2522100", "30.7005377", "2022-04-12 02:00:04"],
-            ["121.2522100", "30.7005377", "2022-04-12 02:10:04"],
-            ["121.2522100", "30.7005377", "2022-04-12 02:20:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 02:30:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 02:40:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 02:50:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 03:00:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 03:10:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 03:20:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 03:30:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 03:40:35"],
-            ["121.2522100", "30.7005377", "2022-04-12 03:50:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 04:00:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 04:10:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 04:20:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 04:30:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 04:40:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 04:50:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 05:00:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 05:10:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 05:20:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 05:30:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 05:40:05"],
-            ["121.2522100", "30.7005377", "2022-04-12 05:50:06"],
-            ["121.2522100", "30.7005377", "2022-04-12 06:00:06"],
-            ["121.2522100", "30.7005377", "2022-04-12 06:10:36"],
-            ["121.2522100", "30.7005377", "2022-04-12 06:20:06"],
-            ["121.2522100", "30.7005377", "2022-04-12 06:30:06"],
-            ["121.2522100", "30.7005377", "2022-04-12 06:40:06"],
-            ["121.2522100", "30.7005377", "2022-04-12 06:50:06"],
-            ["121.2522100", "30.7005377", "2022-04-12 07:00:06"],
-            ["121.2522100", "30.7005377", "2022-04-12 07:10:06"],
-            ["121.2522100", "30.7005377", "2022-04-12 07:20:07"],
-            ["121.2522100", "30.7005377", "2022-04-12 07:30:07"],
-            ["121.2522100", "30.7005377", "2022-04-12 07:40:07"],
-            ["121.2522100", "30.7005377", "2022-04-12 07:50:07"],
-            ["121.2522100", "30.7005377", "2022-04-12 08:00:07"],
-            ["121.2522100", "30.7005377", "2022-04-12 08:10:07"],
-            ["121.2522100", "30.7005377", "2022-04-12 08:20:07"],
-            ["121.2522100", "30.7005377", "2022-04-12 08:30:07"],
-            ["121.2522100", "30.7005377", "2022-04-12 08:40:07"],
-            ["121.2522101", "30.7005377", "2022-04-12 08:50:07"],
-          ];
-          var linedata = [];
+          var data = res.data.result;
+          var path = [];
           data.forEach((item, index) => {
-            if (index < data.length - 2) {
-              linedata.push({
-                coords: [
-                  [item[0], item[1]],
-                  [
-                    data[index + 1][0] || item[0],
-                    data[index + 1][1] || item[1],
-                  ],
-                ],
-              });
+            if (index < data.length - 1) {
+              if (
+                item[0] != data[index + 1][0] &&
+                item[1] != data[index + 1][1]
+              ) {
+                path.push({ lng: item[0], lat: item[1] });
+              }
             }
           });
-          console.log(linedata);
-          // this.drawFeixian(linedata);
+          this.bmap.clearOverlays();
+          var point = [];
+          for (var i = 0; i < path.length; i++) {
+            var poi = new BMapGL.Point(path[i].lng, path[i].lat);
+            point.push(poi);
+            var marker = new BMapGL.Marker(poi); //创建标注
+            this.bmap.addOverlay(marker); //将标注添加到地图中
+          }
+
+          var pl = new BMapGL.Polyline(point, {
+            strokeColor: "#04f197",
+            strokeWeight: 10,
+            strokeOpacity: 1,
+            geodesic: true,
+          });
+          // var trackAni = new BMapGLLib.TrackAnimation(this.bmap, pl, {
+          //   overallView: true, // 动画完成后自动调整视野到总览
+          //   tilt: 35, // 轨迹播放的角度，默认为55
+          //   duration: 5000, // 动画持续时长，默认为10000，单位ms
+          //   delay: 3000, // 动画开始的延迟，默认0，单位ms
+          // });
+          this.bmap.addOverlay(pl);
+          // trackAni.start();
         })
         .catch((err) => {
           console.log(err);
@@ -1624,105 +1617,80 @@ export default {
         method: "get",
         url: `api/v1/jky/getGpsHslUrl/${this.carName}`,
         baseURL: "http://o792k95b.xiaomy.net/",
-        // params: { carName: "浙FF5129", rowId: "92971" },
       })
         .then((res) => {
           if (res.data.result && res.data.result.length > 0) {
             this.videoUrl = res.data.result[0];
             this.urlList = res.data.result;
-            this.player = videojs(
-              this.$refs.videoPlayer,
-              {
-                controls: true, // 是否显示控制条
-                preload: "auto",
-                sources: [
-                  {
-                    src: this.videoUrl,
-                    type: "application/x-mpegURL",
-                  },
-                ],
-              },
-              function onPlayerReady() {
-                this.on("loadstart", function () {
-                  console.log("开始请求数据 ");
-                });
-                this.on("progress", function () {
-                  console.log("正在请求数据 ");
-                });
-                this.on("loadedmetadata", function () {
-                  console.log("获取资源长度完成 ");
-                });
-                this.on("canplaythrough", function () {
-                  console.log("视频源数据加载完成");
-                  this.play();
-                });
-                this.on("waiting", function () {
-                  console.log("等待数据");
-                });
-                this.on("play", function () {
-                  console.log("视频开始播放");
-                });
-                this.on("playing", function () {
-                  console.log("视频播放中");
-                });
-                this.on("pause", function () {
-                  console.log("视频暂停播放");
-                });
-                this.on("ended", function () {
-                  console.log("视频播放结束");
-                });
-                this.on("error", function () {
-                  console.log("加载错误");
-                });
-                this.on("seeking", function () {
-                  console.log("视频跳转中");
-                });
-                this.on("seeked", function () {
-                  console.log("视频跳转结束");
-                });
-                this.on("ratechange", function () {
-                  console.log("播放速率改变");
-                });
-                this.on("timeupdate", function () {
-                  console.log("播放时长改变");
-                });
-                this.on("volumechange", function () {
-                  console.log("音量改变");
-                });
-                this.on("stalled", function () {
-                  console.log("网速异常");
-                });
-              }
-            );
+            setTimeout(() => {
+              this.player = videojs(this.$refs.videoPlayer);
+              this.player.src(this.videoUrl);
+              videojs(this.$refs.videoPlayer).ready(function () {
+                this.player = this;
+                this.player.play();
+              });
+            }, 1000);
           }
         })
         .catch((err) => {
           console.log(err);
         });
-      // this.$http({
-      //   method: "get",
-      //   url: `api/v1/jky/pjcamera/getUrlAddress`,
-      //   baseURL: "http://o792k95b.xiaomy.net/",
-      //   params: { carName: "浙FF5129", rowId: "92971" },
-      // })
-      //   .then((res) => {
-      //     if (res.data.result && res.data.result.length > 0) {
-      //       this.videoUrl = res.data.result;
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
     },
     // 切换视角
     toggleUrl(item) {
       if (item != this.videoUrl) {
         this.videoUrl = item;
-        // this.player.src({ src: this.videoUrl, type: "application/x-mpegURL" });
-        this.player.load({ src: this.videoUrl, type: "application/x-mpegURL" });
-        // setTimeout(() => {
-        //   this.player.play();
-        // }, 1000);
+        this.player.src(this.videoUrl);
+        this.player.ready(function () {
+          this.on("progress", function () {
+            console.log("正在请求数据 ");
+          });
+          this.on("loadedmetadata", function () {
+            console.log("获取资源长度完成 ");
+          });
+          this.on("canplaythrough", function () {
+            console.log("视频源数据加载完成");
+            this.play();
+          });
+          this.on("waiting", function () {
+            console.log("等待数据");
+          });
+          this.on("play", function () {
+            console.log("视频开始播放");
+          });
+          this.on("playing", function () {
+            console.log("视频播放中");
+          });
+          this.on("pause", function () {
+            console.log("视频暂停播放");
+          });
+          this.on("ended", function () {
+            console.log("视频播放结束");
+          });
+          this.on("error", function () {
+            console.log("加载错误");
+          });
+          this.on("seeking", function () {
+            console.log("视频跳转中");
+          });
+          this.on("seeked", function () {
+            console.log("视频跳转结束");
+          });
+          this.on("ratechange", function () {
+            console.log("播放速率改变");
+          });
+          this.on("timeupdate", function () {
+            console.log("播放时长改变");
+          });
+          this.on("volumechange", function () {
+            console.log("音量改变");
+          });
+          this.on("stalled", function () {
+            console.log("网速异常");
+          });
+          this.player = this;
+          this.player.play();
+        });
       }
     },
     //日期转换
@@ -1739,12 +1707,12 @@ export default {
     },
     typeSelect(item) {
       this.formfiled.garbageName = item.name;
-      this.formfiled.garbageType = item.key;
+      this.formfiled1.garbageType = item.key;
       this.typeopen = 0;
     },
     vehicleSelect(item) {
       this.formfiled.vehicleModelListName = item.paramName;
-      this.formfiled.vehicleModelList = item.paramCode;
+      this.formfiled1.vehicleModelList = item.paramCode;
       this.typeopen = 0;
     },
     carSelect(item) {
@@ -1765,9 +1733,9 @@ export default {
         });
     },
     // 获取车辆
-    getTree(val = this.selectdate) {
+    getTree() {
       let params = new FormData();
-      params.append("lnglatTime", val);
+      params.append("lnglatTime", this.formfiled1.selectdate);
       this.$http({
         method: "post",
         url: "api/v1/jky/pjcar/pjCarTreeVal",
@@ -1781,6 +1749,7 @@ export default {
           if (typeof res.data === "string") {
             var result = eval("(" + res.data + ")").result;
             if (result) {
+              this.carlist = [];
               Object.values(result).forEach((item) => {
                 item.forEach((num) => {
                   if (num.flag != 0) {
@@ -1797,139 +1766,6 @@ export default {
           console.log(err);
         });
     },
-    // drawFeixian(linedata = []) {
-    //   let data = this.mapdata;
-    //   echarts.registerMap("yls", data);
-    //   if (this.chart != null && this.chart != "" && this.chart != undefined) {
-    //     this.chart.dispose(); //销毁
-    //   }
-    //   this.chart = echarts.init(document.getElementById("chart-box"));
-    //   this.chart.showLoading();
-    //   const option = {
-    //     title: {
-    //       text: `当前位置-${this.$route.query.areaName}`,
-    //       left: 220,
-    //       top: 160,
-    //       textStyle: {
-    //         color: "#fff",
-    //       },
-    //     },
-    //     geo: {
-    //       map: "yls",
-    //       show: true,
-    //       regionHeight: 0.1,
-    //       zoom: 1,
-    //       top: 190,
-    //       left: 300,
-    //       label: {
-    //         show: false,
-    //         distance: 0,
-    //         formatter(param) {
-    //           const city = param.name;
-    //           return `{sty1|${city}}`;
-    //         },
-    //         rich: {
-    //           sty1: {
-    //             color: "#ffffff",
-    //             align: "center",
-    //           },
-    //         },
-    //         textStyle: {
-    //           fontSize: 12,
-    //           color: "#f51c0b",
-    //         },
-    //       },
-    //       itemStyle: {
-    //         color: "rgba(107,91,237,.7)",
-    //         opacity: 1,
-    //         borderWidth: 1.5,
-    //         // borderColor: "#0b7ef5",
-    //       },
-    //       emphasis: {
-    //         label: {
-    //           show: false,
-    //           formatter: (params) => {
-    //             this.selectcity = params.name;
-    //             return `{sty1|${params.name}}`;
-    //           },
-    //           rich: {
-    //             sty1: {
-    //               color: "#ffffff",
-    //               align: "center",
-    //             },
-    //           },
-    //         },
-    //         itemStyle: {
-    //           color: "#0c66a5",
-    //           opacity: 1,
-    //           borderWidth: 1.5,
-    //           borderColor: "#ffffff",
-    //         },
-    //       },
-    //       viewControl: {
-    //         distance: 110,
-    //         zoomSensitivity: 0,
-    //         panSensitivity: 0,
-    //         // rotateSensitivity: 0,
-    //       },
-    //     },
-    //     series: [
-    //       {
-    //         type: "lines",
-    //         coordinateSystem: "geo",
-    //         zlevel: 15,
-    //         effect: {
-    //           show: false,
-    //           constantSpeed: 80,
-    //           symbol: "pin",
-    //           symbolSize: 10,
-    //           trailLength: 0,
-    //         },
-    //         lineStyle: {
-    //           normal: {
-    //             color: new echarts.graphic.LinearGradient(
-    //               0,
-    //               0,
-    //               0,
-    //               1,
-    //               [
-    //                 {
-    //                   offset: 0,
-    //                   color: "#58B3CC",
-    //                 },
-    //                 {
-    //                   offset: 1,
-    //                   color: "#F58158",
-    //                 },
-    //               ],
-    //               false
-    //             ),
-    //             width: 2,
-    //             opacity: 0.4,
-    //             curveness: 0,
-    //           },
-    //         },
-    //         // label: {
-    //         //   show: true,
-    //         //   position: "middle",
-    //         //   formatter: (params) => {
-    //         //     console.log(params);
-    //         //     return params.data.coords[0];
-    //         //   },
-    //         // },
-    //         emphasis: {
-    //           lineStyle: {
-    //             disabled: false,
-    //             color: "#cb7f26",
-    //           },
-    //         },
-    //         data: linedata,
-    //       },
-    //     ],
-    //   };
-    //   this.chart.hideLoading();
-    //   this.chart.setOption(option);
-    // },
     drawTimeline() {
       var timeLineChart = echarts.init(document.getElementById("topchart"));
       var timeLinePart = echarts.init(document.getElementById("timeline"));
@@ -2083,10 +1919,14 @@ ul {
     display: inline-block;
     position: absolute;
     left: 0px;
+    right: 620px;
     top: 95px;
-    width: calc(100% - 10px);
+    // width: calc(100% - 10px);
     height: calc(100% - 95px);
     z-index: 0;
+  }
+  .videoShow {
+    width: 100%;
   }
   .topbtn {
     margin-bottom: 5px;
@@ -2105,7 +1945,7 @@ ul {
     top: 100px;
     z-index: 200;
     width: 70%;
-    height: 70%;
+    height: 70% !important;
   }
   .rightContainer {
     // display: none;
@@ -2120,6 +1960,7 @@ ul {
       overflow: hidden;
       .top {
         position: relative;
+        background: #c2cbf1;
         width: 100%;
         height: 50%;
         margin-bottom: 10px;
@@ -2154,6 +1995,7 @@ ul {
             background-size: cover;
           }
           .videoOff {
+            cursor: pointer;
             height: 50px;
             min-width: 150px;
             font-weight: 700;
