@@ -190,9 +190,11 @@ export default {
     "formfiled.vehicleName": function (val) {
       if (val) {
         this.rightshow = true;
-        this.drawTimeline();
-        this.getVideoUrl();
-        this.getlineport();
+        setTimeout(() => {
+          this.drawTimeline();
+          this.getVideoUrl();
+          this.getlineport();
+        }, 1000);
       }
     },
   },
@@ -235,7 +237,7 @@ export default {
           });
           this.bmap.centerAndZoom(
             new BMapGL.Point(...this.centerMap.center),
-            12
+            13
           );
           this.bmap.enableScrollWheelZoom(true);
           this.bmap.setTilt(35);
@@ -276,7 +278,7 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "on",
-                color: "#113549ff",
+                color: "#061616ff",
               },
             },
             {
@@ -284,7 +286,7 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "on",
-                color: "#0e1b30ff",
+                color: "#091220ff",
               },
             },
             {
@@ -298,21 +300,21 @@ export default {
               featureType: "building",
               elementType: "geometry.topfill",
               stylers: {
-                color: "#113549ff",
+                color: "#091220ff",
               },
             },
             {
               featureType: "building",
               elementType: "geometry.sidefill",
               stylers: {
-                color: "#143e56ff",
+                color: "#091220ff",
               },
             },
             {
               featureType: "building",
               elementType: "geometry.stroke",
               stylers: {
-                color: "#dadada00",
+                color: "#77777700",
               },
             },
             {
@@ -320,7 +322,7 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "on",
-                color: "#113549B2",
+                color: "#091120B2",
               },
             },
             {
@@ -328,7 +330,7 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "on",
-                color: "#12223dff",
+                color: "#091220ff",
               },
             },
             {
@@ -336,7 +338,7 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "on",
-                color: "#12223dff",
+                color: "#091220ff",
               },
             },
             {
@@ -344,7 +346,7 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "on",
-                color: "#12223dff",
+                color: "#091220ff",
               },
             },
             {
@@ -359,35 +361,35 @@ export default {
               featureType: "highway",
               elementType: "geometry.fill",
               stylers: {
-                color: "#12223dff",
+                color: "#333333ff",
               },
             },
             {
               featureType: "highway",
               elementType: "geometry.stroke",
               stylers: {
-                color: "#fed66900",
+                color: "#33333300",
               },
             },
             {
               featureType: "highway",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "highway",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#12223dff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "highway",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -409,14 +411,14 @@ export default {
               featureType: "arterial",
               elementType: "geometry.fill",
               stylers: {
-                color: "#141414ff",
+                color: "#091200ff",
               },
             },
             {
               featureType: "arterial",
               elementType: "geometry.stroke",
               stylers: {
-                color: "#ffeebb00",
+                color: "#09112000",
               },
             },
             {
@@ -430,14 +432,14 @@ export default {
               featureType: "arterial",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#171b1bff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "arterial",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -452,35 +454,35 @@ export default {
               featureType: "local",
               elementType: "geometry.fill",
               stylers: {
-                color: "#12223dff",
+                color: "#091120ff",
               },
             },
             {
               featureType: "local",
               elementType: "geometry.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#33333300",
               },
             },
             {
               featureType: "local",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "local",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#979c9aff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "local",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffffff",
+                color: "#00000000",
               },
             },
             {
@@ -502,35 +504,35 @@ export default {
               featureType: "subway",
               elementType: "geometry.fill",
               stylers: {
-                color: "#d8d8d8ff",
+                color: "#091120ff",
               },
             },
             {
               featureType: "subway",
               elementType: "geometry.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#09112000",
               },
             },
             {
               featureType: "subway",
               elementType: "labels",
               stylers: {
-                visibility: "on",
+                visibility: "off",
               },
             },
             {
               featureType: "subway",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#979c9aff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "subway",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffffff",
+                color: "#00000000",
               },
             },
             {
@@ -551,14 +553,14 @@ export default {
               featureType: "continent",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "continent",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -579,14 +581,14 @@ export default {
               featureType: "city",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#161818ff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "city",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -600,35 +602,35 @@ export default {
               featureType: "town",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "town",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#454d50ff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "town",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffffff",
+                color: "#00000000",
               },
             },
             {
               featureType: "road",
               elementType: "geometry.fill",
               stylers: {
-                color: "#01c7fcff",
+                color: "#091120ff",
               },
             },
             {
               featureType: "poilabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
@@ -649,14 +651,14 @@ export default {
               featureType: "road",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "road",
               elementType: "geometry.stroke",
               stylers: {
-                color: "#ffffffff",
+                color: "#091120ff",
               },
             },
             {
@@ -677,42 +679,35 @@ export default {
               featureType: "poilabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#292e2eff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "poilabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "manmade",
               elementType: "geometry",
               stylers: {
-                color: "#12223dff",
+                color: "#091220ff",
               },
             },
             {
               featureType: "districtlabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffffff",
-              },
-            },
-            {
-              featureType: "entertainment",
-              elementType: "geometry",
-              stylers: {
-                color: "#12223dff",
+                color: "#00000000",
               },
             },
             {
               featureType: "shopping",
               elementType: "geometry",
               stylers: {
-                color: "#12223dff",
+                color: "#091120ff",
               },
             },
             {
@@ -1041,7 +1036,7 @@ export default {
               featureType: "village",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
@@ -1055,98 +1050,98 @@ export default {
               featureType: "district",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#1d2525ff",
+                color: "#777777ff",
               },
             },
             {
               featureType: "district",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "country",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#121414ff",
+                color: "#777777ff",
               },
             },
             {
               featureType: "country",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "water",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#777777ff",
               },
             },
             {
               featureType: "water",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "cityhighway",
               elementType: "geometry.fill",
               stylers: {
-                color: "#272b2cff",
+                color: "#333333ff",
               },
             },
             {
               featureType: "cityhighway",
               elementType: "geometry.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#33333300",
               },
             },
             {
               featureType: "tertiaryway",
               elementType: "geometry.fill",
               stylers: {
-                color: "#0f0f0fff",
+                color: "#333333ff",
               },
             },
             {
               featureType: "tertiaryway",
               elementType: "geometry.stroke",
               stylers: {
-                color: "#ffffff10",
+                color: "#33333310",
               },
             },
             {
               featureType: "provincialway",
               elementType: "geometry.fill",
               stylers: {
-                color: "#12223dff",
+                color: "#333333ff",
               },
             },
             {
               featureType: "provincialway",
               elementType: "geometry.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#33333300",
               },
             },
             {
               featureType: "nationalway",
               elementType: "geometry.fill",
               stylers: {
-                color: "#12223dff",
+                color: "#333333ff",
               },
             },
             {
               featureType: "nationalway",
               elementType: "geometry.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#33333300",
               },
             },
             {
@@ -1160,14 +1155,14 @@ export default {
               featureType: "nationalway",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "nationalway",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#12223dff",
+                color: "#757777ff",
               },
             },
             {
@@ -1181,14 +1176,14 @@ export default {
               featureType: "provincialway",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#12223dff",
+                color: "#757677ff",
               },
             },
             {
               featureType: "provincialway",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -1202,7 +1197,7 @@ export default {
               featureType: "cityhighway",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#12223dff",
+                color: "#6d7074ff",
               },
             },
             {
@@ -1216,84 +1211,84 @@ export default {
               featureType: "cityhighway",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "estate",
               elementType: "geometry",
               stylers: {
-                color: "#12223dff",
+                color: "#091220ff",
               },
             },
             {
               featureType: "tertiaryway",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#555858ff",
               },
             },
             {
               featureType: "tertiaryway",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "fourlevelway",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "fourlevelway",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "scenicspotsway",
               elementType: "geometry.fill",
               stylers: {
-                color: "#12223dff",
+                color: "#333333ff",
               },
             },
             {
               featureType: "scenicspotsway",
               elementType: "geometry.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#33333300",
               },
             },
             {
               featureType: "universityway",
               elementType: "geometry.fill",
               stylers: {
-                color: "#12223dff",
+                color: "#091120ff",
               },
             },
             {
               featureType: "universityway",
               elementType: "geometry.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#33333300",
               },
             },
             {
               featureType: "vacationway",
               elementType: "geometry.fill",
               stylers: {
-                color: "#12223dff",
+                color: "#091120ff",
               },
             },
             {
               featureType: "vacationway",
               elementType: "geometry.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#33333300",
               },
             },
             {
@@ -1307,21 +1302,21 @@ export default {
               featureType: "fourlevelway",
               elementType: "geometry.fill",
               stylers: {
-                color: "#12223dff",
+                color: "#333333ff",
               },
             },
             {
               featureType: "fourlevelway",
               elementType: "geometry.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#33333300",
               },
             },
             {
               featureType: "transportationlabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
@@ -1335,21 +1330,21 @@ export default {
               featureType: "transportationlabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "transportationlabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "educationlabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
@@ -1363,63 +1358,63 @@ export default {
               featureType: "educationlabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#151919ff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "educationlabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "transportation",
               elementType: "geometry",
               stylers: {
-                color: "#113549ff",
+                color: "#091220ff",
               },
             },
             {
               featureType: "airportlabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#111313ff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "airportlabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "scenicspotslabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#1e2423ff",
+                color: "#7a7c7cff",
               },
             },
             {
               featureType: "scenicspotslabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "medicallabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#171919ff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "medicallabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -1454,14 +1449,14 @@ export default {
               featureType: "entertainmentlabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#121313ff",
+                color: "#777a7aff",
               },
             },
             {
               featureType: "entertainmentlabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -1475,28 +1470,28 @@ export default {
               featureType: "estatelabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "estatelabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "businesstowerlabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "businesstowerlabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -1510,14 +1505,14 @@ export default {
               featureType: "companylabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "companylabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -1538,28 +1533,28 @@ export default {
               featureType: "governmentlabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "governmentlabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "restaurantlabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#7b7e7eff",
               },
             },
             {
               featureType: "restaurantlabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -1580,28 +1575,28 @@ export default {
               featureType: "hotellabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#797a7aff",
               },
             },
             {
               featureType: "hotellabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "shoppinglabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#727777ff",
               },
             },
             {
               featureType: "shoppinglabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -1615,14 +1610,14 @@ export default {
               featureType: "lifeservicelabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#767979ff",
               },
             },
             {
               featureType: "lifeservicelabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -1636,14 +1631,14 @@ export default {
               featureType: "carservicelabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#777777ff",
               },
             },
             {
               featureType: "carservicelabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -1657,14 +1652,14 @@ export default {
               featureType: "financelabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "financelabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -1678,14 +1673,14 @@ export default {
               featureType: "otherlabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#777777ff",
               },
             },
             {
               featureType: "otherlabel",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -1699,70 +1694,70 @@ export default {
               featureType: "manmade",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "manmade",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "transportation",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "transportation",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "education",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "education",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "medical",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#757777ff",
               },
             },
             {
               featureType: "medical",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
               featureType: "scenicspots",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#777777ff",
               },
             },
             {
               featureType: "scenicspots",
               elementType: "labels.text.stroke",
               stylers: {
-                color: "#ffffff00",
+                color: "#00000000",
               },
             },
             {
@@ -1776,91 +1771,91 @@ export default {
               featureType: "airportlabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "scenicspotslabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "medicallabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "entertainmentlabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "estatelabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "businesstowerlabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "companylabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "restaurantlabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "hotellabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "shoppinglabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "lifeservicelabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "carservicelabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
               featureType: "financelabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
@@ -1874,7 +1869,7 @@ export default {
               featureType: "governmentlabel",
               elementType: "labels",
               stylers: {
-                visibility: "off",
+                visibility: "on",
               },
             },
             {
@@ -1885,84 +1880,98 @@ export default {
               },
             },
             {
-              featureType: "nationalway",
-              elementType: "labels",
+              featureType: "entertainment",
+              elementType: "geometry",
               stylers: {
-                visibility: "off",
+                color: "#091220ff",
               },
             },
             {
-              featureType: "provincialway",
-              elementType: "labels",
-              stylers: {
-                visibility: "off",
-              },
-            },
-            {
-              featureType: "cityhighway",
-              elementType: "labels",
-              stylers: {
-                visibility: "off",
-              },
-            },
-            {
-              featureType: "fourlevelway",
-              elementType: "labels",
-              stylers: {
-                visibility: "off",
-              },
-            },
-            {
-              featureType: "scenicspotsway",
+              featureType: "playground",
               elementType: "geometry",
               stylers: {
                 visibility: "off",
               },
             },
             {
-              featureType: "universityway",
+              featureType: "parkinglot",
               elementType: "geometry",
               stylers: {
                 visibility: "off",
               },
             },
             {
-              featureType: "water",
-              elementType: "labels",
+              featureType: "road",
+              elementType: "labels.text.fill",
+              stylers: {
+                color: "#757777ff",
+              },
+            },
+            {
+              featureType: "roadarrow",
+              elementType: "labels.icon",
               stylers: {
                 visibility: "off",
               },
             },
             {
-              featureType: "manmade",
-              elementType: "labels",
+              featureType: "footbridge",
+              elementType: "geometry",
               stylers: {
                 visibility: "off",
               },
             },
             {
-              featureType: "education",
-              elementType: "labels",
+              featureType: "crosswalk",
+              elementType: "geometry",
               stylers: {
                 visibility: "off",
               },
             },
             {
-              featureType: "medical",
-              elementType: "labels",
+              featureType: "underpass",
+              elementType: "geometry",
               stylers: {
                 visibility: "off",
               },
             },
             {
-              featureType: "scenicspots",
-              elementType: "labels",
+              featureType: "parkingspace",
+              elementType: "geometry",
               stylers: {
                 visibility: "off",
               },
             },
             {
-              featureType: "transportation",
+              featureType: "laneline",
+              elementType: "geometry",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "village",
+              elementType: "labels.text.fill",
+              stylers: {
+                color: "#777777ff",
+              },
+            },
+            {
+              featureType: "village",
+              elementType: "labels.text.stroke",
+              stylers: {
+                color: "#00000000",
+              },
+            },
+            {
+              featureType: "road",
+              elementType: "labels.text.stroke",
+              stylers: {
+                color: "#00000000",
+              },
+            },
+            {
+              featureType: "island",
               elementType: "labels",
               stylers: {
                 visibility: "off",
@@ -2039,12 +2048,10 @@ export default {
             for (var i = 0; i < path.length; i++) {
               var poi = new BMapGL.Point(path[i].lng, path[i].lat);
               point.push(poi);
-              // var marker = new BMapGL.Marker(poi); //创建标注
-              // this.bmap.addOverlay(marker); //将标注添加到地图中
             }
 
             var pl = new BMapGL.Polyline(point, {
-              strokeColor: "red",
+              strokeColor: "#49d68f",
               strokeWeight: 10,
               strokeOpacity: 1,
             });
@@ -2053,6 +2060,7 @@ export default {
               tilt: 35, // 轨迹播放的角度，默认为55
               duration: 10000, // 动画持续时长，默认为10000，单位ms
               delay: 1000, // 动画开始的延迟，默认0，单位ms
+              zoom: 15,
             });
             // this.bmap.addOverlay(pl);
             trackAni.start();
@@ -2363,16 +2371,19 @@ ul {
       line-height: 35px;
     }
     .typelist {
+      margin-bottom: 10px;
       ul > li {
         background: linear-gradient(45deg, #1eedd9, #84ca91);
       }
     }
     .huanjie {
+      margin-top: 10px;
       ul > li {
         background: linear-gradient(45deg, #0875f2, #c2cbf1);
       }
     }
     .areatree {
+      margin-top: 10px;
       ul {
         max-height: 600px;
         overflow: auto;
@@ -2427,18 +2438,17 @@ ul {
       overflow: hidden;
       .top {
         position: relative;
-        background: #c2cbf1;
         width: 100%;
         height: 50%;
         margin-bottom: 10px;
         #topchart {
-          width: 75%;
+          width: 70%;
           height: 400px;
           position: absolute;
           right: 0;
         }
         #timeline {
-          width: 25%;
+          width: 30%;
           height: 400px;
           position: absolute;
           left: 0;

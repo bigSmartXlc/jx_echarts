@@ -553,7 +553,7 @@ export default {
               trailLength: 0.1,
             },
             lineStyle: {
-              color: "#bd85ee",
+              color: "#ffd303",
               width: 4,
               opacity: 0.2,
               curveness: 0.2,
