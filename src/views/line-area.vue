@@ -352,7 +352,7 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "on",
-                weight: 4,
+                weight: "4",
               },
             },
             {
@@ -373,7 +373,7 @@ export default {
               featureType: "highway",
               elementType: "labels",
               stylers: {
-                visibility: "on",
+                visibility: "off",
               },
             },
             {
@@ -402,14 +402,14 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "on",
-                weight: 2,
+                weight: "2",
               },
             },
             {
               featureType: "arterial",
               elementType: "geometry.fill",
               stylers: {
-                color: "#09c7faff",
+                color: "#141414ff",
               },
             },
             {
@@ -423,14 +423,14 @@ export default {
               featureType: "arterial",
               elementType: "labels",
               stylers: {
-                visibility: "on",
+                visibility: "off",
               },
             },
             {
               featureType: "arterial",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#171b1bff",
               },
             },
             {
@@ -445,14 +445,14 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "on",
-                weight: 1,
+                weight: "1",
               },
             },
             {
               featureType: "local",
               elementType: "geometry.fill",
               stylers: {
-                color: "#05d9f5ff",
+                color: "#12223dff",
               },
             },
             {
@@ -466,7 +466,7 @@ export default {
               featureType: "local",
               elementType: "labels",
               stylers: {
-                visibility: "on",
+                visibility: "off",
               },
             },
             {
@@ -495,7 +495,7 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "off",
-                weight: 1,
+                weight: "1",
               },
             },
             {
@@ -642,7 +642,7 @@ export default {
               featureType: "road",
               elementType: "geometry",
               stylers: {
-                visibility: "on",
+                visibility: "off",
               },
             },
             {
@@ -718,41 +718,41 @@ export default {
             {
               featureType: "nationalway",
               stylers: {
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "6",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
               featureType: "nationalway",
               stylers: {
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "7",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
               featureType: "nationalway",
               stylers: {
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "8",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
               featureType: "nationalway",
               stylers: {
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "9",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
               featureType: "nationalway",
               stylers: {
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "10",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
@@ -760,9 +760,9 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "6",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
@@ -770,9 +770,9 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "7",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
@@ -780,9 +780,9 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "8",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
@@ -790,9 +790,9 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "9",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
@@ -800,9 +800,9 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "10",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
@@ -810,9 +810,9 @@ export default {
               elementType: "labels",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "6",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
@@ -820,9 +820,9 @@ export default {
               elementType: "labels",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "7",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
@@ -830,9 +830,9 @@ export default {
               elementType: "labels",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "8",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
@@ -840,9 +840,9 @@ export default {
               elementType: "labels",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "9",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
@@ -850,41 +850,41 @@ export default {
               elementType: "labels",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,10",
                 level: "10",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-10",
               },
             },
             {
               featureType: "cityhighway",
               stylers: {
-                curZoomRegionId: "0",
-                curZoomRegion: "6,9",
                 level: "6",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-9",
               },
             },
             {
               featureType: "cityhighway",
               stylers: {
-                curZoomRegionId: "0",
-                curZoomRegion: "6,9",
                 level: "7",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-9",
               },
             },
             {
               featureType: "cityhighway",
               stylers: {
-                curZoomRegionId: "0",
-                curZoomRegion: "6,9",
                 level: "8",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-9",
               },
             },
             {
               featureType: "cityhighway",
               stylers: {
-                curZoomRegionId: "0",
-                curZoomRegion: "6,9",
                 level: "9",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-9",
               },
             },
             {
@@ -892,9 +892,9 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,9",
                 level: "6",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-9",
               },
             },
             {
@@ -902,9 +902,9 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,9",
                 level: "7",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-9",
               },
             },
             {
@@ -912,9 +912,9 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,9",
                 level: "8",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-9",
               },
             },
             {
@@ -922,9 +922,9 @@ export default {
               elementType: "geometry",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,9",
                 level: "9",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-9",
               },
             },
             {
@@ -932,9 +932,9 @@ export default {
               elementType: "labels",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,9",
                 level: "6",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-9",
               },
             },
             {
@@ -942,9 +942,9 @@ export default {
               elementType: "labels",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,9",
                 level: "7",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-9",
               },
             },
             {
@@ -952,9 +952,9 @@ export default {
               elementType: "labels",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,9",
                 level: "8",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-9",
               },
             },
             {
@@ -962,9 +962,9 @@ export default {
               elementType: "labels",
               stylers: {
                 visibility: "off",
-                curZoomRegionId: "0",
-                curZoomRegion: "6,9",
                 level: "9",
+                curZoomRegionId: "0",
+                curZoomRegion: "6-9",
               },
             },
             {
@@ -1048,14 +1048,14 @@ export default {
               featureType: "district",
               elementType: "labels.text",
               stylers: {
-                fontsize: 20,
+                fontsize: "20",
               },
             },
             {
               featureType: "district",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#181b1bff",
+                color: "#1d2525ff",
               },
             },
             {
@@ -1097,7 +1097,7 @@ export default {
               featureType: "cityhighway",
               elementType: "geometry.fill",
               stylers: {
-                color: "#05c5f8ff",
+                color: "#272b2cff",
               },
             },
             {
@@ -1111,7 +1111,7 @@ export default {
               featureType: "tertiaryway",
               elementType: "geometry.fill",
               stylers: {
-                color: "#0fcbe9ff",
+                color: "#0f0f0fff",
               },
             },
             {
@@ -1125,7 +1125,7 @@ export default {
               featureType: "provincialway",
               elementType: "geometry.fill",
               stylers: {
-                color: "#04e6f6ff",
+                color: "#12223dff",
               },
             },
             {
@@ -1153,7 +1153,7 @@ export default {
               featureType: "highway",
               elementType: "labels.text",
               stylers: {
-                fontsize: 20,
+                fontsize: "20",
               },
             },
             {
@@ -1174,7 +1174,7 @@ export default {
               featureType: "nationalway",
               elementType: "labels.text",
               stylers: {
-                fontsize: 20,
+                fontsize: "20",
               },
             },
             {
@@ -1195,7 +1195,7 @@ export default {
               featureType: "provincialway",
               elementType: "labels.text",
               stylers: {
-                fontsize: 20,
+                fontsize: "20",
               },
             },
             {
@@ -1209,7 +1209,7 @@ export default {
               featureType: "cityhighway",
               elementType: "labels.text",
               stylers: {
-                fontsize: 20,
+                fontsize: "20",
               },
             },
             {
@@ -1307,7 +1307,7 @@ export default {
               featureType: "fourlevelway",
               elementType: "geometry.fill",
               stylers: {
-                color: "#0bc8faff",
+                color: "#12223dff",
               },
             },
             {
@@ -1398,7 +1398,7 @@ export default {
               featureType: "scenicspotslabel",
               elementType: "labels.text.fill",
               stylers: {
-                color: "#2dc4bbff",
+                color: "#1e2423ff",
               },
             },
             {
@@ -1769,7 +1769,7 @@ export default {
               featureType: "poilabel",
               elementType: "labels.text",
               stylers: {
-                fontsize: 21,
+                fontsize: "21",
               },
             },
             {
@@ -1865,6 +1865,104 @@ export default {
             },
             {
               featureType: "INTERNATIONALIZEICONICON",
+              elementType: "labels",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "governmentlabel",
+              elementType: "labels",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "tertiaryway",
+              elementType: "labels",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "nationalway",
+              elementType: "labels",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "provincialway",
+              elementType: "labels",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "cityhighway",
+              elementType: "labels",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "fourlevelway",
+              elementType: "labels",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "scenicspotsway",
+              elementType: "geometry",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "universityway",
+              elementType: "geometry",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "water",
+              elementType: "labels",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "manmade",
+              elementType: "labels",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "education",
+              elementType: "labels",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "medical",
+              elementType: "labels",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "scenicspots",
+              elementType: "labels",
+              stylers: {
+                visibility: "off",
+              },
+            },
+            {
+              featureType: "transportation",
               elementType: "labels",
               stylers: {
                 visibility: "off",
@@ -2071,7 +2169,8 @@ export default {
       s = s < 10 ? "0" + s : s;
       // 'm+': date.getMinutes(), // 分
       // 's+': date.getSeconds(), // 秒
-      return y + "-" + M + "-" + d + " " + h + ":" + m + ":" + s;
+      // return y + "-" + M + "-" + d + " " + h + ":" + m + ":" + s;
+      return y + "-" + M + "-" + d;
     },
     typeSelect(item) {
       this.formfiled.garbageName = item.name;

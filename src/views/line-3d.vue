@@ -428,7 +428,7 @@ export default {
           // value: item.properties.centroid,
           itemStyle: {
             // color: this.color[index] || "#046357",
-            color: "#1acbfc",
+            color: "#324ca4",
           },
         };
       });
@@ -465,34 +465,6 @@ export default {
               color: "#f51c0b",
             },
           },
-          // itemStyle: {
-          //   color: "#ff8701",
-          //   opacity: 0,
-          //   borderWidth: 1.5,
-          //   // borderColor: "#0b7ef5",
-          // },
-          // emphasis: {
-          //   label: {
-          //     show: false,
-          //     formatter: (params) => {
-          //       console.log(1);
-          //       this.selectcity = params.name;
-          //       return `{sty1|${params.name}}`;
-          //     },
-          //     rich: {
-          //       sty1: {
-          //         color: "#8d0121",
-          //         align: "center",
-          //       },
-          //     },
-          //   },
-          //   itemStyle: {
-          //     // color: "#14e9c0",
-          //     opacity: 0.1,
-          //     borderWidth: 1.5,
-          //     borderColor: "#ffffff",
-          //   },
-          // },
           viewControl: {
             distance: 110,
             zoomSensitivity: 1,
@@ -553,7 +525,7 @@ export default {
             //   textureTiling: 1, // 纹理平铺，1是拉伸，数字表示纹理平铺次数
             // },
             itemStyle: {
-              color: "#ff8701",
+              color: "#740be8",
               // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
               // areaColor: "#000", // 地图板块的颜色
               opacity: 0.5, // 图形的不透明度 [ default: 1 ]
@@ -574,14 +546,16 @@ export default {
             effect: {
               show: true,
               // period: 6,
-              constantSpeed: 1.5,
-              trailWidth: 1,
-              trailLength: 0.2,
+              constantSpeed: 1,
+              trailColor: "#f7f70b",
+              trailOpacity: 1,
+              trailWidth: 4,
+              trailLength: 0.1,
             },
             lineStyle: {
-              color: linecolor,
-              width: 1,
-              opacity: 1,
+              color: "#bd85ee",
+              width: 4,
+              opacity: 0.2,
               curveness: 0.2,
             },
             emphasis: {
