@@ -20,7 +20,10 @@
         </ul>
       </div>
       <div class="dateselect">
-        <vue-datepicker-local v-model="cpmpomentDate" />
+        <vue-datepicker-local
+          v-model="cpmpomentDate"
+          format="YYYY-MM-DD HH:mm:ss"
+        />
       </div>
       <div class="huanjie">
         <div>
@@ -2050,15 +2053,25 @@ export default {
     },
     //日期转换
     dateSwitch(date) {
+      console.log(date);
       if (typeof date === "string") {
         return date;
       }
       var y = date.getFullYear();
-      var m = date.getMonth() + 1;
-      m = m < 10 ? "0" + m : m;
+      var M = date.getMonth() + 1;
+      M = M < 10 ? "0" + M : M;
       var d = date.getDate();
       d = d < 10 ? "0" + d : d;
-      return y + "-" + m + "-" + d;
+      //    'h+': date.getHours(), // 小时
+      var h = date.getHours();
+      h = h < 10 ? "0" + h : h;
+      var m = date.getMinutes();
+      m = m < 10 ? "0" + m : m;
+      var s = date.getSeconds();
+      s = s < 10 ? "0" + s : s;
+      // 'm+': date.getMinutes(), // 分
+      // 's+': date.getSeconds(), // 秒
+      return y + "-" + M + "-" + d + " " + h + ":" + m + ":" + s;
     },
     typeSelect(item) {
       this.formfiled.garbageName = item.name;
