@@ -20,8 +20,7 @@
         </ul>
       </div>
       <div class="dateselect">
-        <span>日期</span
-        ><input type="date" placeholder="" v-model="formfiled1.selectdate" />
+        <vue-datepicker-local v-model="cpmpomentDate" />
       </div>
       <div class="huanjie">
         <div>
@@ -73,7 +72,7 @@
               <span></span><span></span><span></span> <span></span><span></span
               ><span></span>
             </div>
-            <div class="videoTitle">{{ carName }}车载监控</div>
+            <div class="videoTitle">{{ formfiled.vehicleName }}车载监控</div>
             <div class="videoOff" @click="isactive = false">关闭</div>
           </div>
           <div class="videoContiner">
@@ -106,29 +105,23 @@
 
 <script>
 import * as echarts from "echarts/lib/echarts.js";
+import VueDatepickerLocal from "vue-datepicker-local";
 import videojs from "video.js";
 import "echarts-gl";
 require("echarts/extension/bmap/bmap");
 import { BMPGL } from "./bmpgl.js";
 import yls_json from "./ljpt_xz.json";
 export default {
+  components: {
+    VueDatepickerLocal,
+  },
   data() {
     return {
       ak: "eae1ItjXiOnR6CvVFg5iR4WuGfG6d380",
       bmap: null,
-      videoOptions: {
-        controls: true, // 是否显示控制条
-        preload: "auto",
-        sources: [
-          {
-            src: "xxx",
-            type: "application/x-mpegURL",
-          },
-        ],
-      },
       isactive: false,
+      cpmpomentDate: "",
       carlist: [],
-      carName: "洒-浙FV2129",
       videoUrl: "",
       urlList: [],
       player: null,
@@ -150,7 +143,7 @@ export default {
       },
       formfiled1: {
         vehicleModelList: "",
-        selectdate: "2022-04-12",
+        selectdate: "",
         garbageType: "",
       },
       typeopen: 0,
@@ -179,18 +172,23 @@ export default {
     };
   },
   watch: {
+    cpmpomentDate(val) {
+      this.formfiled1.selectdate = this.dateSwitch(val);
+    },
     formfiled1: {
       handler(val) {
         //逻辑处理
-        console.log(val);
+        this.formfiled.vehicleName = "";
         this.getcarteamTree(val);
       },
       deep: true,
     },
-    "formfiled.vehicleName": function () {
-      this.drawTimeline();
-      this.getVideoUrl();
-      this.getlineport();
+    "formfiled.vehicleName": function (val) {
+      if (val) {
+        this.drawTimeline();
+        this.getVideoUrl();
+        this.getlineport();
+      }
     },
   },
   computed: {},
@@ -205,7 +203,7 @@ export default {
     );
     this.centerMap = this.mapdata.features[0].properties;
     var date = new Date();
-    // this.formfiled1.selectdate = this.dateSwitch(date);
+    this.cpmpomentDate = this.dateSwitch(date);
     this.formfiled1.garbageType = this.$route.query.garbageType;
     this.typelist.forEach((item) => {
       if (item.key == this.$route.query.garbageType) {
@@ -1560,52 +1558,54 @@ export default {
           console.log(err);
         });
     },
-    // 获取轨迹点
+    // 获取轨迹点 || "洒-浙FV2129"  || "2022-06-13"
     getlineport() {
-      // let params = new FormData();
-      // params.append("carName", "浙FF5129");
-      // params.append("date", "2022-4-12");
       this.$http
         .post(
-          "http://o792k95b.xiaomy.net/api/v1/jky/siCarTrack/getPoints2?carNum=洒-浙FV2129&date=2022-06-13"
+          `http://o792k95b.xiaomy.net/api/v1/jky/siCarTrack/getPoints2?carNum=${this.formfiled.vehicleName}&date=${this.formfiled1.selectdate}`
           // params
         )
         .then((res) => {
           var data = res.data.result;
-          var path = [];
-          data.forEach((item, index) => {
-            if (index < data.length - 1) {
-              if (
-                item[0] != data[index + 1][0] &&
-                item[1] != data[index + 1][1]
-              ) {
-                path.push({ lng: item[0], lat: item[1] });
+          if (data) {
+            var path = [];
+            data.forEach((item, index) => {
+              if (index < data.length - 1) {
+                if (
+                  item[0] != data[index + 1][0] &&
+                  item[1] != data[index + 1][1]
+                ) {
+                  path.push({ lng: item[0], lat: item[1] });
+                }
               }
+            });
+            this.bmap.clearOverlays();
+            var point = [];
+            for (var i = 0; i < path.length; i++) {
+              var poi = new BMapGL.Point(path[i].lng, path[i].lat);
+              point.push(poi);
+              var marker = new BMapGL.Marker(poi); //创建标注
+              this.bmap.addOverlay(marker); //将标注添加到地图中
             }
-          });
-          this.bmap.clearOverlays();
-          var point = [];
-          for (var i = 0; i < path.length; i++) {
-            var poi = new BMapGL.Point(path[i].lng, path[i].lat);
-            point.push(poi);
-            var marker = new BMapGL.Marker(poi); //创建标注
-            this.bmap.addOverlay(marker); //将标注添加到地图中
-          }
 
-          var pl = new BMapGL.Polyline(point, {
-            strokeColor: "#04f197",
-            strokeWeight: 10,
-            strokeOpacity: 1,
-            geodesic: true,
-          });
-          // var trackAni = new BMapGLLib.TrackAnimation(this.bmap, pl, {
-          //   overallView: true, // 动画完成后自动调整视野到总览
-          //   tilt: 35, // 轨迹播放的角度，默认为55
-          //   duration: 5000, // 动画持续时长，默认为10000，单位ms
-          //   delay: 3000, // 动画开始的延迟，默认0，单位ms
-          // });
-          this.bmap.addOverlay(pl);
-          // trackAni.start();
+            var pl = new BMapGL.Polyline(point, {
+              strokeColor: "#04f197",
+              strokeWeight: 10,
+              strokeOpacity: 1,
+              geodesic: true,
+            });
+            // var trackAni = new BMapGLLib.TrackAnimation(this.bmap, pl, {
+            //   overallView: true, // 动画完成后自动调整视野到总览
+            //   tilt: 35, // 轨迹播放的角度，默认为55
+            //   duration: 5000, // 动画持续时长，默认为10000，单位ms
+            //   delay: 3000, // 动画开始的延迟，默认0，单位ms
+            // });
+            this.bmap.addOverlay(pl);
+            // trackAni.start();
+          } else {
+            console.log(res);
+            alert("暂无轨迹数据");
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -1615,7 +1615,9 @@ export default {
     getVideoUrl() {
       this.$http({
         method: "get",
-        url: `api/v1/jky/getGpsHslUrl/${this.carName}`,
+        url: `api/v1/jky/getGpsHslUrl/${
+          this.formfiled.vehicleName || "洒-浙FV2129"
+        }`,
         baseURL: "http://o792k95b.xiaomy.net/",
       })
         .then((res) => {
@@ -1735,7 +1737,7 @@ export default {
     // 获取车辆
     getTree() {
       let params = new FormData();
-      params.append("lnglatTime", this.formfiled1.selectdate);
+      params.append("lnglatTime", this.formfiled1.selectdate || "2022-04-12");
       this.$http({
         method: "post",
         url: "api/v1/jky/pjcar/pjCarTreeVal",
@@ -1749,7 +1751,7 @@ export default {
           if (typeof res.data === "string") {
             var result = eval("(" + res.data + ")").result;
             if (result) {
-              this.carlist = [];
+              this.carlist = [{ vehicleName: "洒-浙FV2129" }];
               Object.values(result).forEach((item) => {
                 item.forEach((num) => {
                   if (num.flag != 0) {
