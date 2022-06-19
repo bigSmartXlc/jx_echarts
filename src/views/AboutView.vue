@@ -7,8 +7,8 @@
       </div>
       <div class="leftdiv">
         <h3>项目建设</h3>
-        <div>
-          <div>
+        <div class="leftbottom">
+          <div class="listhead">
             <span>序号</span>
             <span>指标名称</span>
             <span>额定值</span>
@@ -33,7 +33,82 @@
       </div>
       <div class="rightdiv">
         <h3>红黑榜</h3>
-        <div></div>
+        <div class="rightbottom" :key="rightkey">
+          <div
+            v-show="table == true"
+            class="tableone animate__animated animate__fadeInRight"
+          >
+            <img src="../assets/images/red.svg" alt="" srcset="" />
+            <ul class="thead">
+              <span style="width: 50px">排名</span>
+              <span style="width: 110px">名称</span>
+              <span style="width: 70px">综合评分</span>
+              <span style="width: 145px">上榜理由</span>
+            </ul>
+            <VueSeamlessScroll
+              :data="reddata"
+              :class-option="seamlessScrollOption"
+              key="bottom"
+              style="
+                max-height: 350px;
+                overflow: hidden;
+                color: white;
+                font-size: 18px;
+                text-align: center;
+              "
+            >
+              <div class="table">
+                <div
+                  class="tbody"
+                  v-for="(item, index) in reddata"
+                  :key="index"
+                >
+                  <span style="width: 50px">{{ item.index }}</span>
+                  <span style="width: 145px">{{ item.name }}</span>
+                  <span style="width: 70px">{{ item.charge }}</span>
+                  <span style="width: 145px">{{ item.reason }}</span>
+                </div>
+              </div>
+            </VueSeamlessScroll>
+          </div>
+          <div
+            v-show="table == false"
+            class="tabletwo animate__animated animate__fadeInRight"
+          >
+            <img src="../assets/images/balck.svg" alt="" srcset="" />
+            <ul class="thead">
+              <span style="width: 50px">排名</span>
+              <span style="width: 110px">名称</span>
+              <span style="width: 70px">综合评分</span>
+              <span style="width: 145px">上榜理由</span>
+            </ul>
+            <VueSeamlessScroll
+              :data="blackdata"
+              :class-option="seamlessScrollOption"
+              key="bottom"
+              style="
+                max-height: 350px;
+                overflow: hidden;
+                color: white;
+                font-size: 18px;
+                text-align: center;
+              "
+            >
+              <div class="table">
+                <div
+                  class="tbody"
+                  v-for="(item, index) in blackdata"
+                  :key="index"
+                >
+                  <span style="width: 50px">{{ item.index }}</span>
+                  <span style="width: 145px">{{ item.name }}</span>
+                  <span style="width: 70px">{{ item.charge }}</span>
+                  <span style="width: 140px">{{ item.reason }}</span>
+                </div>
+              </div>
+            </VueSeamlessScroll>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -43,15 +118,92 @@
 import * as echarts from "echarts/lib/echarts.js";
 import "echarts-gl";
 import yls_json from "./ljpt_xz.json";
+import anime from "animejs";
+import VueSeamlessScroll from "vue-seamless-scroll";
 export default {
-  props: {
-    cityName: {
-      type: String,
-      default: "浙江",
-    },
+  components: {
+    VueSeamlessScroll,
   },
   data() {
     return {
+      blackdata: [
+        {
+          index: 1,
+          name: "南湖区百度弄社区",
+          charge: 94,
+          reason: "投放点卫生保持整洁",
+        },
+        {
+          index: 2,
+          name: "南湖区百度弄社区",
+          charge: 94,
+          reason: "投放点卫生保持整洁",
+        },
+        {
+          index: 3,
+          name: "南湖区百度弄社区",
+          charge: 94,
+          reason: "投放点卫生保持整洁",
+        },
+        {
+          index: 4,
+          name: "南湖区百度弄社区",
+          charge: 94,
+          reason: "投放点卫生保持整洁",
+        },
+        {
+          index: 5,
+          name: "南湖区百度弄社区",
+          charge: 94,
+          reason: "投放点卫生保持整洁",
+        },
+        {
+          index: 6,
+          name: "南湖区百度弄社区",
+          charge: 94,
+          reason: "投放点卫生保持整洁",
+        },
+      ],
+      reddata: [
+        {
+          index: 1,
+          name: "南湖区百度弄社区",
+          charge: 94,
+          reason: "投放点卫生保持整洁",
+        },
+        {
+          index: 2,
+          name: "南湖区百度弄社区",
+          charge: 94,
+          reason: "投放点卫生保持整洁",
+        },
+        {
+          index: 3,
+          name: "南湖区百度弄社区",
+          charge: 94,
+          reason: "投放点卫生保持整洁",
+        },
+        {
+          index: 4,
+          name: "南湖区百度弄社区",
+          charge: 94,
+          reason: "投放点卫生保持整洁",
+        },
+        {
+          index: 5,
+          name: "南湖区百度弄社区",
+          charge: 94,
+          reason: "投放点卫生保持整洁",
+        },
+        {
+          index: 6,
+          name: "南湖区百度弄社区",
+          charge: 94,
+          reason: "投放点卫生保持整洁",
+        },
+      ],
+      table: true,
+      rightkey: "rightkey",
       color: [
         "#5470c6",
         "#91cc75",
@@ -71,15 +223,73 @@ export default {
           realnum: 9,
           persont: "90%",
         },
+        {
+          index: 2,
+          name: "收集运输中转处置",
+          num: 10,
+          realnum: 9,
+          persont: "90%",
+        },
+        {
+          index: 3,
+          name: "收集运输中转处置",
+          num: 10,
+          realnum: 9,
+          persont: "90%",
+        },
+        {
+          index: 4,
+          name: "收集运输中转处置",
+          num: 10,
+          realnum: 9,
+          persont: "90%",
+        },
       ],
     };
   },
   mounted() {
+    setInterval(() => {
+      this.table = !this.table;
+      this.rightkey += Math.random();
+    }, 5000);
     this.map();
     this.leftbar();
     this.rightline();
+    this.getSkillBuilding();
+  },
+  computed: {
+    seamlessScrollOption() {
+      return {
+        step: 1, // 数值越大速度滚动越快
+        // limitMoveNum: 2, // 开始无缝滚动的数据量 this.dataList.length
+        hoverStop: true, // 是否开启鼠标悬停stop
+        direction: 1, // 0向下 1向上 2向左 3向右
+        openWatch: true, // 开启数据实时监控刷新dom
+        singleHeight: 0, // 单步运动停止的高度(默认值0是无缝不停止的滚动) direction => 0/1
+        singleWidth: 0, // 单步运动停止的宽度(默认值0是无缝不停止的滚动) direction => 2/3
+        waitTime: 1000, // 单步运动停止的时间(默认值1000ms)
+      };
+    },
   },
   methods: {
+    getSkillBuilding() {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/skillBuilding",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptI: "400000000",
+          deptIdEnd: "499999999",
+          date: "2022-06",
+        },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     rightline() {
       var chartDom = document.getElementById("rightline");
       var myChart = echarts.init(chartDom);
@@ -529,32 +739,69 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@keyframes shake {
-  0% {
-    transform: scale(0);
-    transform: rotate3d(1, 1, 1, 360deg);
-    opacity: 0;
+.rightbottom {
+  border: solid 1px rgb(11, 100, 233);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  z-index: 10;
+  height: 100%;
+  overflow: hidden;
+  .tableone {
+    .thead {
+      background: linear-gradient(red, black);
+    }
   }
-  100% {
-    transform: scale(1);
-    transform: rotate3d(1, 1, 1, 0deg);
-    opacity: 1;
+  .tabletwo {
+    .thead {
+      background: linear-gradient(rgb(55, 53, 53), black);
+    }
+  }
+  .thead {
+    padding: 0;
+    display: flex;
+    height: 40px;
+    margin: 0;
+    line-height: 40px;
+    justify-content: space-around;
+  }
+  .thead span {
+    display: inline-block;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .table {
+    width: 100%;
+    .tbody {
+      width: 100%;
+      height: 70px;
+      line-height: 70px;
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 30px;
+      background: rgba(255, 255, 255, 0.13);
+      span {
+        font-size: 14px;
+        font-weight: 600;
+      }
+    }
   }
 }
-@-webkit-keyframes shake {
-  0% {
-    transform: scale(0);
-    transform: rotate3d(1, 1, 1, 360deg);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    transform: rotate3d(1, 1, 1, 0deg);
-    opacity: 1;
-  }
+.right span:hover {
+  background-color: #587e8f;
+  border-radius: 5px;
 }
 h3 {
   margin: 0;
+  display: inline-block;
+  width: 250px;
+  height: 40px;
+  color: #fff;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 40px;
+  background-image: url(../assets/images/u385.svg);
 }
 .returnBtn {
   font-size: 14px;
@@ -562,22 +809,13 @@ h3 {
   margin-top: 20px;
   cursor: pointer;
 }
-#map {
-  width: 620px;
-  height: 465px;
-  margin: 0 auto;
-  animation: shake; /*动画名称*/
-  animation-timing-function: linear;
-  animation-duration: 2; /*动画持续时间*/
-  -webkit-animation: shake 3s; /*针对webkit内核*/
-}
 .fzjc {
   display: flex;
   height: calc(100% - 90px);
   .left {
     width: 30%;
     .leftdiv {
-      height: 50%;
+      height: 45%;
       width: 100%;
       #leftbar {
         border: solid 1px #0167dd;
@@ -593,12 +831,35 @@ h3 {
     width: 30%;
     .rightdiv {
       width: 100%;
-      height: 50%;
+      height: 45%;
       #rightline {
         border: solid 1px #0167dd;
         width: 100%;
         height: calc(100% - 22px);
       }
+    }
+  }
+}
+.leftbottom {
+  border: solid 1px skyblue;
+  height: 40vh;
+  div {
+    display: flex;
+    justify-content: space-around;
+    height: 20%;
+    span {
+      margin-left: 2px;
+      display: inline-block;
+      height: 50px;
+      line-height: 50px;
+      color: #fff;
+    }
+  }
+  .listhead {
+    span {
+      font-size: 25px;
+      font-weight: 700;
+      color: #02a7f0;
     }
   }
 }
