@@ -120,8 +120,10 @@ export default {
   },
   data() {
     return {
+      tk: "647102ae07da59b5275736577f63c21e",
       ak: "eae1ItjXiOnR6CvVFg5iR4WuGfG6d380",
       rightshow: false,
+      tMap: null,
       bmap: null,
       isactive: false,
       cpmpomentDate: "",
@@ -198,7 +200,6 @@ export default {
       }
     },
   },
-  computed: {},
   created() {
     this.mapdata = {
       type: "FeatureCollection",
@@ -220,9 +221,41 @@ export default {
   },
   mounted() {
     this.gethuanjie();
-    this.initMap();
+    // this.initMap();
+    let script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src =
+      "http://api.tianditu.gov.cn/api?v=4.0&tk=647102ae07da59b5275736577f63c21e";
+    document.body.appendChild(script);
+    script.onload = () => {
+      //加载完成去执行代码  ie中不能使用
+      this.load();
+    };
   },
   methods: {
+    load() {
+      this.tMap = new T.Map("chart-box");
+      this.tMap.centerAndZoom(
+        new T.LngLat(this.centerMap.centroid[0], this.centerMap.centroid[1]),
+        13
+      );
+      this.tMap.setStyle("indigo");
+      var mapBorder = this.mapdata.features[0].geometry.coordinates[0];
+      var points = [];
+      mapBorder.forEach((item) => {
+        points.push(new T.LngLat(item[0], item[1]));
+      });
+      var polygon = new T.Polygon([points], {
+        color: "black",
+        weight: 3,
+        opacity: 0.2,
+        fillColor: "blue",
+        fillOpacity: 0.2,
+      });
+      //向地图上添加面
+      this.tMap.addOverLay(polygon);
+    },
+    //天地图
     // 百度地图
     initMap() {
       // 传入密钥获取地图回调。
@@ -2035,34 +2068,50 @@ export default {
             data.forEach((item, index) => {
               if (index < data.length - 1) {
                 if (
-                  item[0] != data[index + 1][0] &&
+                  item[0] != data[index + 1][0] ||
                   item[1] != data[index + 1][1]
                 ) {
                   path.push({ lng: item[0], lat: item[1] });
                 }
               }
             });
-            this.bmap.clearOverlays();
+            // this.bmap.clearOverlays();
             var point = [];
             for (var i = 0; i < path.length; i++) {
-              var poi = new BMapGL.Point(path[i].lng, path[i].lat);
+              var poi = new T.LngLat(path[i].lng, path[i].lat);
               point.push(poi);
             }
+            let script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src =
+              "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/CarTrack.js";
+            document.body.appendChild(script);
+            script.onload = () => {
+              //加载完成去执行代码  ie中不能使用
+              var _CarTrack = new T.CarTrack(this.tMap, {
+                interval: 20,
+                speed: 10,
+                dynamicLine: true,
+                polylinestyle: { color: "#49d68f", weight: 5, opacity: 1 },
+                Datas: point,
+              });
+              _CarTrack.start();
+            };
 
-            var pl = new BMapGL.Polyline(point, {
-              strokeColor: "#49d68f",
-              strokeWeight: 10,
-              strokeOpacity: 1,
-            });
-            var trackAni = new BMapGLLib.TrackAnimation(this.bmap, pl, {
-              overallView: true, // 动画完成后自动调整视野到总览
-              tilt: 35, // 轨迹播放的角度，默认为55
-              duration: 10000, // 动画持续时长，默认为10000，单位ms
-              delay: 1000, // 动画开始的延迟，默认0，单位ms
-              zoom: 15,
-            });
-            // this.bmap.addOverlay(pl);
-            trackAni.start();
+            // var pl = new BMapGL.Polyline(point, {
+            //   strokeColor: "#49d68f",
+            //   strokeWeight: 10,
+            //   strokeOpacity: 1,
+            // });
+            // var trackAni = new BMapGLLib.TrackAnimation(this.bmap, pl, {
+            //   overallView: true, // 动画完成后自动调整视野到总览
+            //   tilt: 35, // 轨迹播放的角度，默认为55
+            //   duration: 10000, // 动画持续时长，默认为10000，单位ms
+            //   delay: 1000, // 动画开始的延迟，默认0，单位ms
+            //   zoom: 15,
+            // });
+            // // this.bmap.addOverlay(pl);
+            // trackAni.start();
           } else {
             console.log(res);
             alert("暂无轨迹数据");
@@ -2333,6 +2382,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#mapDiv {
+  width: 100%;
+  height: 400px;
+}
 html {
   overflow-y: scroll;
 }
@@ -2398,7 +2451,7 @@ ul {
     left: 0px;
     right: 10px;
     top: 95px;
-    // width: calc(100% - 10px);
+    width: calc(100% - 10px);
     height: calc(100% - 95px);
     z-index: 0;
   }
