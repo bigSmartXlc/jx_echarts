@@ -229,10 +229,43 @@ export default {
     document.body.appendChild(script);
     script.onload = () => {
       //加载完成去执行代码  ie中不能使用
-      this.load();
+
+      this.loadJS("http://cdn.bootcss.com/d3/3.5.17/d3.js", () => {
+        console.log(1);
+        this.loadJS(
+          "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
+          () => {
+            console.log(2);
+            this.loadJS(
+              "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
+              () => {
+                console.log("加载完成");
+                this.load();
+              }
+            );
+          }
+        );
+      });
     };
   },
   methods: {
+    loadJS(url, success) {
+      var domScript = document.createElement("script");
+      domScript.src = url;
+      success = success || function () {};
+      domScript.onload = domScript.onreadystatechange = function () {
+        if (
+          !this.readyState ||
+          "loaded" === this.readyState ||
+          "complete" === this.readyState
+        ) {
+          success();
+          this.onload = this.onreadystatechange = null;
+          this.parentNode.removeChild(this);
+        }
+      };
+      document.getElementsByTagName("head")[0].appendChild(domScript);
+    },
     load() {
       this.tMap = new T.Map("chart-box");
       this.tMap.centerAndZoom(

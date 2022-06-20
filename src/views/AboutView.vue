@@ -179,7 +179,7 @@ export default {
         deptName: [],
         weight: [],
         lastYearMonthWeight: [],
-        tongList: [],
+        tong: [],
       },
       btnlist1: [
         { name: "总量", value: "" },
@@ -376,7 +376,7 @@ export default {
               this.grabge.deptName.push(item.deptName);
               this.grabge.weight.push(item.weight);
               this.grabge.lastYearMonthWeight.push(item.lastYearMonthWeight);
-              this.grabge.tongList.push(item.tongList);
+              this.grabge.tong.push(item.tong);
             });
             this.leftbar();
           }
@@ -513,9 +513,12 @@ export default {
         },
         legend: {
           data: ["当月产生量", "去年同期产生量", "同比增长率"],
+          textStyle: {
+            color: "#fff",
+          },
         },
         toolbox: {
-          show: true,
+          show: false,
           feature: {
             dataView: { show: true, readOnly: false },
             magicType: { show: true, type: ["line", "bar"] },
@@ -546,7 +549,7 @@ export default {
               },
             },
             axisLabel: {
-              formatter: "{value}",
+              formatter: "{value}%",
             },
           },
         ],
@@ -555,7 +558,7 @@ export default {
             name: "同比增长率",
             type: "line",
             yAxisIndex: 1,
-            data: this.grabge.tongList,
+            data: this.grabge.tong,
           },
           {
             name: "当月产生量",
@@ -882,7 +885,7 @@ export default {
         left: 0;
         z-index: 3;
         span {
-          margin-top: 20px;
+          margin-top: 10px;
           display: block;
           color: #02a7f0;
           font-size: 25px;
