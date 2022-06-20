@@ -240,10 +240,6 @@ export default {
       }, 1000);
     });
     // this.getWieght();
-    //下钻参考https://blog.csdn.net/qq_23447231/article/details/121928744
-    // chart.on("click", function (params) {
-    //   console.log(params);
-    // });
   },
   methods: {
     //地磅称重 // 车辆载重

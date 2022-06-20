@@ -3,6 +3,11 @@
     <div class="left">
       <div class="leftdiv">
         <h3>垃圾生产量</h3>
+        <div class="btnlist">
+          <span v-for="(item, index) in btnlist1" :key="index">{{
+            item.name
+          }}</span>
+        </div>
         <div id="leftbar"></div>
       </div>
       <div class="leftdiv">
@@ -16,23 +21,67 @@
             <span>负载率 </span>
           </div>
           <div v-for="(item, index) in leftdivdata" :key="index">
-            <span>{{ item.index }}</span
-            ><span>{{ item.name }}</span
-            ><span>{{ item.num }}</span
-            ><span>{{ item.realnum }}</span
-            ><span>{{ item.persont }}</span>
+            <span>{{ index }}</span
+            ><span>{{ item.projectName }}</span
+            ><span>{{ item.projectValue }}</span
+            ><span>{{ item.pojectVaule2 }}</span
+            ><span>{{ item.rate * 100 }}%</span>
           </div>
         </div>
       </div>
     </div>
-    <div id="main"></div>
+    <div class="mapcontainer">
+      <div class="sanlv">
+        <div>
+          <div>
+            <img src="../assets/images/sanlvbg2.png" alt="" />
+            <img src="../assets/images/sanlvbg3.png" alt="" />
+          </div>
+          <div class="sanlvdate">
+            <span>知晓率</span>
+            <span>{{ sanlv.knowRate }}%</span>
+          </div>
+        </div>
+        <div>
+          <div>
+            <img src="../assets/images/sanlvbg2.png" alt="" />
+            <img src="../assets/images/sanlvbg3.png" alt="" />
+          </div>
+          <div class="sanlvdate">
+            <span>参与率</span>
+            <span>{{ sanlv.joinRate }}%</span>
+          </div>
+        </div>
+        <div>
+          <div>
+            <img src="../assets/images/sanlvbg2.png" alt="" />
+            <img src="../assets/images/sanlvbg3.png" alt="" />
+          </div>
+          <div class="sanlvdate">
+            <span>正确率</span>
+            <span>{{ sanlv.rightRate }}%</span>
+          </div>
+        </div>
+      </div>
+      <div id="main"></div>
+    </div>
     <div class="right">
       <div class="rightdiv">
         <h3>质量评价</h3>
+        <div class="btnlist">
+          <span v-for="(item, index) in btnlist2" :key="index">{{
+            item.name
+          }}</span>
+        </div>
         <div id="rightline"></div>
       </div>
       <div class="rightdiv">
         <h3>红黑榜</h3>
+        <div class="btnlist">
+          <span v-for="(item, index) in btnlist3" :key="index">{{
+            item.name
+          }}</span>
+        </div>
         <div class="rightbottom" :key="rightkey">
           <div
             v-show="table == true"
@@ -118,7 +167,6 @@
 import * as echarts from "echarts/lib/echarts.js";
 import "echarts-gl";
 import yls_json from "./ljpt_xz.json";
-import anime from "animejs";
 import VueSeamlessScroll from "vue-seamless-scroll";
 export default {
   components: {
@@ -126,6 +174,43 @@ export default {
   },
   data() {
     return {
+      sanlv: {},
+      grabge: {
+        deptName: [],
+        weight: [],
+        lastYearMonthWeight: [],
+        tongList: [],
+      },
+      btnlist1: [
+        { name: "总量", value: "" },
+        { name: "其他", value: 40 },
+        { name: "餐厨", value: 30 },
+        { name: "厨余", value: 31 },
+        { name: "生鲜", value: 32 },
+        { name: "回收", value: 10 },
+        { name: "有害", value: 20 },
+        { name: "大件", value: 70 },
+        { name: "装修", value: 80 },
+        { name: "园林", value: 60 },
+      ],
+      btnlist2: [
+        { name: "日评价叔分析", value: 1 },
+        { name: "月评价数分析", value: 2 },
+        { name: "焚烧率分析", value: 3 },
+        { name: "回收利用分析", value: 4 },
+        { name: "易腐垃圾占比", value: 5 },
+      ],
+      btnlist3: [
+        { name: "南湖", value: 1 },
+        { name: "秀洲", value: 2 },
+        { name: "嘉善", value: 3 },
+        { name: "平湖", value: 4 },
+        { name: "海盐", value: 5 },
+        { name: "海宁", value: 6 },
+        { name: "桐乡", value: 7 },
+        { name: "经开", value: 8 },
+        { name: "港区", value: 9 },
+      ],
       blackdata: [
         {
           index: 1,
@@ -215,36 +300,7 @@ export default {
         "#9a60b4",
         "#ea7ccc",
       ],
-      leftdivdata: [
-        {
-          index: 1,
-          name: "收集运输中转处置",
-          num: 10,
-          realnum: 9,
-          persont: "90%",
-        },
-        {
-          index: 2,
-          name: "收集运输中转处置",
-          num: 10,
-          realnum: 9,
-          persont: "90%",
-        },
-        {
-          index: 3,
-          name: "收集运输中转处置",
-          num: 10,
-          realnum: 9,
-          persont: "90%",
-        },
-        {
-          index: 4,
-          name: "收集运输中转处置",
-          num: 10,
-          realnum: 9,
-          persont: "90%",
-        },
-      ],
+      leftdivdata: [],
     };
   },
   mounted() {
@@ -253,9 +309,8 @@ export default {
       this.rightkey += Math.random();
     }, 5000);
     this.map();
-    this.leftbar();
     this.rightline();
-    this.getSkillBuilding();
+    this.getdata();
   },
   computed: {
     seamlessScrollOption() {
@@ -272,19 +327,59 @@ export default {
     },
   },
   methods: {
-    getSkillBuilding() {
+    //能力建设
+    getdata() {
+      this.$http({
+        method: "get",
+        url: "api/v1/jky/capabilityAnalysis",
+        baseURL: "http://o792k95b.xiaomy.net/",
+      })
+        .then((res) => {
+          this.leftdivdata = res.data.result;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      //三率
       this.$http({
         method: "post",
-        url: "api/v1/jky/skillBuilding",
+        url: "api/v1/jky/threeRate",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
-          deptI: "400000000",
+          deptId: "400000000",
           deptIdEnd: "499999999",
-          date: "2022-06",
         },
       })
         .then((res) => {
-          console.log(res);
+          const { knowRate, joinRate, rightRate } = res.data.result;
+          this.sanlv.knowRate = knowRate * 100;
+          this.sanlv.joinRate = joinRate * 100;
+          this.sanlv.rightRate = rightRate * 100;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/DwWeightCarMonthWeight/deptMonthWeight",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: "400000000",
+          deptIdEnd: "499999999",
+          weightMonth: "2022-05",
+          garbageType: "",
+        },
+      })
+        .then((res) => {
+          if (res.data.result) {
+            res.data.result.forEach((item) => {
+              this.grabge.deptName.push(item.deptName);
+              this.grabge.weight.push(item.weight);
+              this.grabge.lastYearMonthWeight.push(item.lastYearMonthWeight);
+              this.grabge.tongList.push(item.tongList);
+            });
+            this.leftbar();
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -315,7 +410,7 @@ export default {
           },
         },
         legend: {
-          data: ["Evaporation", "Precipitation", "Temperature"],
+          data: ["去年同期产生量", "Precipitation", "Temperature"],
         },
         xAxis: [
           {
@@ -330,7 +425,7 @@ export default {
         yAxis: [
           {
             type: "value",
-            name: "Evaporation",
+            name: "去年同期产生量",
             position: "right",
             alignTicks: true,
             axisLine: {
@@ -377,7 +472,7 @@ export default {
         ],
         series: [
           {
-            name: "Evaporation",
+            name: "去年同期产生量",
             type: "bar",
             data: [
               2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4,
@@ -410,17 +505,14 @@ export default {
       var chartDom = document.getElementById("leftbar");
       var myChart = echarts.init(chartDom);
       var option;
-
+      const colors = ["#5470C6", "#91CC75", "#EE6666"];
       option = {
-        title: {
-          text: "Rainfall vs Evaporation",
-          subtext: "Fake Data",
-        },
+        color: colors,
         tooltip: {
           trigger: "axis",
         },
         legend: {
-          data: ["Rainfall", "Evaporation"],
+          data: ["当月产生量", "去年同期产生量", "同比增长率"],
         },
         toolbox: {
           show: true,
@@ -435,23 +527,40 @@ export default {
         xAxis: [
           {
             type: "category",
-            // prettier-ignore
-            data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            data: this.grabge.deptName,
           },
         ],
         yAxis: [
           {
             type: "value",
           },
+          {
+            type: "value",
+            name: "同比增长率",
+            position: "right",
+            alignTicks: true,
+            axisLine: {
+              show: true,
+              lineStyle: {
+                color: colors[0],
+              },
+            },
+            axisLabel: {
+              formatter: "{value}",
+            },
+          },
         ],
         series: [
           {
-            name: "Rainfall",
+            name: "同比增长率",
+            type: "line",
+            yAxisIndex: 1,
+            data: this.grabge.tongList,
+          },
+          {
+            name: "当月产生量",
             type: "bar",
-            data: [
-              2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4,
-              3.3,
-            ],
+            data: this.grabge.weight,
             markPoint: {
               data: [
                 { type: "max", name: "Max" },
@@ -463,12 +572,9 @@ export default {
             },
           },
           {
-            name: "Evaporation",
+            name: "去年同期产生量",
             type: "bar",
-            data: [
-              2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0,
-              2.3,
-            ],
+            data: this.grabge.lastYearMonthWeight,
             markPoint: {
               data: [
                 { name: "Max", value: 182.2, xAxis: 7, yAxis: 183 },
@@ -739,6 +845,53 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@keyframes fadenum {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.mapcontainer {
+  width: 40%;
+  .sanlv {
+    width: 100%;
+    height: 200px;
+    float: left;
+    display: flex;
+    margin-top: 100px;
+    justify-content: space-around;
+    div {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      img {
+        width: 100%;
+        top: 0;
+        left: 0;
+        position: absolute;
+        animation: fadenum 5s infinite;
+      }
+      img:first-child {
+        z-index: 1;
+      }
+      img:last-child {
+        z-index: 2;
+      }
+      .sanlvdate {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 3;
+        span {
+          margin-top: 20px;
+          display: block;
+          color: #02a7f0;
+          font-size: 25px;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}
 .rightbottom {
   border: solid 1px rgb(11, 100, 233);
   background: rgba(255, 255, 255, 0.2);
@@ -815,27 +968,28 @@ h3 {
   .left {
     width: 30%;
     .leftdiv {
-      height: 45%;
+      height: 40%;
       width: 100%;
       #leftbar {
         border: solid 1px #0167dd;
         width: 100%;
-        height: calc(100% - 22px);
+        height: calc(100% - 70px);
       }
     }
   }
   #main {
-    width: 40%;
+    width: 100%;
+    height: 100%;
   }
   .right {
     width: 30%;
     .rightdiv {
       width: 100%;
-      height: 45%;
+      height: 40%;
       #rightline {
         border: solid 1px #0167dd;
         width: 100%;
-        height: calc(100% - 22px);
+        height: calc(100% - 70px);
       }
     }
   }
@@ -861,6 +1015,18 @@ h3 {
       font-weight: 700;
       color: #02a7f0;
     }
+  }
+}
+.btnlist {
+  margin: 5px auto;
+  span {
+    display: inline-block;
+    color: #02a7f0;
+    font-size: 14px;
+    border: solid 1px #02a7f0;
+    margin-right: 3px;
+    padding: 0 2px;
+    border-radius: 3px;
   }
 }
 </style>

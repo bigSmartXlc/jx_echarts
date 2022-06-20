@@ -221,7 +221,6 @@ export default {
   mounted() {
     this.gethuanjie();
     this.initMap();
-    //下钻参考https://blog.csdn.net/qq_23447231/article/details/1219287442022-04-12
   },
   methods: {
     // 百度地图
