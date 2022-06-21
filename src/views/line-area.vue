@@ -51,7 +51,18 @@
         >
           {{ $route.query.areaName }}
         </div>
-        <ul v-show="typeopen == 3">
+        <ul>
+          <li
+            v-for="(item, index) in arealist"
+            :key="index"
+            @click="carSelect(item)"
+          >
+            {{ item.vehicleName }}
+          </li>
+        </ul>
+      </div>
+      <div class="carlist">
+        <ul>
           <li
             v-for="(item, index) in carlist"
             :key="index"
@@ -128,6 +139,7 @@ export default {
       isactive: false,
       cpmpomentDate: "",
       carlist: [],
+      arealist: [],
       videoUrl: "",
       urlList: [],
       player: null,
@@ -249,6 +261,23 @@ export default {
     };
   },
   methods: {
+    // 获取区域数据
+    getAreaList() {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/counties",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: "400000000",
+        },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     loadJS(url, success) {
       var domScript = document.createElement("script");
       domScript.src = url;

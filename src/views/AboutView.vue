@@ -4,9 +4,13 @@
       <div class="leftdiv">
         <h3>垃圾生产量</h3>
         <div class="btnlist">
-          <span v-for="(item, index) in btnlist1" :key="index">{{
-            item.name
-          }}</span>
+          <span
+            v-for="(item, index) in btnlist1"
+            @click="garbageType = item.value"
+            :class="{ active: item.value == garbageType }"
+            :key="index"
+            >{{ item.name }}</span
+          >
         </div>
         <div id="leftbar"></div>
       </div>
@@ -69,18 +73,26 @@
       <div class="rightdiv">
         <h3>质量评价</h3>
         <div class="btnlist">
-          <span v-for="(item, index) in btnlist2" :key="index">{{
-            item.name
-          }}</span>
+          <span
+            @click="evaluationType = item.value"
+            :class="{ active: item.value == evaluationType }"
+            v-for="(item, index) in btnlist2"
+            :key="index"
+            >{{ item.name }}</span
+          >
         </div>
         <div id="rightline"></div>
       </div>
       <div class="rightdiv">
         <h3>红黑榜</h3>
         <div class="btnlist">
-          <span v-for="(item, index) in btnlist3" :key="index">{{
-            item.name
-          }}</span>
+          <span
+            @click="areaValue = item.value"
+            :class="{ active: item.value == areaValue }"
+            v-for="(item, index) in btnlist3"
+            :key="index"
+            >{{ item.name }}</span
+          >
         </div>
         <div class="rightbottom" :key="rightkey">
           <div
@@ -174,7 +186,12 @@ export default {
   },
   data() {
     return {
+      carrentDate: null,
+      carrentMounth: null,
       sanlv: {},
+      garbageType: "",
+      evaluationType: 1,
+      areaValue: "",
       grabge: {
         deptName: [],
         weight: [],
@@ -303,6 +320,9 @@ export default {
       leftdivdata: [],
     };
   },
+  created() {
+    this.dateSwitch();
+  },
   mounted() {
     setInterval(() => {
       this.table = !this.table;
@@ -311,6 +331,8 @@ export default {
     this.map();
     this.rightline();
     this.getdata();
+    this.getSanlv();
+    this.getWeight();
   },
   computed: {
     seamlessScrollOption() {
@@ -327,6 +349,27 @@ export default {
     },
   },
   methods: {
+    //日期月份转换
+    dateSwitch() {
+      var date = new Date();
+      var y = date.getFullYear();
+      var M = date.getMonth() + 1;
+      M = M < 10 ? "0" + M : M;
+      var d = date.getDate();
+      d = d < 10 ? "0" + d : d;
+      //    'h+': date.getHours(), // 小时
+      // var h = date.getHours();
+      // h = h < 10 ? "0" + h : h;
+      // var m = date.getMinutes();
+      // m = m < 10 ? "0" + m : m;
+      // var s = date.getSeconds();
+      // s = s < 10 ? "0" + s : s;
+      // 'm+': date.getMinutes(), // 分
+      // 's+': date.getSeconds(), // 秒
+      // return y + "-" + M + "-" + d + " " + h + ":" + m + ":" + s;
+      this.carrentDate = y + "-" + M + "-" + d;
+      this.carrentMounth = y + "-" + M;
+    },
     //能力建设
     getdata() {
       this.$http({
@@ -340,6 +383,8 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    getSanlv() {
       //三率
       this.$http({
         method: "post",
@@ -359,6 +404,8 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    getWeight() {
       this.$http({
         method: "post",
         url: "api/v1/jky/DwWeightCarMonthWeight/deptMonthWeight",
@@ -366,8 +413,35 @@ export default {
         data: {
           deptId: "400000000",
           deptIdEnd: "499999999",
-          weightMonth: "2022-05",
-          garbageType: "",
+          weightMonth: this.carrentMounth,
+          garbageType: this.garbageType,
+        },
+      })
+        .then((res) => {
+          if (res.data.result) {
+            res.data.result.forEach((item) => {
+              this.grabge.deptName.push(item.deptName);
+              this.grabge.weight.push(item.weight);
+              this.grabge.lastYearMonthWeight.push(item.lastYearMonthWeight);
+              this.grabge.tong.push(item.tong);
+            });
+            this.leftbar();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getEvaluation() {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/DwWeightCarMonthWeight/deptMonthWeight",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: "400000000",
+          deptIdEnd: "499999999",
+          weightMonth: this.carrentMounth,
+          type: this.garbageType,
         },
       })
         .then((res) => {
@@ -402,15 +476,15 @@ export default {
         grid: {
           right: "20%",
         },
-        toolbox: {
-          feature: {
-            dataView: { show: true, readOnly: false },
-            restore: { show: true },
-            saveAsImage: { show: true },
-          },
-        },
+        // toolbox: {
+        //   feature: {
+        //     dataView: { show: true, readOnly: false },
+        //     restore: { show: true },
+        //     saveAsImage: { show: true },
+        //   },
+        // },
         legend: {
-          data: ["去年同期产生量", "Precipitation", "Temperature"],
+          data: ["每小时评价数", "当日累计评价数"],
         },
         xAxis: [
           {
@@ -609,7 +683,9 @@ export default {
           name: geoAreaName,
           coord: item.properties.centroid,
           itemStyle: {
-            color: this.color[index] || "#046357",
+            color: "#0072cc",
+            opacity: 0.5,
+            borderColor: "#fff",
           },
         };
       });
@@ -722,31 +798,6 @@ export default {
               show: false, // 是否显示地面。[ default: false ]
               color: "#aaa", // 地面颜色。[ default: '#aaa' ]
             },
-
-            regions: [
-              {
-                // 可对单个地图区域进行设置
-                name: "嘉善县", // 所对应的地图区域的名称
-                //regionHeight: '', // 区域的高度，可以设置不同的高度用来表达数据的大小。当 GeoJSON 为建筑的数据时，也可以通过这个值表示简直的高度。
-                itemStyle: {
-                  // 单个区域的样式设置
-                  color: "#00FF00",
-                  opacity: 1,
-                  borderWidth: 0.4,
-                  borderColor: "#5F9EA0",
-                },
-              },
-              {
-                name: "南湖区",
-                itemStyle: {
-                  color: "#EEEE00",
-                  opacity: 1,
-                  borderWidth: 0.4,
-                  borderColor: "#5F9EA0",
-                },
-              },
-            ],
-
             //shading: 'lambert', // 三维地理坐标系组件中三维图形的着色效果，echarts-gl 中支持下面三种着色方式:
             // 'color' 只显示颜色，不受光照等其它因素的影响。
             // 'lambert' 通过经典的 lambert 着色表现光照带来的明暗。
@@ -1023,6 +1074,7 @@ h3 {
 .btnlist {
   margin: 5px auto;
   span {
+    cursor: pointer;
     display: inline-block;
     color: #02a7f0;
     font-size: 14px;
@@ -1031,5 +1083,9 @@ h3 {
     padding: 0 2px;
     border-radius: 3px;
   }
+}
+.active {
+  background: #02a7f0;
+  color: #fff !important;
 }
 </style>

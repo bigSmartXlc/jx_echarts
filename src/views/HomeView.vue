@@ -358,7 +358,7 @@ export default {
           label: {
             // 标签的相关设置
             show: true, // (地图上的城市名称)是否显示标签 [ default: false ]
-            distance: 2,
+            distance: 20,
             formatter(param) {
               const city = param.name;
               return `{sty1|${city}}`;
@@ -469,13 +469,14 @@ export default {
             type: "scatter3D",
             name: mapName,
             coordinateSystem: "geo3D",
-            zlevel: 5,
-            symbolSize: 12,
-            rippleEffect: {
-              period: 6,
-              brushType: "stroke",
-              scale: 8,
-            },
+            symbol: "triangle",
+            symbolSize: 30,
+            // zlevel: 30,
+            // rippleEffect: {
+            //   period: 6,
+            //   brushType: "stroke",
+            //   scale: 8,
+            // },
             itemStyle: {
               color: "#FF5722",
               opacity: 1,
