@@ -411,7 +411,7 @@ export default {
         });
     },
 
-    drawFeixian(linecolor = "#b0f7f7fc") {
+    drawFeixian() {
       let data = yls_json;
       echarts.registerMap("yls", data);
       if (this.chart != null && this.chart != "" && this.chart != undefined) {
@@ -420,7 +420,11 @@ export default {
       this.chart = echarts.init(document.getElementById("chart-box"));
       this.chart.showLoading();
       // var bg = document.getElementById("bgimg");
+      var linedata = [];
       const map3Ddata = yls_json.features.map((item) => {
+        if (item.properties.centroid) {
+          linedata.push([...item.properties.centroid, 1]);
+        }
         const geoAreaName = item.properties.name; // geo文件中的地理名称
         return {
           name: geoAreaName,
@@ -473,6 +477,18 @@ export default {
           zlevel: -11,
         },
         series: [
+          {
+            type: "scatter3D",
+            name: "yls",
+            coordinateSystem: "geo3D",
+            symbol: "triangle",
+            symbolSize: 30,
+            itemStyle: {
+              color: "#FF5722",
+              opacity: 1,
+            },
+            data: linedata,
+          },
           {
             name: "yls",
             type: "map3D", // map3D / map

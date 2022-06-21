@@ -110,13 +110,7 @@
               :data="reddata"
               :class-option="seamlessScrollOption"
               key="bottom"
-              style="
-                max-height: 350px;
-                overflow: hidden;
-                color: white;
-                font-size: 18px;
-                text-align: center;
-              "
+              class="scroll"
             >
               <div class="table">
                 <div
@@ -147,13 +141,7 @@
               :data="blackdata"
               :class-option="seamlessScrollOption"
               key="bottom"
-              style="
-                max-height: 350px;
-                overflow: hidden;
-                color: white;
-                font-size: 18px;
-                text-align: center;
-              "
+              class="scroll"
             >
               <div class="table">
                 <div
@@ -218,15 +206,15 @@ export default {
         { name: "易腐垃圾占比", value: 5 },
       ],
       btnlist3: [
-        { name: "南湖", value: 1 },
-        { name: "秀洲", value: 2 },
-        { name: "嘉善", value: 3 },
-        { name: "平湖", value: 4 },
-        { name: "海盐", value: 5 },
-        { name: "海宁", value: 6 },
-        { name: "桐乡", value: 7 },
-        { name: "经开", value: 8 },
-        { name: "港区", value: 9 },
+        { name: "南湖", value: 410000000 },
+        { name: "秀洲", value: 420000000 },
+        { name: "嘉善", value: 430000000 },
+        { name: "平湖", value: 460000000 },
+        { name: "海盐", value: 440000000 },
+        { name: "海宁", value: 450000000 },
+        { name: "桐乡", value: 470000000 },
+        { name: "经开", value: 480000000 },
+        { name: "港区", value: 490000000 },
       ],
       blackdata: [
         {
@@ -677,7 +665,11 @@ export default {
       myChart.showLoading();
 
       // 引入JSON文件
-      const data = yls_json.features.map((item, index) => {
+      var linedata = [];
+      const data = yls_json.features.map((item) => {
+        if (item.properties.centroid) {
+          linedata.push([...item.properties.centroid, 0]);
+        }
         const geoAreaName = item.properties.name; // geo文件中的地理名称
         return {
           name: geoAreaName,
@@ -689,6 +681,7 @@ export default {
           },
         };
       });
+      console.log(data, yls_json);
       // 注册地图名字(tongren)和数据(geoJson)
       echarts.registerMap("jx", yls_json);
       // 隐藏动画加载效果。
@@ -710,17 +703,57 @@ export default {
 
         tooltip: {
           // 提示框
-          show: true,
+          show: false,
           trigger: "item",
           formatter: function (params) {
             return params.name;
           },
         },
-
+        geo3D: {
+          map: "jx",
+          show: false,
+          label: {
+            show: false,
+            distance: 0,
+            formatter(param) {
+              const city = param.name;
+              return `{sty1|${city}}`;
+            },
+            rich: {
+              sty1: {
+                color: "#8d0121",
+                align: "center",
+              },
+            },
+            textStyle: {
+              fontSize: 12,
+              color: "#f51c0b",
+            },
+          },
+          viewControl: {
+            distance: 110,
+            zoomSensitivity: 1,
+            panSensitivity: 1,
+            rotateSensitivity: 1,
+          },
+          zlevel: -11,
+        },
         series: [
           {
+            type: "scatter3D",
+            name: "jx",
+            coordinateSystem: "geo3D",
+            symbol: "triangle",
+            symbolSize: 18,
+            itemStyle: {
+              color: "#FF5722",
+              opacity: 1,
+            },
+            data: linedata,
+          },
+          {
+            name: "jx", // 系列名称
             type: "map3D", // 系列类型
-            name: "map3D", // 系列名称
             map: "jx", // 地图类型。echarts-gl 中使用的地图类型同 geo 组件相同(ECharts 中提供了两种格式的地图数据，一种是可以直接 script 标签引入的 js 文件，引入后会自动注册地图名字和数据。还有一种是 JSON 文件，需要通过 AJAX 异步加载后手动注册。)
             // colorBy: "data",
             tooltip: {
@@ -754,15 +787,22 @@ export default {
             // 环境贴图，支持純颜色值，渐变色，全景贴图的 url。默认为 'auto'，在配置有 light.ambientCubemap.texture 的时候会使用该纹理作为环境贴图。否则则不显示环境贴图。
             label: {
               // 标签的相关设置
-              show: true, // (地图上的城市名称)是否显示标签 [ default: false ]
+              show: false, // (地图上的城市名称)是否显示标签 [ default: false ]
               //distance: 50, // 标签距离图形的距离，在三维的散点图中这个距离是屏幕空间的像素值，其它图中这个距离是相对的三维距离
-              //formatter:, // 标签内容格式器
+              formatter(param) {
+                const city = param.name;
+                return `{sty1|${city}}`;
+              },
+              rich: {
+                sty1: {
+                  color: "#8d0121",
+                  align: "center",
+                },
+              },
               textStyle: {
                 // 标签的字体样式
-                color: "#000", // 地图初始化区域字体颜色
-                fontSize: 8, // 字体大小
+                fontSize: 18, // 字体大小
                 opacity: 1, // 字体透明度
-                backgroundColor: "rgba(0,23,11,0)", // 字体背景色
               },
               emphasis: {
                 show: true,
@@ -951,7 +991,7 @@ export default {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   z-index: 10;
-  height: 100%;
+  height: calc(100% - 81px);
   overflow: hidden;
   .tableone {
     .thead {
@@ -978,6 +1018,13 @@ export default {
     font-weight: 700;
     color: #fff;
   }
+  .scroll {
+    height: 100%;
+    overflow: hidden;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+  }
   .table {
     width: 100%;
     .tbody {
@@ -986,7 +1033,7 @@ export default {
       line-height: 70px;
       display: flex;
       justify-content: space-around;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       background: rgba(255, 255, 255, 0.13);
       span {
         font-size: 14px;
@@ -1002,6 +1049,7 @@ export default {
 h3 {
   margin: 0;
   display: inline-block;
+  margin-top: 10px;
   width: 250px;
   height: 40px;
   color: #fff;
@@ -1022,12 +1070,12 @@ h3 {
   .left {
     width: 30%;
     .leftdiv {
-      height: 40%;
+      height: 50%;
       width: 100%;
       #leftbar {
         border: solid 1px #0167dd;
         width: 100%;
-        height: calc(100% - 70px);
+        height: calc(100% - 81px);
       }
     }
   }
@@ -1039,11 +1087,11 @@ h3 {
     width: 30%;
     .rightdiv {
       width: 100%;
-      height: 40%;
+      height: 50%;
       #rightline {
         border: solid 1px #0167dd;
         width: 100%;
-        height: calc(100% - 70px);
+        height: calc(100% - 81px);
       }
     }
   }
@@ -1073,8 +1121,11 @@ h3 {
 }
 .btnlist {
   margin: 5px auto;
+  display: flex;
+  justify-content: space-around;
   span {
     cursor: pointer;
+    min-width: 40px;
     display: inline-block;
     color: #02a7f0;
     font-size: 14px;
