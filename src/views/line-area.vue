@@ -47,21 +47,22 @@
       <div class="areatree">
         <div
           class="selectdata"
-          @click="typeopen == 3 ? (typeopen = 0) : (typeopen = 3)"
+          @click="typeopen == 4 ? (typeopen = 0) : (typeopen = 4)"
         >
-          {{ $route.query.areaName }}
+          {{ formfiled.deptName }}
         </div>
-        <ul>
+        <ul v-show="typeopen == 4">
           <li
             v-for="(item, index) in arealist"
             :key="index"
-            @click="carSelect(item)"
+            @click="toggleArea(item.name, item.value)"
           >
-            {{ item.vehicleName }}
+            {{ item.name }}
           </li>
         </ul>
       </div>
       <div class="carlist">
+        <div v-show="carlist.length < 1" class="loading">加载中.....</div>
         <ul>
           <li
             v-for="(item, index) in carlist"
@@ -139,10 +140,20 @@ export default {
       isactive: false,
       cpmpomentDate: "",
       carlist: [],
-      arealist: [],
       videoUrl: "",
       urlList: [],
       player: null,
+      arealist: [
+        { name: "南湖", value: "410000000" },
+        { name: "秀洲", value: "420000000" },
+        { name: "嘉善", value: "430000000" },
+        { name: "平湖", value: "460000000" },
+        { name: "海盐", value: "440000000" },
+        { name: "海宁", value: "450000000" },
+        { name: "桐乡", value: "470000000" },
+        { name: "经开", value: "480000000" },
+        { name: "港区", value: "490000000" },
+      ],
       typelist: [
         { name: "可回收物", key: 10 },
         { name: "有害垃圾", key: 20 },
@@ -158,11 +169,13 @@ export default {
         garbageName: "请选择回收类型",
         vehicleModelListName: "请选择回收环节",
         vehicleName: "",
+        deptName: "",
       },
       formfiled1: {
         vehicleModelList: "",
         selectdate: "",
         garbageType: "",
+        deptId: "",
       },
       typeopen: 0,
       huanjie: [],
@@ -194,10 +207,18 @@ export default {
       this.formfiled1.selectdate = this.dateSwitch(val);
     },
     formfiled1: {
-      handler(val) {
+      handler(newval) {
         //逻辑处理
-        this.formfiled.vehicleName = "";
-        this.getcarteamTree(val);
+        if (
+          newval.deptId &&
+          newval.deptId != "" &&
+          newval.selectdate &&
+          newval.selectdate != ""
+        ) {
+          this.carlist = [];
+          this.formfiled.vehicleName = "";
+          this.getcarteamTree();
+        }
       },
       deep: true,
     },
@@ -213,15 +234,6 @@ export default {
     },
   },
   created() {
-    this.mapdata = {
-      type: "FeatureCollection",
-      features: [],
-    };
-    var data = yls_json.features;
-    this.mapdata.features = data.filter(
-      (item) => item.properties.name === this.$route.query.areaName
-    );
-    this.centerMap = this.mapdata.features[0].properties;
     var date = new Date();
     this.cpmpomentDate = this.dateSwitch(date);
     this.formfiled1.garbageType = this.$route.query.garbageType;
@@ -243,16 +255,14 @@ export default {
       //加载完成去执行代码  ie中不能使用
 
       this.loadJS("http://cdn.bootcss.com/d3/3.5.17/d3.js", () => {
-        console.log(1);
         this.loadJS(
           "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
           () => {
-            console.log(2);
             this.loadJS(
               "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
               () => {
-                console.log("加载完成");
-                this.load();
+                this.tMap = new T.Map("chart-box");
+                this.toggleArea(this.$route.query.areaName);
               }
             );
           }
@@ -261,22 +271,29 @@ export default {
     };
   },
   methods: {
-    // 获取区域数据
-    getAreaList() {
-      this.$http({
-        method: "post",
-        url: "api/v1/jky/counties",
-        baseURL: "http://o792k95b.xiaomy.net/",
-        data: {
-          deptId: "400000000",
-        },
-      })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
+    //切换区域
+    toggleArea(areaName, val) {
+      this.formfiled.deptName = areaName;
+      if (val) {
+        this.formfiled1.deptId = val;
+      } else {
+        this.arealist.forEach((item) => {
+          if (areaName.indexOf(item.name) != -1) {
+            this.formfiled1.deptId = item.value;
+          }
         });
+      }
+      this.typeopen = 0;
+      this.mapdata = {
+        type: "FeatureCollection",
+        features: [],
+      };
+      var data = yls_json.features;
+      this.mapdata.features = data.filter((item) => {
+        return item.properties.name.indexOf(areaName) != -1;
+      });
+      this.centerMap = this.mapdata.features[0].properties;
+      this.load();
     },
     loadJS(url, success) {
       var domScript = document.createElement("script");
@@ -296,10 +313,11 @@ export default {
       document.getElementsByTagName("head")[0].appendChild(domScript);
     },
     load() {
-      this.tMap = new T.Map("chart-box");
+      this.tMap.clearLayers();
+      this.tMap.clearOverLays();
       this.tMap.centerAndZoom(
         new T.LngLat(this.centerMap.centroid[0], this.centerMap.centroid[1]),
-        13
+        12
       );
       this.tMap.setStyle("indigo");
       var mapBorder = this.mapdata.features[0].geometry.coordinates[0];
@@ -2079,23 +2097,23 @@ export default {
         });
     },
     // 获取时间线节点数据
-    getTimelineData() {
-      this.$http({
-        method: "post",
-        url: "api/v1/jky/timeline",
-        baseURL: "http://o792k95b.xiaomy.net/",
-        data: {
-          date: "2022-04-12",
-          carNum: "浙FF5129",
-        },
-      })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+    // getTimelineData() {
+    //   this.$http({
+    //     method: "post",
+    //     url: "api/v1/jky/timeline",
+    //     baseURL: "http://o792k95b.xiaomy.net/",
+    //     data: {
+    //       date: "2022-04-12",
+    //       carNum: "浙FF5129",
+    //     },
+    //   })
+    //     .then((res) => {
+    //       console.log(res);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // },
     //获取车辆组织树
     getcarteamTree() {
       this.$http({
@@ -2103,10 +2121,10 @@ export default {
         url: "api/v1/jky/pjcar/pjcarTree",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
-          lnglatTime: "2022-05-19",
-          deptId: "400000000",
+          lnglatTime: this.formfiled1.selectdate,
+          deptId: this.formfiled1.deptId,
           vehicleModelList: this.formfiled1.vehicleModelList,
-          garbageType: this.formfiled.garbageType,
+          garbageType: this.formfiled1.garbageType,
         },
       })
         .then((res) => {
@@ -2175,7 +2193,6 @@ export default {
             // // this.bmap.addOverlay(pl);
             // trackAni.start();
           } else {
-            console.log(res);
             alert("暂无轨迹数据");
           }
         })
@@ -2269,7 +2286,6 @@ export default {
     },
     //日期转换
     dateSwitch(date) {
-      console.log(date);
       if (typeof date === "string") {
         return date;
       }
@@ -2471,6 +2487,7 @@ ul {
     height: calc(100% - 150px);
     border-radius: 5px;
     color: aliceblue;
+    overflow: auto;
     .selectdata {
       cursor: pointer;
       height: 35px;
@@ -2485,24 +2502,60 @@ ul {
       line-height: 35px;
     }
     .typelist {
+      position: relative;
       margin-bottom: 10px;
-      ul > li {
-        background: linear-gradient(45deg, #1eedd9, #84ca91);
+      ul {
+        // position: absolute;
+        // z-index: 100;
+        // top: 35px;
+        // width: 100%;
+        li {
+          background: linear-gradient(45deg, #1eedd9, #84ca91);
+        }
       }
     }
     .huanjie {
+      position: relative;
       margin-top: 10px;
-      ul > li {
-        background: linear-gradient(45deg, #0875f2, #c2cbf1);
+      ul {
+        // position: absolute;
+        // z-index: 100;
+        // top: 35px;
+        // width: 100%;
+        li {
+          background: linear-gradient(45deg, #0875f2, #c2cbf1);
+        }
       }
     }
     .areatree {
       margin-top: 10px;
+      position: relative;
       ul {
-        max-height: 600px;
-        overflow: auto;
+        // position: absolute;
+        // z-index: 100;
+        // top: 35px;
+        // width: 100%;
         li {
+          width: 100%;
           background: linear-gradient(45deg, #27a37a, #84ca91);
+        }
+      }
+    }
+    .carlist {
+      // max-height: 600px;
+      // overflow: auto;
+      position: relative;
+      .loading {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.8);
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+      ul {
+        li {
+          background: linear-gradient(45deg, #2ba327, #607964);
         }
       }
     }

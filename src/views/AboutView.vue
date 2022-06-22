@@ -87,11 +87,11 @@
         <h3>红黑榜</h3>
         <div class="btnlist">
           <span
-            @click="areaValue = item.value"
-            :class="{ active: item.value == areaValue }"
+            @click="toggleArea(item)"
+            :class="{ active: item.rowId == areaValue }"
             v-for="(item, index) in btnlist3"
             :key="index"
-            >{{ item.name }}</span
+            >{{ item.deptName }}</span
           >
         </div>
         <div class="rightbottom" :key="rightkey">
@@ -107,7 +107,7 @@
               <span style="width: 145px">上榜理由</span>
             </ul>
             <VueSeamlessScroll
-              :data="reddata"
+              :data="redList"
               :class-option="seamlessScrollOption"
               key="bottom"
               class="scroll"
@@ -115,13 +115,13 @@
               <div class="table">
                 <div
                   class="tbody"
-                  v-for="(item, index) in reddata"
+                  v-for="(item, index) in redList"
                   :key="index"
                 >
-                  <span style="width: 50px">{{ item.index }}</span>
-                  <span style="width: 145px">{{ item.name }}</span>
-                  <span style="width: 70px">{{ item.charge }}</span>
-                  <span style="width: 145px">{{ item.reason }}</span>
+                  <span style="width: 50px">{{ index + 1 }}</span>
+                  <span style="width: 145px">{{ item.redblackName }}</span>
+                  <span style="width: 70px">{{ item.score }}</span>
+                  <span style="width: 145px">{{ item.remarks }}</span>
                 </div>
               </div>
             </VueSeamlessScroll>
@@ -138,7 +138,7 @@
               <span style="width: 145px">上榜理由</span>
             </ul>
             <VueSeamlessScroll
-              :data="blackdata"
+              :data="blackList"
               :class-option="seamlessScrollOption"
               key="bottom"
               class="scroll"
@@ -146,13 +146,13 @@
               <div class="table">
                 <div
                   class="tbody"
-                  v-for="(item, index) in blackdata"
+                  v-for="(item, index) in blackList"
                   :key="index"
                 >
-                  <span style="width: 50px">{{ item.index }}</span>
-                  <span style="width: 145px">{{ item.name }}</span>
-                  <span style="width: 70px">{{ item.charge }}</span>
-                  <span style="width: 140px">{{ item.reason }}</span>
+                  <span style="width: 50px">{{ index + 1 }}</span>
+                  <span style="width: 145px">{{ item.redblackName }}</span>
+                  <span style="width: 70px">{{ item.score }}</span>
+                  <span style="width: 140px">{{ item.remarks }}</span>
                 </div>
               </div>
             </VueSeamlessScroll>
@@ -178,7 +178,7 @@ export default {
       carrentMounth: null,
       sanlv: {},
       garbageType: "",
-      evaluationType: 1,
+      evaluationType: 10,
       areaValue: "",
       grabge: {
         deptName: [],
@@ -199,99 +199,15 @@ export default {
         { name: "园林", value: 60 },
       ],
       btnlist2: [
-        { name: "日评价叔分析", value: 1 },
-        { name: "月评价数分析", value: 2 },
-        { name: "焚烧率分析", value: 3 },
-        { name: "回收利用分析", value: 4 },
-        { name: "易腐垃圾占比", value: 5 },
+        { name: "日评价数分析", value: 10 },
+        { name: "月评价数分析", value: 20 },
+        { name: "焚烧率分析", value: 1 },
+        { name: "回收利用分析", value: 2 },
+        { name: "易腐垃圾占比", value: 3 },
       ],
-      btnlist3: [
-        { name: "南湖", value: 410000000 },
-        { name: "秀洲", value: 420000000 },
-        { name: "嘉善", value: 430000000 },
-        { name: "平湖", value: 460000000 },
-        { name: "海盐", value: 440000000 },
-        { name: "海宁", value: 450000000 },
-        { name: "桐乡", value: 470000000 },
-        { name: "经开", value: 480000000 },
-        { name: "港区", value: 490000000 },
-      ],
-      blackdata: [
-        {
-          index: 1,
-          name: "南湖区百度弄社区",
-          charge: 94,
-          reason: "投放点卫生保持整洁",
-        },
-        {
-          index: 2,
-          name: "南湖区百度弄社区",
-          charge: 94,
-          reason: "投放点卫生保持整洁",
-        },
-        {
-          index: 3,
-          name: "南湖区百度弄社区",
-          charge: 94,
-          reason: "投放点卫生保持整洁",
-        },
-        {
-          index: 4,
-          name: "南湖区百度弄社区",
-          charge: 94,
-          reason: "投放点卫生保持整洁",
-        },
-        {
-          index: 5,
-          name: "南湖区百度弄社区",
-          charge: 94,
-          reason: "投放点卫生保持整洁",
-        },
-        {
-          index: 6,
-          name: "南湖区百度弄社区",
-          charge: 94,
-          reason: "投放点卫生保持整洁",
-        },
-      ],
-      reddata: [
-        {
-          index: 1,
-          name: "南湖区百度弄社区",
-          charge: 94,
-          reason: "投放点卫生保持整洁",
-        },
-        {
-          index: 2,
-          name: "南湖区百度弄社区",
-          charge: 94,
-          reason: "投放点卫生保持整洁",
-        },
-        {
-          index: 3,
-          name: "南湖区百度弄社区",
-          charge: 94,
-          reason: "投放点卫生保持整洁",
-        },
-        {
-          index: 4,
-          name: "南湖区百度弄社区",
-          charge: 94,
-          reason: "投放点卫生保持整洁",
-        },
-        {
-          index: 5,
-          name: "南湖区百度弄社区",
-          charge: 94,
-          reason: "投放点卫生保持整洁",
-        },
-        {
-          index: 6,
-          name: "南湖区百度弄社区",
-          charge: 94,
-          reason: "投放点卫生保持整洁",
-        },
-      ],
+      btnlist3: [],
+      blackList: [],
+      redList: [],
       table: true,
       rightkey: "rightkey",
       color: [
@@ -308,6 +224,37 @@ export default {
       leftdivdata: [],
     };
   },
+  watch: {
+    garbageType: {
+      handler: function () {
+        console.log("切换垃圾种类");
+        this.getWeight();
+      },
+    },
+    evaluationType: {
+      handler: function (val) {
+        console.log("切换评价种类");
+        if (val == 10) {
+          this.getEvaluation("api/v1/jky/dailyEvaluation", {
+            deptId: "400000000",
+            deptIdEnd: "499999999",
+            date: this.carrentDate,
+          });
+        } else if (val == 20) {
+          this.getEvaluation("api/v1/jky/monthlyEvaluation", {
+            deptId: "400000000",
+            deptIdEnd: "499999999",
+          });
+        } else {
+          this.getEvaluation("api/v1/jky/qualityEvaluation", {
+            deptId: "400000000",
+            deptIdEnd: "499999999",
+            type: val,
+          });
+        }
+      },
+    },
+  },
   created() {
     this.dateSwitch();
   },
@@ -316,17 +263,25 @@ export default {
       this.table = !this.table;
       this.rightkey += Math.random();
     }, 5000);
+    this.getAreaList();
     this.map();
-    this.rightline();
     this.getdata();
     this.getSanlv();
     this.getWeight();
+    this.getRedBlack();
+    this.rightline();
+    this.getEvaluation("api/v1/jky/dailyEvaluation", {
+      deptId: "400000000",
+      deptIdEnd: "499999999",
+      // date: this.carrentDate,
+      date: "2022-05-17",
+    });
   },
   computed: {
     seamlessScrollOption() {
       return {
         step: 1, // 数值越大速度滚动越快
-        // limitMoveNum: 2, // 开始无缝滚动的数据量 this.dataList.length
+        limitMoveNum: 2, // 开始无缝滚动的数据量 this.dataList.length
         hoverStop: true, // 是否开启鼠标悬停stop
         direction: 1, // 0向下 1向上 2向左 3向右
         openWatch: true, // 开启数据实时监控刷新dom
@@ -337,6 +292,50 @@ export default {
     },
   },
   methods: {
+    //切换红黑榜区域
+    toggleArea(item) {
+      this.areaValue = item.rowId;
+      this.getRedBlack(item);
+    },
+    // 获取区域数据
+    getAreaList() {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/counties",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: "400000000",
+        },
+      })
+        .then((res) => {
+          this.btnlist3 = res.data.result;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //红黑榜
+    getRedBlack(area) {
+      //三率
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/redBlack",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: area ? area.rowId.toString() : "400000000",
+          deptIdEnd: area ? area.rowIdEnd.toString() : "499999999",
+          // date: this.carrentDate,
+          date: "2021-05-08",
+        },
+      })
+        .then((res) => {
+          this.blackList = res.data.result.blackList;
+          this.redList = res.data.result.redList;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     //日期月份转换
     dateSwitch() {
       var date = new Date();
@@ -407,11 +406,17 @@ export default {
       })
         .then((res) => {
           if (res.data.result) {
+            this.grabge.deptName = [];
+            this.grabge.weight = [];
+            this.grabge.lastYearMonthWeight = [];
+            this.grabge.tong = [];
             res.data.result.forEach((item) => {
-              this.grabge.deptName.push(item.deptName);
-              this.grabge.weight.push(item.weight);
-              this.grabge.lastYearMonthWeight.push(item.lastYearMonthWeight);
-              this.grabge.tong.push(item.tong);
+              if (item.deptName) {
+                this.grabge.deptName.push(item.deptName);
+                this.grabge.weight.push(item.weight);
+                this.grabge.lastYearMonthWeight.push(item.lastYearMonthWeight);
+                this.grabge.tong.push(item.tong);
+              }
             });
             this.leftbar();
           }
@@ -420,27 +425,22 @@ export default {
           console.log(err);
         });
     },
-    getEvaluation() {
+    getEvaluation(url, data) {
       this.$http({
         method: "post",
-        url: "api/v1/jky/DwWeightCarMonthWeight/deptMonthWeight",
+        url: url,
         baseURL: "http://o792k95b.xiaomy.net/",
-        data: {
-          deptId: "400000000",
-          deptIdEnd: "499999999",
-          weightMonth: this.carrentMounth,
-          type: this.garbageType,
-        },
+        data: data,
       })
         .then((res) => {
           if (res.data.result) {
-            res.data.result.forEach((item) => {
-              this.grabge.deptName.push(item.deptName);
-              this.grabge.weight.push(item.weight);
-              this.grabge.lastYearMonthWeight.push(item.lastYearMonthWeight);
-              this.grabge.tong.push(item.tong);
-            });
-            this.leftbar();
+            if (typeof res.data === "string") {
+              var result = eval("(" + res.data + ")").result;
+            }
+            console.log(result);
+            // this.rightline();
+          } else {
+            console.log(res.data.result);
           }
         })
         .catch((err) => {
@@ -464,13 +464,6 @@ export default {
         grid: {
           right: "20%",
         },
-        // toolbox: {
-        //   feature: {
-        //     dataView: { show: true, readOnly: false },
-        //     restore: { show: true },
-        //     saveAsImage: { show: true },
-        //   },
-        // },
         legend: {
           data: ["每小时评价数", "当日累计评价数"],
         },
@@ -593,6 +586,10 @@ export default {
           {
             type: "category",
             data: this.grabge.deptName,
+            axisLabel: {
+              interval: 0,
+              rotate: -30,
+            },
           },
         ],
         yAxis: [
@@ -652,7 +649,7 @@ export default {
           },
         ],
       };
-
+      myChart.clear();
       option && myChart.setOption(option);
     },
     map() {
@@ -739,18 +736,18 @@ export default {
           zlevel: -11,
         },
         series: [
-          {
-            type: "scatter3D",
-            name: "jx",
-            coordinateSystem: "geo3D",
-            symbol: "triangle",
-            symbolSize: 18,
-            itemStyle: {
-              color: "#FF5722",
-              opacity: 1,
-            },
-            data: linedata,
-          },
+          // {
+          //   type: "scatter3D",
+          //   name: "jx",
+          //   coordinateSystem: "geo3D",
+          //   symbol: "triangle",
+          //   symbolSize: 18,
+          //   itemStyle: {
+          //     color: "#FF5722",
+          //     opacity: 1,
+          //   },
+          //   data: linedata,
+          // },
           {
             name: "jx", // 系列名称
             type: "map3D", // 系列类型
@@ -991,7 +988,7 @@ export default {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   z-index: 10;
-  height: calc(100% - 81px);
+  height: calc(100% - 100px);
   overflow: hidden;
   .tableone {
     .thead {
@@ -1033,7 +1030,7 @@ export default {
       line-height: 70px;
       display: flex;
       justify-content: space-around;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       background: rgba(255, 255, 255, 0.13);
       span {
         font-size: 14px;
