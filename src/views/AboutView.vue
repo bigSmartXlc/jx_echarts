@@ -34,39 +34,39 @@
         </div>
       </div>
     </div>
-    <div class="mapcontainer">
-      <div class="sanlv">
+    <div class="sanlv">
+      <div>
         <div>
-          <div>
-            <img src="../assets/images/sanlvbg2.png" alt="" />
-            <img src="../assets/images/sanlvbg3.png" alt="" />
-          </div>
-          <div class="sanlvdate">
-            <span>知晓率</span>
-            <span>{{ sanlv.knowRate }}%</span>
-          </div>
+          <img src="../assets/images/sanlvbg2.png" alt="" />
+          <img src="../assets/images/sanlvbg3.png" alt="" />
         </div>
-        <div>
-          <div>
-            <img src="../assets/images/sanlvbg2.png" alt="" />
-            <img src="../assets/images/sanlvbg3.png" alt="" />
-          </div>
-          <div class="sanlvdate">
-            <span>参与率</span>
-            <span>{{ sanlv.joinRate }}%</span>
-          </div>
-        </div>
-        <div>
-          <div>
-            <img src="../assets/images/sanlvbg2.png" alt="" />
-            <img src="../assets/images/sanlvbg3.png" alt="" />
-          </div>
-          <div class="sanlvdate">
-            <span>正确率</span>
-            <span>{{ sanlv.rightRate }}%</span>
-          </div>
+        <div class="sanlvdate">
+          <span>知晓率</span>
+          <span>{{ sanlv.knowRate }}%</span>
         </div>
       </div>
+      <div>
+        <div>
+          <img src="../assets/images/sanlvbg2.png" alt="" />
+          <img src="../assets/images/sanlvbg3.png" alt="" />
+        </div>
+        <div class="sanlvdate">
+          <span>参与率</span>
+          <span>{{ sanlv.joinRate }}%</span>
+        </div>
+      </div>
+      <div>
+        <div>
+          <img src="../assets/images/sanlvbg2.png" alt="" />
+          <img src="../assets/images/sanlvbg3.png" alt="" />
+        </div>
+        <div class="sanlvdate">
+          <span>正确率</span>
+          <span>{{ sanlv.rightRate }}%</span>
+        </div>
+      </div>
+    </div>
+    <div class="mapcontainer">
       <div id="main"></div>
     </div>
     <div class="right">
@@ -174,6 +174,7 @@ export default {
   },
   data() {
     return {
+      rightChart: null,
       carrentDate: null,
       carrentMounth: null,
       sanlv: {},
@@ -205,7 +206,18 @@ export default {
         { name: "回收利用分析", value: 2 },
         { name: "易腐垃圾占比", value: 3 },
       ],
-      btnlist3: [],
+      // btnlist3: [],
+      btnlist3: [
+        { deptName: "南湖", rowId: 410000000, rowIdEnd: 419999999 },
+        { deptName: "秀洲", rowId: 420000000, rowIdEnd: 429999999 },
+        { deptName: "嘉善", rowId: 430000000, rowIdEnd: 439999999 },
+        { deptName: "海盐", rowId: 440000000, rowIdEnd: 449999999 },
+        { deptName: "海宁", rowId: 450000000, rowIdEnd: 459999999 },
+        { deptName: "平湖", rowId: 460000000, rowIdEnd: 469999999 },
+        { deptName: "桐乡", rowId: 470000000, rowIdEnd: 479999999 },
+        { deptName: "经开", rowId: 480000000, rowIdEnd: 489999999 },
+        { deptName: "港区", rowId: 490000000, rowIdEnd: 499999999 },
+      ],
       blackList: [],
       redList: [],
       table: true,
@@ -227,30 +239,41 @@ export default {
   watch: {
     garbageType: {
       handler: function () {
-        console.log("切换垃圾种类");
         this.getWeight();
       },
     },
     evaluationType: {
       handler: function (val) {
-        console.log("切换评价种类");
         if (val == 10) {
-          this.getEvaluation("api/v1/jky/dailyEvaluation", {
-            deptId: "400000000",
-            deptIdEnd: "499999999",
-            date: this.carrentDate,
-          });
+          this.getEvaluation(
+            "api/v1/jky/dailyEvaluation",
+            {
+              deptId: "400000000",
+              deptIdEnd: "499999999",
+              // date: this.carrentDate,
+              date: "2022-05-17",
+            },
+            val
+          );
         } else if (val == 20) {
-          this.getEvaluation("api/v1/jky/monthlyEvaluation", {
-            deptId: "400000000",
-            deptIdEnd: "499999999",
-          });
+          this.getEvaluation(
+            "api/v1/jky/monthlyEvaluation",
+            {
+              deptId: "400000000",
+              deptIdEnd: "499999999",
+            },
+            val
+          );
         } else {
-          this.getEvaluation("api/v1/jky/qualityEvaluation", {
-            deptId: "400000000",
-            deptIdEnd: "499999999",
-            type: val,
-          });
+          this.getEvaluation(
+            "api/v1/jky/qualityEvaluation",
+            {
+              deptId: "400000000",
+              deptIdEnd: "499999999",
+              type: val,
+            },
+            val
+          );
         }
       },
     },
@@ -263,19 +286,22 @@ export default {
       this.table = !this.table;
       this.rightkey += Math.random();
     }, 5000);
-    this.getAreaList();
+    // this.getAreaList();
     this.map();
     this.getdata();
     this.getSanlv();
     this.getWeight();
     this.getRedBlack();
-    this.rightline();
-    this.getEvaluation("api/v1/jky/dailyEvaluation", {
-      deptId: "400000000",
-      deptIdEnd: "499999999",
-      // date: this.carrentDate,
-      date: "2022-05-17",
-    });
+    this.getEvaluation(
+      "api/v1/jky/dailyEvaluation",
+      {
+        deptId: "400000000",
+        deptIdEnd: "499999999",
+        // date: this.carrentDate,
+        date: "2022-05-17",
+      },
+      10
+    );
   },
   computed: {
     seamlessScrollOption() {
@@ -308,7 +334,14 @@ export default {
         },
       })
         .then((res) => {
-          this.btnlist3 = res.data.result;
+          this.btnlist3 = res.data.result.map((item) => {
+            return {
+              deptName: item.deptName,
+              rowId: item.rowId,
+              rowIdEnd: item.rowIdEnd,
+            };
+          });
+          console.log(this.btnlist3);
         })
         .catch((err) => {
           console.log(err);
@@ -425,7 +458,10 @@ export default {
           console.log(err);
         });
     },
-    getEvaluation(url, data) {
+    getEvaluation(url, data, type) {
+      var chartDom = document.getElementById("rightline");
+      this.rightChart = echarts.init(chartDom);
+      this.rightChart.showLoading();
       this.$http({
         method: "post",
         url: url,
@@ -433,128 +469,229 @@ export default {
         data: data,
       })
         .then((res) => {
-          if (res.data.result) {
+          if (res.data) {
+            var result;
             if (typeof res.data === "string") {
-              var result = eval("(" + res.data + ")").result;
+              result = eval("(" + res.data + ")").result;
+            } else {
+              result = res.data.result;
             }
-            console.log(result);
-            // this.rightline();
+            this.rightline(result, type);
           } else {
-            console.log(res.data.result);
+            console.log(res.data);
           }
         })
         .catch((err) => {
           console.log(err);
         });
     },
-    rightline() {
-      var chartDom = document.getElementById("rightline");
-      var myChart = echarts.init(chartDom);
+    rightline(result, type) {
       var option;
-
+      var xData = [];
+      var legendData = [];
       const colors = ["#5470C6", "#91CC75", "#EE6666"];
-      option = {
-        color: colors,
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "cross",
-          },
-        },
-        grid: {
-          right: "20%",
-        },
-        legend: {
-          data: ["每小时评价数", "当日累计评价数"],
-        },
-        xAxis: [
-          {
-            type: "category",
-            axisTick: {
-              alignWithLabel: true,
+      if (type == 10) {
+        var xDataOld = Object.keys(result.map);
+        xData = xDataOld.map((item) => {
+          return Number(item) + 1;
+        });
+        var yDataLeft = Object.values(result.map);
+        var yDataRight = Object.values(result.mapSum);
+        legendData = ["每小时评价数", "当日累计评价数"];
+        option = {
+          color: colors,
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "cross",
             },
-            // prettier-ignore
-            data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
           },
-        ],
-        yAxis: [
-          {
-            type: "value",
-            name: "去年同期产生量",
-            position: "right",
-            alignTicks: true,
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: colors[0],
+          legend: {
+            data: legendData,
+            textStyle: {
+              color: "#fff",
+            },
+          },
+          xAxis: [
+            {
+              type: "category",
+              axisTick: {
+                alignWithLabel: true,
+              },
+              data: xData,
+            },
+          ],
+          yAxis: [
+            {
+              type: "value",
+              name: "当日累计评价数",
+              position: "right",
+              alignTicks: true,
+              axisLine: {
+                show: true,
+                lineStyle: {
+                  color: colors[0],
+                },
+              },
+              axisLabel: {
+                formatter: "{value}",
               },
             },
-            axisLabel: {
-              formatter: "{value} ml",
-            },
-          },
-          {
-            type: "value",
-            name: "Precipitation",
-            position: "right",
-            alignTicks: true,
-            offset: 80,
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: colors[1],
+            {
+              type: "value",
+              name: "每小时评价数",
+              position: "left",
+              alignTicks: true,
+              axisLine: {
+                show: true,
+                lineStyle: {
+                  color: colors[2],
+                },
+              },
+              axisLabel: {
+                formatter: "{value}",
               },
             },
-            axisLabel: {
-              formatter: "{value} ml",
+          ],
+          series: [
+            {
+              name: "每小时评价数",
+              type: "bar",
+              data: yDataLeft,
+            },
+            {
+              name: "当日累计评价数",
+              type: "line",
+              yAxisIndex: 1,
+              data: yDataRight,
+            },
+          ],
+        };
+      } else if (type == 20) {
+        xData = Object.keys(result.goodMap);
+        var goodData = Object.values(result.goodMap);
+        var sumData = Object.values(result.goodMap);
+        legendData = ["月评价数", "好评数"];
+        option = {
+          color: colors,
+          grid: {
+            // containLabel: true,
+            left: 90,
+          },
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "cross",
             },
           },
-          {
-            type: "value",
-            name: "温度",
-            position: "left",
-            alignTicks: true,
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: colors[2],
+          legend: {
+            data: legendData,
+            textStyle: {
+              color: "#fff",
+            },
+          },
+          xAxis: [
+            {
+              type: "category",
+              axisTick: {
+                alignWithLabel: true,
+              },
+              data: xData,
+            },
+          ],
+          yAxis: [
+            {
+              type: "value",
+              name: "评价数",
+              position: "left",
+              alignTicks: true,
+              axisLine: {
+                show: true,
+                lineStyle: {
+                  color: colors[2],
+                },
+              },
+              axisLabel: {
+                formatter: "{value}",
               },
             },
-            axisLabel: {
-              formatter: "{value} °C",
+          ],
+          series: [
+            {
+              name: "月评价数",
+              type: "line",
+              data: sumData,
+            },
+            {
+              name: "好评数",
+              type: "line",
+              data: goodData,
+            },
+          ],
+        };
+      } else {
+        var yDataold = Object.values(result.rateList);
+        var yData = yDataold.map((item) => item * 100);
+        xData = Object.values(result.monthList);
+        if (type == 1) {
+          legendData = ["焚烧率"];
+        } else if (type == 2) {
+          legendData = ["回收利用率"];
+        } else if (type == 3) {
+          legendData = ["易腐垃圾占比"];
+        }
+        option = {
+          color: colors,
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "cross",
             },
           },
-        ],
-        series: [
-          {
-            name: "去年同期产生量",
-            type: "bar",
-            data: [
-              2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4,
-              3.3,
-            ],
+          legend: {
+            data: legendData,
+            textStyle: {
+              color: "#fff",
+            },
           },
-          {
-            name: "Precipitation",
-            type: "bar",
-            yAxisIndex: 1,
-            data: [
-              2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0,
-              2.3,
-            ],
-          },
-          {
-            name: "Temperature",
-            type: "line",
-            yAxisIndex: 2,
-            data: [
-              2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2,
-            ],
-          },
-        ],
-      };
-
-      option && myChart.setOption(option);
+          xAxis: [
+            {
+              type: "category",
+              axisTick: {
+                alignWithLabel: true,
+              },
+              data: xData,
+            },
+          ],
+          yAxis: [
+            {
+              type: "value",
+              name: legendData[0],
+              position: "left",
+              alignTicks: true,
+              axisLine: {
+                show: true,
+                lineStyle: {
+                  color: colors[2],
+                },
+              },
+              axisLabel: {
+                formatter: "{value}%",
+              },
+            },
+          ],
+          series: [
+            {
+              name: legendData[0],
+              type: "line",
+              data: yData,
+            },
+          ],
+        };
+      }
+      this.rightChart.clear();
+      this.rightChart.hideLoading();
+      option && this.rightChart.setOption(option);
     },
     leftbar() {
       var chartDom = document.getElementById("leftbar");
@@ -654,6 +791,8 @@ export default {
     },
     map() {
       // 初始化图表
+      let data = yls_json;
+      echarts.registerMap("yls", data);
       var myChart = echarts.init(document.getElementById("main"));
 
       // JSON文件(地图数据)路径
@@ -663,54 +802,36 @@ export default {
 
       // 引入JSON文件
       var linedata = [];
-      const data = yls_json.features.map((item) => {
+      const map3Ddata = yls_json.features.map((item) => {
         if (item.properties.centroid) {
           linedata.push([...item.properties.centroid, 0]);
         }
         const geoAreaName = item.properties.name; // geo文件中的地理名称
         return {
           name: geoAreaName,
-          coord: item.properties.centroid,
+          // value: item.properties.centroid,
           itemStyle: {
-            color: "#0072cc",
-            opacity: 0.5,
-            borderColor: "#fff",
+            color: "#0b7ef5",
           },
         };
       });
-      console.log(data, yls_json);
-      // 注册地图名字(tongren)和数据(geoJson)
-      echarts.registerMap("jx", yls_json);
-      // 隐藏动画加载效果。
-      myChart.hideLoading();
-
-      // 图表配置项
-      var option = {
-        selectedMode: "multiple", // 选中效果固话
+      const option = {
         title: {
-          // 标题
-          top: "5%",
-          text: "当前位置-嘉兴",
-          subtext: "",
-          x: "center",
+          text: "当前位置-嘉兴市",
+          left: 600,
+          top: 160,
           textStyle: {
-            color: "#ccc",
-          },
-        },
-
-        tooltip: {
-          // 提示框
-          show: false,
-          trigger: "item",
-          formatter: function (params) {
-            return params.name;
+            color: "#fff",
           },
         },
         geo3D: {
-          map: "jx",
+          map: "yls",
           show: false,
+          regionHeight: 2.9,
+          zoom: 1,
+          left: 0,
           label: {
-            show: false,
+            show: true,
             distance: 0,
             formatter(param) {
               const city = param.name;
@@ -736,199 +857,122 @@ export default {
           zlevel: -11,
         },
         series: [
-          // {
-          //   type: "scatter3D",
-          //   name: "jx",
-          //   coordinateSystem: "geo3D",
-          //   symbol: "triangle",
-          //   symbolSize: 18,
-          //   itemStyle: {
-          //     color: "#FF5722",
-          //     opacity: 1,
-          //   },
-          //   data: linedata,
-          // },
           {
-            name: "jx", // 系列名称
-            type: "map3D", // 系列类型
-            map: "jx", // 地图类型。echarts-gl 中使用的地图类型同 geo 组件相同(ECharts 中提供了两种格式的地图数据，一种是可以直接 script 标签引入的 js 文件，引入后会自动注册地图名字和数据。还有一种是 JSON 文件，需要通过 AJAX 异步加载后手动注册。)
-            // colorBy: "data",
-            tooltip: {
-              //提示框组件。
-              alwaysShowContent: true,
-              hoverAnimation: true,
-              trigger: "item", //触发类型 散点图
-              enterable: true, //鼠标是否可进入提示框
-              transitionDuration: 1, //提示框移动动画过渡时间
-              triggerOn: "click",
-              formatter: function (params) {
-                if (params.name) {
-                  var str = `
-                  <div class="map-tooltip">
-                    <div class="city-name">${params.name}</div>
-                  </div>
-                  `;
-                  return str;
-                }
-              },
-              // backgroundColor: 'rgba(30, 54, 124,1)',
-              // backgroundColor: '#01FEDD',
-              borderWidth: "1px",
-              borderRadius: "4",
-              borderColor: "#00B2AC",
-              textStyle: {
-                color: "#00B2AC",
-              },
-              padding: [5, 10],
+            type: "scatter3D",
+            name: "yls",
+            coordinateSystem: "geo3D",
+            symbol: "triangle",
+            symbolSize: 30,
+            itemStyle: {
+              color: "#FF5722",
+              opacity: 1,
             },
-            // 环境贴图，支持純颜色值，渐变色，全景贴图的 url。默认为 'auto'，在配置有 light.ambientCubemap.texture 的时候会使用该纹理作为环境贴图。否则则不显示环境贴图。
+            data: linedata,
+          },
+          {
+            name: "yls",
+            type: "map3D", // map3D / map
+            zoom: 0.7,
+            map: "yls",
+            // regionHeight: -3,
             label: {
-              // 标签的相关设置
-              show: false, // (地图上的城市名称)是否显示标签 [ default: false ]
-              //distance: 50, // 标签距离图形的距离，在三维的散点图中这个距离是屏幕空间的像素值，其它图中这个距离是相对的三维距离
+              show: true,
+              distance: 0,
               formatter(param) {
                 const city = param.name;
                 return `{sty1|${city}}`;
               },
               rich: {
                 sty1: {
-                  color: "#8d0121",
+                  color: "#ffffff",
                   align: "center",
+                  fontSize: 18,
+                  fontWeight: 700,
                 },
               },
-              textStyle: {
-                // 标签的字体样式
-                fontSize: 18, // 字体大小
-                opacity: 1, // 字体透明度
-              },
-              emphasis: {
-                show: true,
-              },
+              // textStyle:{
+              //     color:'#f73205'
+              // }
             },
-
-            itemStyle: {
-              // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
-              color: "#570131", // 地图板块的颜色
-              opacity: 1, // 图形的不透明度 [ default: 1 ]
-              borderWidth: 0.5, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
-              borderColor: "#000", // 图形描边的颜色。[ default: #333 ]
-            },
-
             emphasis: {
               // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
               label: {
                 // label高亮时的配置
                 show: true,
                 textStyle: {
-                  color: "#fff", // 高亮时标签颜色变为 白色
-                  fontSize: 15, // 高亮时标签字体 变大
+                  color: "#f73205", // 高亮时标签颜色变为 白色
+                  fontSize: 18, // 高亮时标签字体 变大
                 },
               },
               itemStyle: {
-                // itemStyle高亮时的配置
-                areaColor: "#5470c6", // 高亮时地图板块颜色改变
+                color: "#0b7ef5",
+                opacity: 0.5,
               },
             },
-
             groundPlane: {
-              // 地面可以让整个组件有个“摆放”的地方，从而使整个场景看起来更真实，更有模型感。
-              show: false, // 是否显示地面。[ default: false ]
-              color: "#aaa", // 地面颜色。[ default: '#aaa' ]
+              //工作台
+              // show: true,
             },
-            //shading: 'lambert', // 三维地理坐标系组件中三维图形的着色效果，echarts-gl 中支持下面三种着色方式:
-            // 'color' 只显示颜色，不受光照等其它因素的影响。
-            // 'lambert' 通过经典的 lambert 着色表现光照带来的明暗。
-            // 'realistic' 真实感渲染，配合 light.ambientCubemap 和 postEffect 使用可以让展示的画面效果和质感有质的提升。ECharts GL 中使用了基于物理的渲染（PBR） 来表现真实感材质。
-            // realisticMaterial: {} // 真实感材质相关的配置项，在 shading 为'realistic'时有效。
-            // lambertMaterial: {} // lambert 材质相关的配置项，在 shading 为'lambert'时有效。
-            // colorMaterial: {} // color 材质相关的配置项，在 shading 为'color'时有效。
-
-            light: {
-              // 光照相关的设置。在 shading 为 'color' 的时候无效。 光照的设置会影响到组件以及组件所在坐标系上的所有图表。合理的光照设置能够让整个场景的明暗变得更丰富，更有层次。
-              main: {
-                // 场景主光源的设置，在 globe 组件中就是太阳光。
-                color: "#fff", //主光源的颜色。[ default: #fff ]
-                intensity: 1.2, //主光源的强度。[ default: 1 ]
-                shadow: false, //主光源是否投射阴影。默认关闭。 开启阴影可以给场景带来更真实和有层次的光照效果。但是同时也会增加程序的运行开销。
-                //shadowQuality: 'high', // 阴影的质量。可选'low', 'medium', 'high', 'ultra' [ default: 'medium' ]
-                alpha: 55, // 主光源绕 x 轴，即上下旋转的角度。配合 beta 控制光源的方向。[ default: 40 ]
-                beta: 10, // 主光源绕 y 轴，即左右旋转的角度。[ default: 40 ]
-              },
-              ambient: {
-                // 全局的环境光设置。
-                color: "#fff", // 环境光的颜色。[ default: #fff ]
-                intensity: 0.5, // 环境光的强度。[ default: 0.2 ]
-              },
+            shading: "realistic",
+            // shading: "color",
+            // realisticMaterial: {
+            //   detailTexture: bg, // 纹理贴图
+            //   textureTiling: 1, // 纹理平铺，1是拉伸，数字表示纹理平铺次数
+            // },
+            itemStyle: {
+              // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
+              // areaColor: "#000", // 地图板块的颜色
+              opacity: 0.2, // 图形的不透明度 [ default: 1 ]
+              borderWidth: 2, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
+              borderColor: "#ffffff", // 图形描边的颜色。[ default: #333 ]
             },
-
+            data: map3Ddata,
             viewControl: {
-              // 用于鼠标的旋转，缩放等视角控制。
-              projection: "perspective", // 投影方式，默认为透视投影'perspective'，也支持设置为正交投影'orthographic'。
-              autoRotate: false, // 是否开启视角绕物体的自动旋转查看。[ default: false ]
-              autoRotateDirection: "cw", // 物体自传的方向。默认是 'cw' 也就是从上往下看是顺时针方向，也可以取 'ccw'，既从上往下看为逆时针方向。
-              autoRotateSpeed: 10, // 物体自传的速度。单位为角度 / 秒，默认为10 ，也就是36秒转一圈。
-              autoRotateAfterStill: 3, // 在鼠标静止操作后恢复自动旋转的时间间隔。在开启 autoRotate 后有效。[ default: 3 ]
-              damping: 0, // 鼠标进行旋转，缩放等操作时的迟滞因子，在大于等于 1 的时候鼠标在停止操作后，视角仍会因为一定的惯性继续运动（旋转和缩放）。[ default: 0.8 ]
-              rotateSensitivity: 1, // 旋转操作的灵敏度，值越大越灵敏。支持使用数组分别设置横向和纵向的旋转灵敏度。默认为1, 设置为0后无法旋转。 rotateSensitivity: [1, 0]——只能横向旋转； rotateSensitivity: [0, 1]——只能纵向旋转。
-              zoomSensitivity: 1, // 缩放操作的灵敏度，值越大越灵敏。默认为1,设置为0后无法缩放。
-              panSensitivity: 1, // 平移操作的灵敏度，值越大越灵敏。默认为1,设置为0后无法平移。支持使用数组分别设置横向和纵向的平移灵敏度
-              panMouseButton: "left", // 平移操作使用的鼠标按键，支持：'left' 鼠标左键（默认）;'middle' 鼠标中键 ;'right' 鼠标右键(注意：如果设置为鼠标右键则会阻止默认的右键菜单。)
-              rotateMouseButton: "left", // 旋转操作使用的鼠标按键，支持：'left' 鼠标左键;'middle' 鼠标中键（默认）;'right' 鼠标右键(注意：如果设置为鼠标右键则会阻止默认的右键菜单。)
-
-              distance: 150, // [ default: 100 ] 默认视角距离主体的距离，对于 grid3D 和 geo3D 等其它组件来说是距离中心原点的距离,对于 globe 来说是距离地球表面的距离。在 projection 为'perspective'的时候有效。
-              minDistance: 40, // [ default: 40 ] 视角通过鼠标控制能拉近到主体的最小距离。在 projection 为'perspective'的时候有效。
-              maxDistance: 400, // [ default: 400 ] 视角通过鼠标控制能拉远到主体的最大距离。在 projection 为'perspective'的时候有效。
-
-              alpha: 40, // 视角绕 x 轴，即上下旋转的角度。配合 beta 可以控制视角的方向。[ default: 40 ]
-              beta: 15, // 视角绕 y 轴，即左右旋转的角度。[ default: 0 ]
-              minAlpha: -360, // 上下旋转的最小 alpha 值。即视角能旋转到达最上面的角度。[ default: 5 ]
-              maxAlpha: 360, // 上下旋转的最大 alpha 值。即视角能旋转到达最下面的角度。[ default: 90 ]
-              minBeta: -360, // 左右旋转的最小 beta 值。即视角能旋转到达最左的角度。[ default: -80 ]
-              maxBeta: 360, // 左右旋转的最大 beta 值。即视角能旋转到达最右的角度。[ default: 80 ]
-
-              center: [0, 0, 0], // 视角中心点，旋转也会围绕这个中心点旋转，默认为[0,0,0]。
-
-              animation: true, // 是否开启动画。[ default: true ]
-              animationDurationUpdate: 1000, // 过渡动画的时长。[ default: 1000 ]
-              animationEasingUpdate: "cubicInOut", // 过渡动画的缓动效果。[ default: cubicInOut ]
+              distance: 110, // 地图视角 控制初始大小
+              rotateSensitivity: 1, // 旋转
+              zoomSensitivity: 1, // 缩放
             },
-
-            data: data,
           },
+          // {
+          //   type: "scatter3D",
+          //   coordinateSystem: "geo3D",
+          //   zlevel: 1,
+          //   effect: "symbol",
+          //   symbolSize: "7",
+          //   rippleEffect: {
+          //     period: 6,
+          //     brushType: "stroke",
+          //     scale: 8,
+          //   },
+          //   emphasis: {
+          //     itemStyle: {
+          //       color: "#ff1863",
+          //     },
+          //     label: {
+          //       show: true,
+          //     },
+          //   },
+          //   itemStyle: {
+          //     color: "#FF5722",
+          //     opacity: 1,
+          //   },
+          //   data: this.scatter_coord,
+          // },
         ],
       };
-
-      // 设置图表实例的配置项以及数据，万能接口，所有参数和数据的修改都可以通过setOption完成，ECharts 会合并新的参数和数据，然后刷新图表。
+      myChart.hideLoading();
       myChart.setOption(option);
-
-      // 处理点击事件并且跳转到相应的百度搜索页面
-      myChart.on("click", function (params) {
-        var subSystem = params.name;
-        var url = "https://www.baidu.com/s?ie=UTF-8&wd=";
-
-        // 根据点击地图区域的名称,跳转到对应页面
-        if (subSystem == "德江县") {
-          window.open(url.concat(subSystem));
-        } else if (subSystem == "思南县") {
-          window.open(url.concat(subSystem));
-        } else if (subSystem == "江口县") {
-          window.open(url.concat(subSystem));
-        } else if (subSystem == "沿河土家自治县") {
-          window.open(url.concat(subSystem));
-        } else if (subSystem == "万山区") {
-          window.open(url.concat(subSystem));
-        } else if (subSystem == "碧江区") {
-          window.open(url.concat(subSystem));
-        } else if (subSystem == "石阡县") {
-          window.open(url.concat(subSystem));
-        } else if (subSystem == "玉屏侗族自治县") {
-          window.open(url.concat(subSystem));
-        } else if (subSystem == "松桃苗族自治县") {
-          window.open(url.concat(subSystem));
-        } else if (subSystem == "印江土家族苗族自治县") {
-          window.open(url.concat(subSystem));
-        }
-        /*alert(params.name); */
+      myChart.on("click", (res) => {
+        this.$router.push({
+          name: "line3d-area",
+          query: {
+            areaName: res.name,
+            garbageType: this.garbageType,
+          },
+        });
+        // this.$router.push({
+        //   path: `/line3d-area/${res.name}`,
+        // });
       });
     },
   },
@@ -939,48 +983,6 @@ export default {
 @keyframes fadenum {
   100% {
     transform: rotate(360deg);
-  }
-}
-.mapcontainer {
-  width: 40%;
-  .sanlv {
-    width: 100%;
-    height: 200px;
-    float: left;
-    display: flex;
-    margin-top: 100px;
-    justify-content: space-around;
-    div {
-      position: relative;
-      width: 100px;
-      height: 100px;
-      img {
-        width: 100%;
-        top: 0;
-        left: 0;
-        position: absolute;
-        animation: fadenum 5s infinite;
-      }
-      img:first-child {
-        z-index: 1;
-      }
-      img:last-child {
-        z-index: 2;
-      }
-      .sanlvdate {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 3;
-        span {
-          margin-top: 10px;
-          display: block;
-          color: #02a7f0;
-          font-size: 25px;
-          font-weight: 700;
-        }
-      }
-    }
   }
 }
 .rightbottom {
@@ -1062,10 +1064,61 @@ h3 {
   cursor: pointer;
 }
 .fzjc {
-  display: flex;
   height: calc(100% - 90px);
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  .mapcontainer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    #main {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .sanlv {
+    width: 40%;
+    height: 200px;
+    display: flex;
+    justify-content: space-around;
+    z-index: 2;
+    div {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      img {
+        width: 100%;
+        top: 0;
+        left: 0;
+        position: absolute;
+        animation: fadenum 5s infinite;
+      }
+      img:first-child {
+        z-index: 1;
+      }
+      img:last-child {
+        z-index: 2;
+      }
+      .sanlvdate {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 3;
+        span {
+          margin-top: 10px;
+          display: block;
+          color: #02a7f0;
+          font-size: 25px;
+          font-weight: 700;
+        }
+      }
+    }
+  }
   .left {
     width: 30%;
+    z-index: 2;
     .leftdiv {
       height: 50%;
       width: 100%;
@@ -1076,12 +1129,9 @@ h3 {
       }
     }
   }
-  #main {
-    width: 100%;
-    height: 100%;
-  }
   .right {
     width: 30%;
+    z-index: 2;
     .rightdiv {
       width: 100%;
       height: 50%;

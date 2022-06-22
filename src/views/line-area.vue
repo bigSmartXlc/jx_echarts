@@ -319,6 +319,9 @@ export default {
         new T.LngLat(this.centerMap.centroid[0], this.centerMap.centroid[1]),
         12
       );
+      document.getElementsByClassName(
+        "tdt-control-copyright tdt-control"
+      )[0].style.display = "none";
       this.tMap.setStyle("indigo");
       var mapBorder = this.mapdata.features[0].geometry.coordinates[0];
       var points = [];
