@@ -357,7 +357,23 @@ export default {
       this.solution = item.solution;
       this.solutionShow = true;
     },
-    getYuJing() {},
+    getYuJing() {
+      this.$http({
+        method: "get",
+        url: "api/v1/jky/getAiWarningPn",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        params: {
+          deptId: "400000000",
+          deptIdEnd: "499999999",
+        },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     yujingClick() {
       this.$store.commit("TOGGLE_YUJING", !this.$store.state.yujingDialogShow);
     },

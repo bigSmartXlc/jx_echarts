@@ -12,7 +12,7 @@
             >{{ item.name }}</span
           >
         </div>
-        <div id="leftbar"></div>
+        <div id="left_line_bar"></div>
       </div>
       <div class="leftdiv">
         <h3>项目建设</h3>
@@ -85,15 +85,6 @@
       </div>
       <div class="rightdiv">
         <h3>红黑榜</h3>
-        <div class="btnlist">
-          <span
-            @click="toggleArea(item)"
-            :class="{ active: item.rowId == areaValue }"
-            v-for="(item, index) in btnlist3"
-            :key="index"
-            >{{ item.deptName }}</span
-          >
-        </div>
         <div class="rightbottom" :key="rightkey">
           <div
             v-show="table == true"
@@ -160,13 +151,14 @@
         </div>
       </div>
     </div>
+    <div></div>
   </div>
 </template>
 
 <script>
 import * as echarts from "echarts/lib/echarts.js";
-import "echarts-gl";
 import yls_json from "./ljpt_xz.json";
+import "echarts-gl";
 import VueSeamlessScroll from "vue-seamless-scroll";
 export default {
   components: {
@@ -174,6 +166,7 @@ export default {
   },
   data() {
     return {
+      leftChart: null,
       rightChart: null,
       carrentDate: null,
       carrentMounth: null,
@@ -206,7 +199,6 @@ export default {
         { name: "回收利用分析", value: 2 },
         { name: "易腐垃圾占比", value: 3 },
       ],
-      // btnlist3: [],
       btnlist3: [
         { deptName: "南湖", rowId: 410000000, rowIdEnd: 419999999 },
         { deptName: "秀洲", rowId: 420000000, rowIdEnd: 429999999 },
@@ -234,6 +226,13 @@ export default {
         "#ea7ccc",
       ],
       leftdivdata: [],
+      mapdata: [],
+      centerMap: [],
+      tMap: null,
+      formfiled: {
+        deptId: "",
+        deptIdEnd: "",
+      },
     };
   },
   watch: {
@@ -248,8 +247,8 @@ export default {
           this.getEvaluation(
             "api/v1/jky/dailyEvaluation",
             {
-              deptId: "400000000",
-              deptIdEnd: "499999999",
+              deptId: this.formfiled.deptId,
+              deptIdEnd: this.formfiled.deptIdEnd,
               // date: this.carrentDate,
               date: "2022-05-17",
             },
@@ -259,8 +258,8 @@ export default {
           this.getEvaluation(
             "api/v1/jky/monthlyEvaluation",
             {
-              deptId: "400000000",
-              deptIdEnd: "499999999",
+              deptId: this.formfiled.deptId,
+              deptIdEnd: this.formfiled.deptIdEnd,
             },
             val
           );
@@ -268,8 +267,8 @@ export default {
           this.getEvaluation(
             "api/v1/jky/qualityEvaluation",
             {
-              deptId: "400000000",
-              deptIdEnd: "499999999",
+              deptId: this.formfiled.deptId,
+              deptIdEnd: this.formfiled.deptIdEnd,
               type: val,
             },
             val
@@ -286,22 +285,52 @@ export default {
       this.table = !this.table;
       this.rightkey += Math.random();
     }, 5000);
-    // this.getAreaList();
-    this.map();
-    this.getdata();
-    this.getSanlv();
-    this.getWeight();
-    this.getRedBlack();
-    this.getEvaluation(
-      "api/v1/jky/dailyEvaluation",
-      {
-        deptId: "400000000",
-        deptIdEnd: "499999999",
-        // date: this.carrentDate,
-        date: "2022-05-17",
-      },
-      10
-    );
+    // this.map();
+    this.btnlist3.forEach((item) => {
+      if (this.$route.query.areaName.indexOf(item.deptName) != -1) {
+        this.formfiled.deptId = item.rowId;
+        this.formfiled.deptIdEnd = item.rowIdEnd;
+      }
+    });
+    let script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src =
+      "http://api.tianditu.gov.cn/api?v=4.0&tk=647102ae07da59b5275736577f63c21e";
+    document.body.appendChild(script);
+    script.onload = () => {
+      //加载完成去执行代码  ie中不能使用
+      this.loadJS("http://cdn.bootcss.com/d3/3.5.17/d3.js", () => {
+        this.loadJS(
+          "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
+          () => {
+            this.loadJS(
+              "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
+              () => {
+                console.log("天地图准备完毕", echarts);
+                this.tMap = new T.Map("main");
+                this.toggleArea(this.$route.query.areaName);
+                this.getdata();
+                this.getRedBlack();
+                this.getSanlv();
+                setTimeout(() => {
+                  this.getWeight();
+                  this.getEvaluation(
+                    "api/v1/jky/dailyEvaluation",
+                    {
+                      deptId: this.formfiled.deptId,
+                      deptIdEnd: this.formfiled.deptIdEnd,
+                      // date: this.carrentDate,
+                      date: "2022-05-17",
+                    },
+                    10
+                  );
+                }, 1000);
+              }
+            );
+          }
+        );
+      });
+    };
   },
   computed: {
     seamlessScrollOption() {
@@ -318,45 +347,73 @@ export default {
     },
   },
   methods: {
-    //切换红黑榜区域
-    toggleArea(item) {
-      this.areaValue = item.rowId;
-      this.getRedBlack(item);
+    //加载js
+    loadJS(url, success) {
+      var domScript = document.createElement("script");
+      domScript.src = url;
+      success = success || function () {};
+      domScript.onload = domScript.onreadystatechange = function () {
+        if (
+          !this.readyState ||
+          "loaded" === this.readyState ||
+          "complete" === this.readyState
+        ) {
+          success();
+          this.onload = this.onreadystatechange = null;
+          this.parentNode.removeChild(this);
+        }
+      };
+      document.getElementsByTagName("head")[0].appendChild(domScript);
     },
-    // 获取区域数据
-    getAreaList() {
-      this.$http({
-        method: "post",
-        url: "api/v1/jky/counties",
-        baseURL: "http://o792k95b.xiaomy.net/",
-        data: {
-          deptId: "400000000",
-        },
-      })
-        .then((res) => {
-          this.btnlist3 = res.data.result.map((item) => {
-            return {
-              deptName: item.deptName,
-              rowId: item.rowId,
-              rowIdEnd: item.rowIdEnd,
-            };
-          });
-          console.log(this.btnlist3);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    toggleArea(areaName) {
+      this.mapdata = {
+        type: "FeatureCollection",
+        features: [],
+      };
+      var data = yls_json.features;
+      this.mapdata.features = data.filter((item) => {
+        return item.properties.name.indexOf(areaName) != -1;
+      });
+      this.centerMap = this.mapdata.features[0].properties;
+      this.load();
+    },
+    //天地图
+    load() {
+      this.tMap.clearLayers();
+      this.tMap.clearOverLays();
+      this.tMap.centerAndZoom(
+        new T.LngLat(this.centerMap.centroid[0], this.centerMap.centroid[1]),
+        11
+      );
+      document.getElementsByClassName(
+        "tdt-control-copyright tdt-control"
+      )[0].style.display = "none";
+      this.tMap.setStyle("indigo");
+      var mapBorder = this.mapdata.features[0].geometry.coordinates[0];
+      var points = [];
+      mapBorder.forEach((item) => {
+        points.push(new T.LngLat(item[0], item[1]));
+      });
+      var polygon = new T.Polygon([points], {
+        color: "black",
+        weight: 3,
+        opacity: 0.2,
+        fillColor: "blue",
+        fillOpacity: 0.2,
+      });
+      //向地图上添加面
+      this.tMap.addOverLay(polygon);
     },
     //红黑榜
-    getRedBlack(area) {
+    getRedBlack() {
       //三率
       this.$http({
         method: "post",
         url: "api/v1/jky/redBlack",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
-          deptId: area ? area.rowId.toString() : "400000000",
-          deptIdEnd: area ? area.rowIdEnd.toString() : "499999999",
+          deptId: this.formfiled.deptId,
+          deptIdEnd: this.formfiled.deptIdEnd,
           // date: this.carrentDate,
           date: "2021-05-08",
         },
@@ -411,8 +468,8 @@ export default {
         url: "api/v1/jky/threeRate",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
-          deptId: "400000000",
-          deptIdEnd: "499999999",
+          deptId: this.formfiled.deptId,
+          deptIdEnd: this.formfiled.deptIdEnd,
         },
       })
         .then((res) => {
@@ -426,6 +483,9 @@ export default {
         });
     },
     getWeight() {
+      var chartDom = document.getElementById("left_line_bar");
+      this.leftChart = echarts.init(chartDom);
+      this.leftChart.showLoading();
       this.$http({
         method: "post",
         url: "api/v1/jky/DwWeightCarMonthWeight/deptMonthWeight",
@@ -476,7 +536,7 @@ export default {
             } else {
               result = res.data.result;
             }
-            this.rightline(result, type);
+            // this.rightline(result, type);
           } else {
             console.log(res.data);
           }
@@ -694,8 +754,6 @@ export default {
       option && this.rightChart.setOption(option);
     },
     leftbar() {
-      var chartDom = document.getElementById("leftbar");
-      var myChart = echarts.init(chartDom);
       var option;
       const colors = ["#5470C6", "#91CC75", "#EE6666"];
       option = {
@@ -786,201 +844,9 @@ export default {
           },
         ],
       };
-      myChart.clear();
-      option && myChart.setOption(option);
-    },
-    map() {
-      // 初始化图表
-      let data = yls_json;
-      echarts.registerMap("yls", data);
-      var myChart = echarts.init(document.getElementById("main"));
-
-      // JSON文件(地图数据)路径
-
-      // 显示加载动画效果,可以在加载数据前手动调用该接口显示加载动画，在数据加载完成后调用 hideLoading 隐藏加载动画。
-      myChart.showLoading();
-
-      // 引入JSON文件
-      var linedata = [];
-      console.log(yls_json.features);
-      const map3Ddata = yls_json.features.map((item) => {
-        if (item.properties.centroid) {
-          linedata.push([...item.properties.centroid, 0]);
-        }
-        const geoAreaName = item.properties.name; // geo文件中的地理名称
-        return {
-          name: geoAreaName,
-          // value: item.properties.centroid,
-          itemStyle: {
-            color: "#0b7ef5",
-          },
-        };
-      });
-      const option = {
-        title: {
-          text: "当前位置-嘉兴市",
-          left: "35%",
-          top: 160,
-          textStyle: {
-            color: "#fff",
-          },
-        },
-        geo3D: {
-          map: "yls",
-          show: false,
-          regionHeight: 6,
-          zoom: 1,
-          left: 0,
-          label: {
-            show: true,
-            distance: 0,
-            formatter(param) {
-              const city = param.name;
-              return `{sty1|${city}}`;
-            },
-            rich: {
-              sty1: {
-                color: "#8d0121",
-                align: "center",
-              },
-            },
-            textStyle: {
-              fontSize: 12,
-              color: "#f51c0b",
-            },
-          },
-          viewControl: {
-            distance: 110,
-            zoomSensitivity: 1,
-            panSensitivity: 1,
-            rotateSensitivity: 1,
-          },
-          zlevel: -11,
-        },
-        series: [
-          {
-            type: "scatter3D",
-            name: "yls",
-            coordinateSystem: "geo3D",
-            symbol:
-              "path://M201.142857 58.514286v658.285714s131.657143-160.914286 336.457143-73.142857c80.457143 43.885714 153.6 109.714286 277.942857 109.714286 124.342857 0 204.8-73.142857 204.8-73.142858V43.885714s-182.857143 182.857143-409.6 29.257143C552.228571 29.257143 449.828571-14.628571 369.371429 7.314286 281.6 29.257143 201.142857 58.514286 201.142857 58.514286M54.857143 1024c-29.257143 0-51.2-21.942857-51.2-58.514286V51.2C3.657143 21.942857 25.6 0 54.857143 0s51.2 21.942857 51.2 51.2v914.285714c7.314286 36.571429-14.628571 58.514286-51.2 58.514286z",
-            // symbolSize: 20,
-            //http://47.99.127.192:9903/images/%E9%A6%96%E9%A1%B5/u31.svg
-            // symbol:
-            //   "image://http://47.99.127.192:9903/images/%E9%A6%96%E9%A1%B5/u31.svg",
-            symbolSize: 30,
-            animation: true,
-            zlevel: -8,
-            itemStyle: {
-              color: "#FF5722",
-              opacity: 1,
-            },
-            label: {
-              distance: 20,
-            },
-            data: linedata,
-          },
-          {
-            name: "yls",
-            type: "map3D", // map3D / map
-            map: "yls",
-            zlevel: -9,
-            // regionHeight: 5,
-            label: {
-              show: true,
-              distance: 0,
-              formatter(param) {
-                const city = param.name;
-                return `{sty1|${city}}`;
-              },
-              rich: {
-                sty1: {
-                  color: "#02a7f0",
-                  align: "center",
-                  fontSize: 18,
-                  fontWeight: 700,
-                },
-              },
-              // textStyle:{
-              //     color:'#f73205'
-              // }
-            },
-            emphasis: {
-              // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
-              label: {
-                // label高亮时的配置
-                show: true,
-                textStyle: {
-                  color: "#f73205", // 高亮时标签颜色变为 白色
-                  fontSize: 18, // 高亮时标签字体 变大
-                },
-              },
-              itemStyle: {
-                color: "#0b7ef5",
-                opacity: 0.5,
-              },
-            },
-            groundPlane: {
-              //工作台
-              // show: true,
-            },
-            shading: "realistic",
-            // shading: "color",
-            // realisticMaterial: {
-            //   detailTexture: bg, // 纹理贴图
-            //   textureTiling: 1, // 纹理平铺，1是拉伸，数字表示纹理平铺次数
-            // },
-            itemStyle: {
-              // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
-              // areaColor: "#000", // 地图板块的颜色
-              opacity: 0.6, // 图形的不透明度 [ default: 1 ]
-              borderWidth: 2, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
-              borderColor: "#ffffff", // 图形描边的颜色。[ default: #333 ]
-            },
-            data: map3Ddata,
-            viewControl: {
-              distance: 130, // 地图视角 控制初始大小
-              rotateSensitivity: 1, // 旋转
-              zoomSensitivity: 1, // 缩放
-            },
-          },
-          // {
-          //   type: "scatter3D",
-          //   coordinateSystem: "geo3D",
-          //   zlevel: 1,
-          //   effect: "symbol",
-          //   symbolSize: "7",
-          //   rippleEffect: {
-          //     period: 6,
-          //     brushType: "stroke",
-          //     scale: 8,
-          //   },
-          //   emphasis: {
-          //     itemStyle: {
-          //       color: "#ff1863",
-          //     },
-          //     label: {
-          //       show: true,
-          //     },
-          //   },
-          //   itemStyle: {
-          //     color: "#FF5722",
-          //     opacity: 1,
-          //   },
-          //   data: this.scatter_coord,
-          // },
-        ],
-      };
-      myChart.hideLoading();
-      myChart.setOption(option);
-      myChart.on("click", (res) => {
-        this.$router.push({
-          name: "aboutDetail",
-          query: {
-            areaName: res.name,
-          },
-        });
-      });
+      this.leftChart.clear();
+      this.leftChart.hideLoading();
+      option && this.leftChart.setOption(option);
     },
   },
 };
@@ -997,7 +863,7 @@ export default {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   z-index: 10;
-  height: calc(100% - 100px);
+  height: calc(100% - 60px);
   overflow: hidden;
   .tableone {
     .thead {
@@ -1130,7 +996,7 @@ h3 {
     .leftdiv {
       height: 50%;
       width: 100%;
-      #leftbar {
+      #left_line_bar {
         border: solid 1px #0167dd;
         width: 100%;
         height: calc(100% - 81px);
