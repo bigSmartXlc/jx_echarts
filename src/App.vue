@@ -182,21 +182,8 @@ export default {
         { deptName: "经开", rowId: 480000000, rowIdEnd: 489999999 },
         { deptName: "港区", rowId: 490000000, rowIdEnd: 499999999 },
       ],
-      yujingList: [
-        {
-          level: 1,
-          content: "南湖区有十三个摄像头连续七天处于异常状态",
-          solution: "已安排人逐个排查维修，限期完成",
-        },
-        { level: 1, content: "南湖区有十三个摄像头连续七天处于异常状态" },
-        { level: 1, content: "南湖区有十三个摄像头连续七天处于异常状态" },
-        { level: 2, content: "南湖区有十三个摄像头连续七天处于异常状态" },
-        { level: 2, content: "南湖区有十三个摄像头连续七天处于异常状态" },
-        { level: 2, content: "南湖区有十三个摄像头连续七天处于异常状态" },
-        { level: 3, content: "南湖区有十三个摄像头连续七天处于异常状态" },
-        { level: 3, content: "南湖区有十三个摄像头连续七天处于异常状态" },
-        { level: 3, content: "南湖区有十三个摄像头连续七天处于异常状态" },
-      ],
+      yujingList: [],
+      chart3D: null,
     };
   },
   computed: {
@@ -211,16 +198,27 @@ export default {
       },
     },
   },
-  mounted() {
-    this.getYuJing();
+  watch: {
+    xitongShow(val) {
+      if (!val) {
+        this.chart3D.dispose();
+      }
+    },
+    yujingShow(val) {
+      if (val) {
+        this.getYuJing();
+      } else {
+        this.yujingList = [];
+      }
+    },
   },
   methods: {
     map() {
       // 初始化图表
       let data = yls_json;
       echarts.registerMap("yls", data);
-      var myChart = echarts.init(document.getElementById("main"));
-      myChart.showLoading();
+      this.chart3D = echarts.init(document.getElementById("main"));
+      this.chart3D.showLoading();
       var linedata = [];
       const map3Ddata = yls_json.features.map((item) => {
         if (item.properties.centroid) {
@@ -350,25 +348,35 @@ export default {
           },
         ],
       };
-      myChart.hideLoading();
-      myChart.setOption(option);
+      this.chart3D.hideLoading();
+      this.chart3D.setOption(option);
     },
     yjitemClick(item) {
       this.solution = item.solution;
       this.solutionShow = true;
     },
     getYuJing() {
+      var data;
+      if (this.$route.query.areaName) {
+        data = {
+          deptId: this.$route.query.deptId,
+          deptIdEnd: this.$route.query.deptIdEnd,
+        };
+      } else {
+        data = {
+          deptId: "400000000",
+          deptIdEnd: "499999999",
+        };
+      }
       this.$http({
         method: "get",
         url: "api/v1/jky/getAiWarningPn",
         baseURL: "http://o792k95b.xiaomy.net/",
-        params: {
-          deptId: "400000000",
-          deptIdEnd: "499999999",
-        },
+        params: data,
       })
         .then((res) => {
           console.log(res);
+          this.yujingList = res.data.result;
         })
         .catch((err) => {
           console.log(err);
@@ -484,6 +492,10 @@ export default {
           .areaName {
             position: absolute;
             bottom: 0;
+            margin-left: -16px;
+            color: #fff;
+            font-size: 18px;
+            z-index: 600;
           }
           img {
             position: absolute;
@@ -662,9 +674,12 @@ export default {
       height: 90px;
       position: absolute;
       top: 0;
+      h4 {
+        margin: 0;
+      }
       img {
         width: 100%;
-        top: 25px;
+        top: 12px;
         left: 0;
         width: 90px;
         height: 90px;

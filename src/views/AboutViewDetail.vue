@@ -151,12 +151,29 @@
         </div>
       </div>
     </div>
-    <div></div>
+    <div class="yujin_bottom" @click="showYujing">
+      <VueSeamlessScroll
+        :data="yujinglist"
+        :class-option="yujingOption"
+        class="yujingflow"
+      >
+        <ul class="item">
+          <li
+            v-for="(item, index) in yujinglist"
+            :key="index"
+            :data-index="index"
+          >
+            {{ item.content }}
+          </li>
+        </ul>
+      </VueSeamlessScroll>
+    </div>
   </div>
 </template>
 
 <script>
-import * as echarts from "echarts/lib/echarts.js";
+// import * as echarts from "echarts/lib/echarts.js";
+import * as echarts from "echarts";
 import yls_json from "./ljpt_xz.json";
 import "echarts-gl";
 import VueSeamlessScroll from "vue-seamless-scroll";
@@ -166,6 +183,21 @@ export default {
   },
   data() {
     return {
+      yujinglist: [
+        {
+          level: 1,
+          content: "南湖区有十三个摄像头连续七天处于异常状态",
+          solution: "已安排人逐个排查维修，限期完成",
+        },
+        { level: 1, content: "这是什么傻逼需求啊" },
+        { level: 1, content: "我的发" },
+        { level: 2, content: "真尼玛肯爹" },
+        { level: 2, content: "迟早骨灰给你扬了" },
+        { level: 2, content: "啊要死要死" },
+        { level: 3, content: "看鬼啊" },
+        { level: 3, content: "垃圾" },
+        { level: 3, content: "ruabixi" },
+      ],
       leftChart: null,
       rightChart: null,
       carrentDate: null,
@@ -280,18 +312,17 @@ export default {
   created() {
     this.dateSwitch();
   },
+  beforeDestroy() {
+    this.leftChart.dispose();
+    this.rightChart.dispose();
+  },
   mounted() {
     setInterval(() => {
       this.table = !this.table;
       this.rightkey += Math.random();
     }, 5000);
-    // this.map();
-    this.btnlist3.forEach((item) => {
-      if (this.$route.query.areaName.indexOf(item.deptName) != -1) {
-        this.formfiled.deptId = item.rowId;
-        this.formfiled.deptIdEnd = item.rowIdEnd;
-      }
-    });
+    this.formfiled.deptId = this.$route.query.deptId;
+    this.formfiled.deptIdEnd = this.$route.query.deptIdEnd;
     let script = document.createElement("script");
     script.type = "text/javascript";
     script.src =
@@ -306,12 +337,13 @@ export default {
             this.loadJS(
               "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
               () => {
-                console.log("天地图准备完毕", echarts);
+                console.log("天地图准备完毕");
                 this.tMap = new T.Map("main");
                 this.toggleArea(this.$route.query.areaName);
                 this.getdata();
                 this.getRedBlack();
                 this.getSanlv();
+                this.getYuJing();
                 setTimeout(() => {
                   this.getWeight();
                   this.getEvaluation(
@@ -345,8 +377,42 @@ export default {
         waitTime: 1000, // 单步运动停止的时间(默认值1000ms)
       };
     },
+    yujingOption() {
+      return {
+        step: 1.5,
+        direction: 2, // 0向下 1向上 2向左 3向右
+        // limitMoveNum: this.dataList.length,// 开始无缝滚动的数据量 this.dataList.length
+        hoverStop: true,
+        openTouch: false,
+      };
+    },
   },
   methods: {
+    showYujing() {
+      this.$store.commit("TOGGLE_YUJING", true);
+    },
+    //预警信息
+    getYuJing() {
+      var data;
+      data = {
+        deptId: this.$route.query.deptId,
+        deptIdEnd: this.$route.query.deptIdEnd,
+        // deptId: "400000000",
+        // deptIdEnd: "499999999",
+      };
+      this.$http({
+        method: "get",
+        url: "api/v1/jky/getAiWarningPn",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        params: data,
+      })
+        .then((res) => {
+          // this.yujinglist = res.data.result;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     //加载js
     loadJS(url, success) {
       var domScript = document.createElement("script");
@@ -853,6 +919,28 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.yujin_bottom {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100px;
+  z-index: 1000;
+  .yujingflow {
+    background: rgba(255, 0, 0, 0.3);
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+  ul > li {
+    list-style: none;
+    margin-left: 30px;
+    float: left;
+    height: 70;
+    font-size: 30px;
+    line-height: 70px;
+    color: #fff;
+  }
+}
 @keyframes fadenum {
   100% {
     transform: rotate(360deg);

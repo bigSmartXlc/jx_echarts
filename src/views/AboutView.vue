@@ -164,7 +164,8 @@
 </template>
 
 <script>
-import * as echarts from "echarts/lib/echarts.js";
+// import * as echarts from "echarts/lib/echarts.js";
+import * as echarts from "echarts";
 import "echarts-gl";
 import yls_json from "./ljpt_xz.json";
 import VueSeamlessScroll from "vue-seamless-scroll";
@@ -174,6 +175,7 @@ export default {
   },
   data() {
     return {
+      leftChart: null,
       rightChart: null,
       carrentDate: null,
       carrentMounth: null,
@@ -280,6 +282,12 @@ export default {
   },
   created() {
     this.dateSwitch();
+  },
+  beforeDestroy() {
+    this.leftChart.dispose();
+    this.rightChart.dispose();
+    // leftChart: null,
+    // rightChart: null,
   },
   mounted() {
     setInterval(() => {
@@ -426,6 +434,8 @@ export default {
         });
     },
     getWeight() {
+      var chartDom = document.getElementById("leftbar");
+      this.leftChart = echarts.init(chartDom);
       this.$http({
         method: "post",
         url: "api/v1/jky/DwWeightCarMonthWeight/deptMonthWeight",
@@ -694,8 +704,6 @@ export default {
       option && this.rightChart.setOption(option);
     },
     leftbar() {
-      var chartDom = document.getElementById("leftbar");
-      var myChart = echarts.init(chartDom);
       var option;
       const colors = ["#5470C6", "#91CC75", "#EE6666"];
       option = {
@@ -786,8 +794,8 @@ export default {
           },
         ],
       };
-      myChart.clear();
-      option && myChart.setOption(option);
+      this.leftChart.clear();
+      option && this.leftChart.setOption(option);
     },
     map() {
       // 初始化图表
@@ -901,9 +909,6 @@ export default {
                   fontWeight: 700,
                 },
               },
-              // textStyle:{
-              //     color:'#f73205'
-              // }
             },
             emphasis: {
               // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
@@ -925,11 +930,6 @@ export default {
               // show: true,
             },
             shading: "realistic",
-            // shading: "color",
-            // realisticMaterial: {
-            //   detailTexture: bg, // 纹理贴图
-            //   textureTiling: 1, // 纹理平铺，1是拉伸，数字表示纹理平铺次数
-            // },
             itemStyle: {
               // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
               // areaColor: "#000", // 地图板块的颜色
@@ -944,40 +944,25 @@ export default {
               zoomSensitivity: 1, // 缩放
             },
           },
-          // {
-          //   type: "scatter3D",
-          //   coordinateSystem: "geo3D",
-          //   zlevel: 1,
-          //   effect: "symbol",
-          //   symbolSize: "7",
-          //   rippleEffect: {
-          //     period: 6,
-          //     brushType: "stroke",
-          //     scale: 8,
-          //   },
-          //   emphasis: {
-          //     itemStyle: {
-          //       color: "#ff1863",
-          //     },
-          //     label: {
-          //       show: true,
-          //     },
-          //   },
-          //   itemStyle: {
-          //     color: "#FF5722",
-          //     opacity: 1,
-          //   },
-          //   data: this.scatter_coord,
-          // },
         ],
       };
       myChart.hideLoading();
       myChart.setOption(option);
       myChart.on("click", (res) => {
+        var deptId;
+        var deptIdEnd;
+        this.btnlist3.forEach((item) => {
+          if (res.name.indexOf(item.deptName) != -1) {
+            deptId = item.rowId;
+            deptIdEnd = item.rowIdEnd;
+          }
+        });
         this.$router.push({
           name: "aboutDetail",
           query: {
             areaName: res.name,
+            deptId,
+            deptIdEnd,
           },
         });
       });
