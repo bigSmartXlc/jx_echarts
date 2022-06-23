@@ -802,6 +802,7 @@ export default {
 
       // 引入JSON文件
       var linedata = [];
+      console.log(yls_json.features);
       const map3Ddata = yls_json.features.map((item) => {
         if (item.properties.centroid) {
           linedata.push([...item.properties.centroid, 0]);
@@ -818,7 +819,7 @@ export default {
       const option = {
         title: {
           text: "当前位置-嘉兴市",
-          left: 600,
+          left: "35%",
           top: 160,
           textStyle: {
             color: "#fff",
@@ -827,7 +828,7 @@ export default {
         geo3D: {
           map: "yls",
           show: false,
-          regionHeight: 2.9,
+          regionHeight: 6,
           zoom: 1,
           left: 0,
           label: {
@@ -861,20 +862,30 @@ export default {
             type: "scatter3D",
             name: "yls",
             coordinateSystem: "geo3D",
-            symbol: "triangle",
+            symbol:
+              "path://M201.142857 58.514286v658.285714s131.657143-160.914286 336.457143-73.142857c80.457143 43.885714 153.6 109.714286 277.942857 109.714286 124.342857 0 204.8-73.142857 204.8-73.142858V43.885714s-182.857143 182.857143-409.6 29.257143C552.228571 29.257143 449.828571-14.628571 369.371429 7.314286 281.6 29.257143 201.142857 58.514286 201.142857 58.514286M54.857143 1024c-29.257143 0-51.2-21.942857-51.2-58.514286V51.2C3.657143 21.942857 25.6 0 54.857143 0s51.2 21.942857 51.2 51.2v914.285714c7.314286 36.571429-14.628571 58.514286-51.2 58.514286z",
+            // symbolSize: 20,
+            //http://47.99.127.192:9903/images/%E9%A6%96%E9%A1%B5/u31.svg
+            // symbol:
+            //   "image://http://47.99.127.192:9903/images/%E9%A6%96%E9%A1%B5/u31.svg",
             symbolSize: 30,
+            animation: true,
+            zlevel: -8,
             itemStyle: {
               color: "#FF5722",
               opacity: 1,
+            },
+            label: {
+              distance: 20,
             },
             data: linedata,
           },
           {
             name: "yls",
             type: "map3D", // map3D / map
-            zoom: 0.7,
             map: "yls",
-            // regionHeight: -3,
+            zlevel: -9,
+            // regionHeight: 5,
             label: {
               show: true,
               distance: 0,
@@ -884,7 +895,7 @@ export default {
               },
               rich: {
                 sty1: {
-                  color: "#ffffff",
+                  color: "#02a7f0",
                   align: "center",
                   fontSize: 18,
                   fontWeight: 700,
@@ -922,13 +933,13 @@ export default {
             itemStyle: {
               // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
               // areaColor: "#000", // 地图板块的颜色
-              opacity: 0.2, // 图形的不透明度 [ default: 1 ]
+              opacity: 0.6, // 图形的不透明度 [ default: 1 ]
               borderWidth: 2, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
               borderColor: "#ffffff", // 图形描边的颜色。[ default: #333 ]
             },
             data: map3Ddata,
             viewControl: {
-              distance: 110, // 地图视角 控制初始大小
+              distance: 130, // 地图视角 控制初始大小
               rotateSensitivity: 1, // 旋转
               zoomSensitivity: 1, // 缩放
             },
@@ -963,16 +974,14 @@ export default {
       myChart.hideLoading();
       myChart.setOption(option);
       myChart.on("click", (res) => {
-        this.$router.push({
-          name: "line3d-area",
-          query: {
-            areaName: res.name,
-            garbageType: this.garbageType,
-          },
-        });
         // this.$router.push({
-        //   path: `/line3d-area/${res.name}`,
+        //   name: "line3d-area",
+        //   query: {
+        //     areaName: res.name,
+        //     garbageType: this.garbageType,
+        //   },
         // });
+        console.log("详情", res);
       });
     },
   },
@@ -1083,6 +1092,7 @@ h3 {
     height: 200px;
     display: flex;
     justify-content: space-around;
+    margin-top: 20px;
     z-index: 2;
     div {
       position: relative;

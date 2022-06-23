@@ -4,9 +4,19 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    yujingDialogShow: false,
+    xitongDialogShow: false,
+  },
   getters: {},
-  mutations: {},
+  mutations: {
+    TOGGLE_YUJING(state, val) {
+      state.yujingDialogShow = val;
+    },
+    TOGGLE_XITONG(state, val) {
+      state.xitongDialogShow = val;
+    },
+  },
   actions: {},
   modules: {},
 });
