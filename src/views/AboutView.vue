@@ -2,7 +2,7 @@
   <div class="fzjc">
     <div class="left">
       <div class="leftdiv">
-        <h3>垃圾生产量</h3>
+        <h3>垃圾清运量</h3>
         <div class="btnlist">
           <span
             v-for="(item, index) in btnlist1"
@@ -15,7 +15,7 @@
         <div id="leftbar"></div>
       </div>
       <div class="leftdiv">
-        <h3>项目建设</h3>
+        <h3>能力分析</h3>
         <div class="leftbottom">
           <div class="listhead">
             <span>序号</span>
@@ -535,6 +535,22 @@ export default {
           yAxis: [
             {
               type: "value",
+              name: "每小时评价数",
+              position: "left",
+              alignTicks: true,
+              axisLine: {
+                show: true,
+                lineStyle: {
+                  color: "#fff",
+                },
+              },
+              axisLabel: {
+                formatter: "{value}",
+                clolor: "#fff",
+              },
+            },
+            {
+              type: "value",
               name: "当日累计评价数",
               position: "right",
               alignTicks: true,
@@ -546,21 +562,7 @@ export default {
               },
               axisLabel: {
                 formatter: "{value}",
-              },
-            },
-            {
-              type: "value",
-              name: "每小时评价数",
-              position: "left",
-              alignTicks: true,
-              axisLine: {
-                show: true,
-                lineStyle: {
-                  color: colors[2],
-                },
-              },
-              axisLabel: {
-                formatter: "{value}",
+                clolor: "#fff",
               },
             },
           ],
@@ -573,7 +575,7 @@ export default {
             {
               name: "当日累计评价数",
               type: "line",
-              yAxisIndex: 1,
+              // yAxisIndex: 1,
               data: yDataRight,
             },
           ],
@@ -964,17 +966,18 @@ export default {
 }
 .rightbottom {
   border: solid 1px rgb(11, 100, 233);
-  background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   z-index: 10;
   height: calc(100% - 100px);
   overflow: hidden;
   .tableone {
+    text-align: left;
     .thead {
       background: linear-gradient(red, black);
     }
   }
   .tabletwo {
+    text-align: left;
     .thead {
       background: linear-gradient(rgb(55, 53, 53), black);
     }
@@ -1005,12 +1008,11 @@ export default {
     width: 100%;
     .tbody {
       width: 100%;
-      height: 70px;
-      line-height: 70px;
+      height: 40px;
+      line-height: 40px;
       display: flex;
       justify-content: space-around;
-      margin-bottom: 20px;
-      background: rgba(255, 255, 255, 0.13);
+      background: rgba(252, 250, 250, 0.03);
       span {
         font-size: 14px;
         font-weight: 600;

@@ -915,9 +915,9 @@ export default {
 <style scoped lang="scss">
 .yujin_bottom {
   position: absolute;
-  bottom: 0;
+  bottom: 10px;
   width: 100%;
-  height: 100px;
+  height: 50px;
   z-index: 1000;
   .yujingflow {
     background: rgba(255, 0, 0, 0.3);
@@ -925,13 +925,16 @@ export default {
     width: 100%;
     overflow: hidden;
   }
+  ul {
+    margin: 0;
+  }
   ul > li {
     list-style: none;
     margin-left: 30px;
     float: left;
-    height: 70;
-    font-size: 30px;
-    line-height: 70px;
+    height: 50px;
+    font-size: 38px;
+    line-height: 50px;
     color: #fff;
   }
 }
