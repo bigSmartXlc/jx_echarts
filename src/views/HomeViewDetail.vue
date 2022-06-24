@@ -250,12 +250,15 @@ export default {
   },
   data() {
     return {
+      tMap: null,
+      mapdata: [],
+      centerMap: [],
       myChart: null,
       tabContent: 0,
       color: ["#fecb9a", "#fefdce", "#fefa7d", "#cdccfb", "#cdf99d", "#fdcdcc"],
       lefttopdata: [
-        "消息1 : 2006年1月John Resig等人创建了jQuery",
-        "消息1 : 2006年1月John Resig等人创建了jQuery",
+        "消息1 : 2006年1月John ",
+        "消息1 : 2006年1月John ",
         "消息2 : 2007年7月，jQuery 1.1.3版发布",
         "消息3 : 2008年5月，jQuery 1.2.6版发布",
         "消息3 : 2008年5月，jQuery 1.2.6版发布",
@@ -265,7 +268,7 @@ export default {
         "消息3 : 2008年5月，jQuery 1.2.6版发布",
         "消息3 : 2008年5月，jQuery 1.2.6版发布",
         "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息4 : 2010年1月，也是jQuery的四周年生日",
+        "消息4 : 2010年1月，",
       ],
       leftBottom: [
         { index: 1, position: "桐乡市", num: 5, jingdu: "10%" },
@@ -295,9 +298,89 @@ export default {
     };
   },
   mounted() {
-    this.setCityChart();
+    let script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src =
+      "http://api.tianditu.gov.cn/api?v=4.0&tk=647102ae07da59b5275736577f63c21e";
+    document.body.appendChild(script);
+    script.onload = () => {
+      //加载完成去执行代码  ie中不能使用
+      this.loadJS("http://cdn.bootcss.com/d3/3.5.17/d3.js", () => {
+        this.loadJS(
+          "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
+          () => {
+            this.loadJS(
+              "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
+              () => {
+                console.log("天地图准备完毕");
+                this.tMap = new T.Map("chart-city");
+                this.toggleArea(this.$route.query.areaName);
+              }
+            );
+          }
+        );
+      });
+    };
+    // this.setCityChart();
   },
   methods: {
+    toggleArea(areaName) {
+      this.mapdata = {
+        type: "FeatureCollection",
+        features: [],
+      };
+      var data = yls_json.features;
+      this.mapdata.features = data.filter((item) => {
+        return item.properties.name.indexOf(areaName) != -1;
+      });
+      this.centerMap = this.mapdata.features[0].properties;
+      this.load();
+    },
+    //天地图
+    load() {
+      this.tMap.clearLayers();
+      this.tMap.clearOverLays();
+      this.tMap.centerAndZoom(
+        new T.LngLat(this.centerMap.centroid[0], this.centerMap.centroid[1]),
+        11
+      );
+      document.getElementsByClassName(
+        "tdt-control-copyright tdt-control"
+      )[0].style.display = "none";
+      this.tMap.setStyle("indigo");
+      var mapBorder = this.mapdata.features[0].geometry.coordinates[0];
+      var points = [];
+      mapBorder.forEach((item) => {
+        points.push(new T.LngLat(item[0], item[1]));
+      });
+      var polygon = new T.Polygon([points], {
+        color: "black",
+        weight: 3,
+        opacity: 0.2,
+        fillColor: "blue",
+        fillOpacity: 0.2,
+      });
+      //向地图上添加面
+      this.tMap.addOverLay(polygon);
+    },
+    //加载js
+    loadJS(url, success) {
+      var domScript = document.createElement("script");
+      domScript.src = url;
+      success = success || function () {};
+      domScript.onload = domScript.onreadystatechange = function () {
+        if (
+          !this.readyState ||
+          "loaded" === this.readyState ||
+          "complete" === this.readyState
+        ) {
+          success();
+          this.onload = this.onreadystatechange = null;
+          this.parentNode.removeChild(this);
+        }
+      };
+      document.getElementsByTagName("head")[0].appendChild(domScript);
+    },
     setCityChart() {
       // if (this.myChart) {
       //   this.myChart.dispose(); // 销毁实例，实例销毁后无法再被使用。
@@ -507,10 +590,10 @@ export default {
 .chart-wrapper {
   z-index: 1;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 90px);
   position: absolute;
   left: 0;
-  top: 0;
+  top: 90px;
 }
 h3 {
   margin: 0;

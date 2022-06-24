@@ -184,19 +184,11 @@ export default {
   data() {
     return {
       yujinglist: [
+        // 测试数据
         {
           level: 1,
-          content: "南湖区有十三个摄像头连续七天处于异常状态",
-          solution: "已安排人逐个排查维修，限期完成",
+          content: "该区域暂无预警信息......",
         },
-        { level: 1, content: "这是什么傻逼需求啊" },
-        { level: 1, content: "我的发" },
-        { level: 2, content: "真尼玛肯爹" },
-        { level: 2, content: "迟早骨灰给你扬了" },
-        { level: 2, content: "啊要死要死" },
-        { level: 3, content: "看鬼啊" },
-        { level: 3, content: "垃圾" },
-        { level: 3, content: "ruabixi" },
       ],
       leftChart: null,
       rightChart: null,
@@ -282,6 +274,7 @@ export default {
               deptId: this.formfiled.deptId,
               deptIdEnd: this.formfiled.deptIdEnd,
               // date: this.carrentDate,
+              // 测试数据
               date: "2022-05-17",
             },
             val
@@ -352,6 +345,7 @@ export default {
                       deptId: this.formfiled.deptId,
                       deptIdEnd: this.formfiled.deptIdEnd,
                       // date: this.carrentDate,
+                      // 测试数据
                       date: "2022-05-17",
                     },
                     10
@@ -381,7 +375,7 @@ export default {
       return {
         step: 1.5,
         direction: 2, // 0向下 1向上 2向左 3向右
-        // limitMoveNum: this.dataList.length,// 开始无缝滚动的数据量 this.dataList.length
+        limitMoveNum: this.yujinglist.length, // 开始无缝滚动的数据量 this.dataList.length
         hoverStop: true,
         openTouch: false,
       };
@@ -407,7 +401,10 @@ export default {
         params: data,
       })
         .then((res) => {
-          // this.yujinglist = res.data.result;
+          console.log(res.data.result);
+          if (res.data.result) {
+            this.yujinglist = res.data.result;
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -481,6 +478,7 @@ export default {
           deptId: this.formfiled.deptId,
           deptIdEnd: this.formfiled.deptIdEnd,
           // date: this.carrentDate,
+          // 测试数据
           date: "2021-05-08",
         },
       })
@@ -602,7 +600,7 @@ export default {
             } else {
               result = res.data.result;
             }
-            // this.rightline(result, type);
+            this.rightline(result, type);
           } else {
             console.log(res.data);
           }
@@ -643,6 +641,9 @@ export default {
               type: "category",
               axisTick: {
                 alignWithLabel: true,
+              },
+              axisLabel: {
+                color: "#fff",
               },
               data: xData,
             },
@@ -722,6 +723,9 @@ export default {
               axisTick: {
                 alignWithLabel: true,
               },
+              axisLabel: {
+                color: "#fff",
+              },
               data: xData,
             },
           ],
@@ -786,6 +790,9 @@ export default {
               axisTick: {
                 alignWithLabel: true,
               },
+              axisLabel: {
+                color: "#fff",
+              },
               data: xData,
             },
           ],
@@ -849,6 +856,7 @@ export default {
             data: this.grabge.deptName,
             axisLabel: {
               interval: 0,
+              color: "#fff",
               rotate: -30,
             },
           },
@@ -856,6 +864,9 @@ export default {
         yAxis: [
           {
             type: "value",
+            axisLabel: {
+              color: "#fff",
+            },
           },
           {
             type: "value",
@@ -870,6 +881,7 @@ export default {
             },
             axisLabel: {
               formatter: "{value}%",
+              color: "#fff",
             },
           },
         ],
@@ -884,29 +896,11 @@ export default {
             name: "当月产生量",
             type: "bar",
             data: this.grabge.weight,
-            markPoint: {
-              data: [
-                { type: "max", name: "Max" },
-                { type: "min", name: "Min" },
-              ],
-            },
-            markLine: {
-              data: [{ type: "average", name: "Avg" }],
-            },
           },
           {
             name: "去年同期产生量",
             type: "bar",
             data: this.grabge.lastYearMonthWeight,
-            markPoint: {
-              data: [
-                { name: "Max", value: 182.2, xAxis: 7, yAxis: 183 },
-                { name: "Min", value: 2.3, xAxis: 11, yAxis: 3 },
-              ],
-            },
-            markLine: {
-              data: [{ type: "average", name: "Avg" }],
-            },
           },
         ],
       };

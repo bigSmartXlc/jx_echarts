@@ -99,7 +99,8 @@
 </template>
 
 <script>
-import * as echarts from "echarts/lib/echarts.js";
+// import * as echarts from "echarts/lib/echarts.js";
+import * as echarts from "echarts";
 import "echarts-gl";
 import yls_json from "./jx.json";
 import VueSeamlessScroll from "vue-seamless-scroll";

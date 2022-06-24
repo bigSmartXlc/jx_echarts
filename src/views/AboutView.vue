@@ -253,6 +253,7 @@ export default {
               deptId: "400000000",
               deptIdEnd: "499999999",
               // date: this.carrentDate,
+              //测试数据
               date: "2022-05-17",
             },
             val
@@ -286,8 +287,6 @@ export default {
   beforeDestroy() {
     this.leftChart.dispose();
     this.rightChart.dispose();
-    // leftChart: null,
-    // rightChart: null,
   },
   mounted() {
     setInterval(() => {
@@ -306,6 +305,7 @@ export default {
         deptId: "400000000",
         deptIdEnd: "499999999",
         // date: this.carrentDate,
+        //测试数据
         date: "2022-05-17",
       },
       10
@@ -366,6 +366,7 @@ export default {
           deptId: area ? area.rowId.toString() : "400000000",
           deptIdEnd: area ? area.rowIdEnd.toString() : "499999999",
           // date: this.carrentDate,
+          //测试数据
           date: "2021-05-08",
         },
       })
@@ -734,12 +735,16 @@ export default {
             axisLabel: {
               interval: 0,
               rotate: -30,
+              color: "#fff",
             },
           },
         ],
         yAxis: [
           {
             type: "value",
+            axisLabel: {
+              color: "#fff",
+            },
           },
           {
             type: "value",
@@ -754,6 +759,7 @@ export default {
             },
             axisLabel: {
               formatter: "{value}%",
+              color: "#fff",
             },
           },
         ],
@@ -768,29 +774,11 @@ export default {
             name: "当月产生量",
             type: "bar",
             data: this.grabge.weight,
-            markPoint: {
-              data: [
-                { type: "max", name: "Max" },
-                { type: "min", name: "Min" },
-              ],
-            },
-            markLine: {
-              data: [{ type: "average", name: "Avg" }],
-            },
           },
           {
             name: "去年同期产生量",
             type: "bar",
             data: this.grabge.lastYearMonthWeight,
-            markPoint: {
-              data: [
-                { name: "Max", value: 182.2, xAxis: 7, yAxis: 183 },
-                { name: "Min", value: 2.3, xAxis: 11, yAxis: 3 },
-              ],
-            },
-            markLine: {
-              data: [{ type: "average", name: "Avg" }],
-            },
           },
         ],
       };
@@ -802,9 +790,6 @@ export default {
       let data = yls_json;
       echarts.registerMap("yls", data);
       var myChart = echarts.init(document.getElementById("main"));
-
-      // JSON文件(地图数据)路径
-
       // 显示加载动画效果,可以在加载数据前手动调用该接口显示加载动画，在数据加载完成后调用 hideLoading 隐藏加载动画。
       myChart.showLoading();
 
@@ -866,28 +851,28 @@ export default {
           zlevel: -11,
         },
         series: [
-          {
-            type: "scatter3D",
-            name: "yls",
-            coordinateSystem: "geo3D",
-            symbol:
-              "path://M201.142857 58.514286v658.285714s131.657143-160.914286 336.457143-73.142857c80.457143 43.885714 153.6 109.714286 277.942857 109.714286 124.342857 0 204.8-73.142857 204.8-73.142858V43.885714s-182.857143 182.857143-409.6 29.257143C552.228571 29.257143 449.828571-14.628571 369.371429 7.314286 281.6 29.257143 201.142857 58.514286 201.142857 58.514286M54.857143 1024c-29.257143 0-51.2-21.942857-51.2-58.514286V51.2C3.657143 21.942857 25.6 0 54.857143 0s51.2 21.942857 51.2 51.2v914.285714c7.314286 36.571429-14.628571 58.514286-51.2 58.514286z",
-            // symbolSize: 20,
-            //http://47.99.127.192:9903/images/%E9%A6%96%E9%A1%B5/u31.svg
-            // symbol:
-            //   "image://http://47.99.127.192:9903/images/%E9%A6%96%E9%A1%B5/u31.svg",
-            symbolSize: 30,
-            animation: true,
-            zlevel: -8,
-            itemStyle: {
-              color: "#FF5722",
-              opacity: 1,
-            },
-            label: {
-              distance: 20,
-            },
-            data: linedata,
-          },
+          // {
+          //   type: "scatter3D",
+          //   name: "yls",
+          //   coordinateSystem: "geo3D",
+          //   // symbol:
+          //   //   "path://M201.142857 58.514286v658.285714s131.657143-160.914286 336.457143-73.142857c80.457143 43.885714 153.6 109.714286 277.942857 109.714286 124.342857 0 204.8-73.142857 204.8-73.142858V43.885714s-182.857143 182.857143-409.6 29.257143C552.228571 29.257143 449.828571-14.628571 369.371429 7.314286 281.6 29.257143 201.142857 58.514286 201.142857 58.514286M54.857143 1024c-29.257143 0-51.2-21.942857-51.2-58.514286V51.2C3.657143 21.942857 25.6 0 54.857143 0s51.2 21.942857 51.2 51.2v914.285714c7.314286 36.571429-14.628571 58.514286-51.2 58.514286z",
+          //   // // symbolSize: 20,
+          //   // //http://47.99.127.192:9903/images/%E9%A6%96%E9%A1%B5/u31.svg
+          //   // // symbol:
+          //   // //   "image://http://47.99.127.192:9903/images/%E9%A6%96%E9%A1%B5/u31.svg",
+          //   // symbolSize: 20,
+          //   animation: true,
+          //   zlevel: -8,
+          //   itemStyle: {
+          //     color: "#FF5722",
+          //     opacity: 1,
+          //   },
+          //   label: {
+          //     distance: 2,
+          //   },
+          //   data: linedata,
+          // },
           {
             name: "yls",
             type: "map3D", // map3D / map
@@ -903,7 +888,7 @@ export default {
               },
               rich: {
                 sty1: {
-                  color: "#02a7f0",
+                  color: "#FFFFFF",
                   align: "center",
                   fontSize: 18,
                   fontWeight: 700,

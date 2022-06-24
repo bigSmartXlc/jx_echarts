@@ -62,8 +62,8 @@
         </ul>
       </div>
       <div class="carlist">
-        <div v-show="carlist.length < 1" class="loading">加载中.....</div>
-        <ul>
+        <div v-show="carlist.length < 1" class="loading">车辆加载中.....</div>
+        <ul v-show="typeopen == 0">
           <li
             v-for="(item, index) in carlist"
             :key="index"
@@ -312,6 +312,7 @@ export default {
       };
       document.getElementsByTagName("head")[0].appendChild(domScript);
     },
+    //天地图
     load() {
       this.tMap.clearLayers();
       this.tMap.clearOverLays();
@@ -338,7 +339,6 @@ export default {
       //向地图上添加面
       this.tMap.addOverLay(polygon);
     },
-    //天地图
     // 百度地图
     initMap() {
       // 传入密钥获取地图回调。
@@ -2180,21 +2180,6 @@ export default {
               });
               _CarTrack.start();
             };
-
-            // var pl = new BMapGL.Polyline(point, {
-            //   strokeColor: "#49d68f",
-            //   strokeWeight: 10,
-            //   strokeOpacity: 1,
-            // });
-            // var trackAni = new BMapGLLib.TrackAnimation(this.bmap, pl, {
-            //   overallView: true, // 动画完成后自动调整视野到总览
-            //   tilt: 35, // 轨迹播放的角度，默认为55
-            //   duration: 10000, // 动画持续时长，默认为10000，单位ms
-            //   delay: 1000, // 动画开始的延迟，默认0，单位ms
-            //   zoom: 15,
-            // });
-            // // this.bmap.addOverlay(pl);
-            // trackAni.start();
           } else {
             alert("暂无轨迹数据");
           }
@@ -2353,7 +2338,6 @@ export default {
           if (typeof res.data === "string") {
             var result = eval("(" + res.data + ")").result;
             if (result) {
-              this.carlist = [{ vehicleName: "洒-浙FV2129" }];
               Object.values(result).forEach((item) => {
                 item.forEach((num) => {
                   if (num.flag != 0) {
@@ -2361,6 +2345,7 @@ export default {
                   }
                 });
               });
+              this.carlist.unshift({ vehicleName: "洒-浙FV2129" });
             }
           } else if (typeof res.data === "object") {
             // this.drawFeixian();

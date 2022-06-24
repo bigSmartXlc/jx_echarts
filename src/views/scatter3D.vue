@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import * as echarts from "echarts/lib/echarts.js";
+import * as echarts from "echarts";
 import "echarts-gl";
 export default {
   data() {

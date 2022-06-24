@@ -251,6 +251,17 @@ export default {
     return {
       myChart: null,
       tabContent: 0,
+      btnlist3: [
+        { deptName: "南湖", rowId: 410000000, rowIdEnd: 419999999 },
+        { deptName: "秀洲", rowId: 420000000, rowIdEnd: 429999999 },
+        { deptName: "嘉善", rowId: 430000000, rowIdEnd: 439999999 },
+        { deptName: "海盐", rowId: 440000000, rowIdEnd: 449999999 },
+        { deptName: "海宁", rowId: 450000000, rowIdEnd: 459999999 },
+        { deptName: "平湖", rowId: 460000000, rowIdEnd: 469999999 },
+        { deptName: "桐乡", rowId: 470000000, rowIdEnd: 479999999 },
+        { deptName: "经开", rowId: 480000000, rowIdEnd: 489999999 },
+        { deptName: "港区", rowId: 490000000, rowIdEnd: 499999999 },
+      ],
       color: ["#fecb9a", "#fefdce", "#fefa7d", "#cdccfb", "#cdf99d", "#fdcdcc"],
       lefttopdata: [
         "消息1 : 2006年1月John Resig等人创建了jQuery",
@@ -482,10 +493,20 @@ export default {
       myChart.hideLoading();
       myChart.setOption(option);
       myChart.on("click", (res) => {
+        var deptId;
+        var deptIdEnd;
+        this.btnlist3.forEach((item) => {
+          if (res.name.indexOf(item.deptName) != -1) {
+            deptId = item.rowId;
+            deptIdEnd = item.rowIdEnd;
+          }
+        });
         this.$router.push({
           name: "homeDetail",
           query: {
             areaName: res.name,
+            deptId,
+            deptIdEnd,
           },
         });
       });
