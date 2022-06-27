@@ -450,13 +450,26 @@ export default {
       })
         .then((res) => {
           if (res.data.result) {
-            this.grabge.deptName = [];
+            this.grabge.deptName = [
+              "2021-6",
+              "2021-7",
+              "2021-8",
+              "2021-9",
+              "2021-10",
+              "2021-11",
+              "2021-12",
+              "2022-1",
+              "2022-2",
+              "2022-3",
+              "2022-4",
+              "2022-5",
+            ];
             this.grabge.weight = [];
             this.grabge.lastYearMonthWeight = [];
             this.grabge.tong = [];
             res.data.result.forEach((item) => {
               if (item.deptName) {
-                this.grabge.deptName.push(item.deptName);
+                // this.grabge.deptName.push(item.deptName);
                 this.grabge.weight.push(item.weight);
                 this.grabge.lastYearMonthWeight.push(item.lastYearMonthWeight);
                 this.grabge.tong.push(item.tong);
@@ -515,6 +528,10 @@ export default {
             trigger: "axis",
             axisPointer: {
               type: "cross",
+              label: {
+                color: "#000",
+                backgroundColor: "#fff",
+              },
             },
           },
           legend: {
@@ -797,7 +814,6 @@ export default {
 
       // 引入JSON文件
       var linedata = [];
-      console.log(yls_json.features);
       const map3Ddata = yls_json.features.map((item) => {
         if (item.properties.centroid) {
           linedata.push([...item.properties.centroid, 0]);
@@ -823,11 +839,10 @@ export default {
         geo3D: {
           map: "yls",
           show: false,
-          regionHeight: 6,
-          zoom: 1,
+          regionHeight: 3,
           left: 0,
           label: {
-            show: true,
+            show: false,
             distance: 0,
             formatter(param) {
               const city = param.name;
@@ -845,7 +860,7 @@ export default {
             },
           },
           viewControl: {
-            distance: 110,
+            distance: 130,
             zoomSensitivity: 1,
             panSensitivity: 1,
             rotateSensitivity: 1,
@@ -853,60 +868,49 @@ export default {
           zlevel: -11,
         },
         series: [
-          // {
-          //   type: "scatter3D",
-          //   name: "yls",
-          //   coordinateSystem: "geo3D",
-          //   // symbol:
-          //   //   "path://M201.142857 58.514286v658.285714s131.657143-160.914286 336.457143-73.142857c80.457143 43.885714 153.6 109.714286 277.942857 109.714286 124.342857 0 204.8-73.142857 204.8-73.142858V43.885714s-182.857143 182.857143-409.6 29.257143C552.228571 29.257143 449.828571-14.628571 369.371429 7.314286 281.6 29.257143 201.142857 58.514286 201.142857 58.514286M54.857143 1024c-29.257143 0-51.2-21.942857-51.2-58.514286V51.2C3.657143 21.942857 25.6 0 54.857143 0s51.2 21.942857 51.2 51.2v914.285714c7.314286 36.571429-14.628571 58.514286-51.2 58.514286z",
-          //   // // symbolSize: 20,
-          //   // //http://47.99.127.192:9903/images/%E9%A6%96%E9%A1%B5/u31.svg
-          //   // // symbol:
-          //   // //   "image://http://47.99.127.192:9903/images/%E9%A6%96%E9%A1%B5/u31.svg",
-          //   // symbolSize: 20,
-          //   animation: true,
-          //   zlevel: -8,
-          //   itemStyle: {
-          //     color: "#FF5722",
-          //     opacity: 1,
-          //   },
-          //   label: {
-          //     distance: 2,
-          //   },
-          //   data: linedata,
-          // },
+          {
+            type: "scatter3D",
+            name: "yls",
+            coordinateSystem: "geo3D",
+            symbol: "pin",
+            symbolSize: 20,
+            animation: true,
+            zlevel: -8,
+            emphasis: {
+              label: {
+                show: false,
+              },
+            },
+            itemStyle: {
+              color: "#FF5722",
+              opacity: 1,
+            },
+            data: linedata,
+          },
           {
             name: "yls",
             type: "map3D", // map3D / map
             map: "yls",
             zlevel: -9,
-            // regionHeight: 5,
+            boxHeight: 20,
+            regionHeight: 3,
             label: {
               show: true,
-              distance: 0,
+              distance: 5,
               formatter(param) {
                 const city = param.name;
                 return `{sty1|${city}}`;
               },
               rich: {
                 sty1: {
-                  color: "#FFFFFF",
-                  align: "center",
-                  fontSize: 18,
+                  color: "#fff",
+                  fontSize: 22,
                   fontWeight: 700,
                 },
               },
             },
             emphasis: {
               // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
-              label: {
-                // label高亮时的配置
-                show: true,
-                textStyle: {
-                  color: "#f73205", // 高亮时标签颜色变为 白色
-                  fontSize: 18, // 高亮时标签字体 变大
-                },
-              },
               itemStyle: {
                 color: "#0b7ef5",
                 opacity: 0.5,

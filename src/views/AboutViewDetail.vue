@@ -458,11 +458,12 @@ export default {
         points.push(new T.LngLat(item[0], item[1]));
       });
       var polygon = new T.Polygon([points], {
-        color: "black",
-        weight: 3,
-        opacity: 0.2,
-        fillColor: "blue",
-        fillOpacity: 0.2,
+        color: "blue",
+        weight: 1.5,
+        opacity: 1,
+        fillColor: "#E2E1F4",
+        lineStyle: "dashed",
+        fillOpacity: 0.3,
       });
       //向地图上添加面
       this.tMap.addOverLay(polygon);
@@ -563,13 +564,26 @@ export default {
       })
         .then((res) => {
           if (res.data.result) {
-            this.grabge.deptName = [];
+            this.grabge.deptName = [
+              "2021-6",
+              "2021-7",
+              "2021-8",
+              "2021-9",
+              "2021-10",
+              "2021-11",
+              "2021-12",
+              "2022-1",
+              "2022-2",
+              "2022-3",
+              "2022-4",
+              "2022-5",
+            ];
             this.grabge.weight = [];
             this.grabge.lastYearMonthWeight = [];
             this.grabge.tong = [];
             res.data.result.forEach((item) => {
               if (item.deptName) {
-                this.grabge.deptName.push(item.deptName);
+                // this.grabge.deptName.push(item.deptName);
                 this.grabge.weight.push(item.weight);
                 this.grabge.lastYearMonthWeight.push(item.lastYearMonthWeight);
                 this.grabge.tong.push(item.tong);
@@ -628,6 +642,10 @@ export default {
             trigger: "axis",
             axisPointer: {
               type: "cross",
+              label: {
+                color: "#000",
+                backgroundColor: "#fff",
+              },
             },
           },
           legend: {
@@ -642,13 +660,26 @@ export default {
               axisTick: {
                 alignWithLabel: true,
               },
-              axisLabel: {
-                color: "#fff",
-              },
               data: xData,
             },
           ],
           yAxis: [
+            {
+              type: "value",
+              name: "每小时评价数",
+              position: "left",
+              alignTicks: true,
+              axisLine: {
+                show: true,
+                lineStyle: {
+                  color: "#fff",
+                },
+              },
+              axisLabel: {
+                formatter: "{value}",
+                clolor: "#fff",
+              },
+            },
             {
               type: "value",
               name: "当日累计评价数",
@@ -662,21 +693,7 @@ export default {
               },
               axisLabel: {
                 formatter: "{value}",
-              },
-            },
-            {
-              type: "value",
-              name: "每小时评价数",
-              position: "left",
-              alignTicks: true,
-              axisLine: {
-                show: true,
-                lineStyle: {
-                  color: colors[2],
-                },
-              },
-              axisLabel: {
-                formatter: "{value}",
+                clolor: "#fff",
               },
             },
           ],
@@ -689,7 +706,7 @@ export default {
             {
               name: "当日累计评价数",
               type: "line",
-              yAxisIndex: 1,
+              // yAxisIndex: 1,
               data: yDataRight,
             },
           ],
@@ -945,17 +962,18 @@ export default {
 }
 .rightbottom {
   border: solid 1px rgb(11, 100, 233);
-  background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   z-index: 10;
   height: calc(100% - 60px);
   overflow: hidden;
   .tableone {
+    text-align: left;
     .thead {
       background: linear-gradient(red, black);
     }
   }
   .tabletwo {
+    text-align: left;
     .thead {
       background: linear-gradient(rgb(55, 53, 53), black);
     }
@@ -986,12 +1004,11 @@ export default {
     width: 100%;
     .tbody {
       width: 100%;
-      height: 70px;
-      line-height: 70px;
+      height: 40px;
+      line-height: 40px;
       display: flex;
       justify-content: space-around;
-      margin-bottom: 20px;
-      background: rgba(255, 255, 255, 0.13);
+      background: rgba(252, 250, 250, 0.03);
       span {
         font-size: 14px;
         font-weight: 600;
