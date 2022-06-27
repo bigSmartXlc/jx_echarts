@@ -2,7 +2,7 @@
   <div class="fzjc">
     <div class="left">
       <div class="leftdiv">
-        <h3>垃圾清运量</h3>
+        <h3 class="enlargeTitle" @click="enlarge('left')">垃圾清运量</h3>
         <div class="btnlist">
           <span
             v-for="(item, index) in btnlist1"
@@ -71,7 +71,7 @@
     </div>
     <div class="right">
       <div class="rightdiv">
-        <h3>质量评价</h3>
+        <h3 @click="enlarge('right')" class="enlargeTitle">质量评价</h3>
         <div class="btnlist">
           <span
             @click="evaluationType = item.value"
@@ -151,6 +151,17 @@
         </div>
       </div>
     </div>
+    <div class="chartPart" v-show="enlargeShow">
+      <div class="titleContainer">
+        <div class="videoPoint">
+          <span></span><span></span><span></span> <span></span><span></span
+          ><span></span>
+        </div>
+        <div class="videoTitle">{{ enlargeTitle }}</div>
+        <div class="videoOff" @click="enlargeShow = false">关闭</div>
+      </div>
+      <div id="echarts_part"></div>
+    </div>
     <div class="yujin_bottom" @click="showYujing">
       <VueSeamlessScroll
         :data="yujinglist"
@@ -183,6 +194,11 @@ export default {
   },
   data() {
     return {
+      enlargeShow: false,
+      enlargeTitle: null,
+      charts_part_option: [],
+      left_option: [],
+      right_option: [],
       yujinglist: [
         // 测试数据
         {
@@ -382,6 +398,21 @@ export default {
     },
   },
   methods: {
+    //放大图表
+    enlarge(L) {
+      this.enlargeShow = true;
+      this.charts_part_option =
+        L == "left" ? this.left_option : this.right_option;
+      this.enlargeTitle = L == "left" ? "垃圾清运量" : "质量评价";
+      setTimeout(() => {
+        var chartDom = document.getElementById("echarts_part");
+        var enlarge_chart = echarts.init(chartDom);
+        enlarge_chart.clear();
+        enlarge_chart.hideLoading();
+        this.charts_part_option &&
+          enlarge_chart.setOption(this.charts_part_option);
+      }, 200);
+    },
     showYujing() {
       this.$store.commit("TOGGLE_YUJING", true);
     },
@@ -666,29 +697,12 @@ export default {
           yAxis: [
             {
               type: "value",
-              name: "每小时评价数",
               position: "left",
               alignTicks: true,
               axisLine: {
                 show: true,
                 lineStyle: {
                   color: "#fff",
-                },
-              },
-              axisLabel: {
-                formatter: "{value}",
-                clolor: "#fff",
-              },
-            },
-            {
-              type: "value",
-              name: "当日累计评价数",
-              position: "right",
-              alignTicks: true,
-              axisLine: {
-                show: true,
-                lineStyle: {
-                  color: colors[0],
                 },
               },
               axisLabel: {
@@ -706,7 +720,6 @@ export default {
             {
               name: "当日累计评价数",
               type: "line",
-              // yAxisIndex: 1,
               data: yDataRight,
             },
           ],
@@ -839,6 +852,7 @@ export default {
           ],
         };
       }
+      this.right_option = option;
       this.rightChart.clear();
       this.rightChart.hideLoading();
       option && this.rightChart.setOption(option);
@@ -921,6 +935,7 @@ export default {
           },
         ],
       };
+      this.left_option = option;
       this.leftChart.clear();
       this.leftChart.hideLoading();
       option && this.leftChart.setOption(option);
@@ -930,6 +945,59 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.enlargeTitle {
+  cursor: pointer;
+}
+.titleContainer {
+  background: #455dc7;
+  display: flex;
+  justify-content: space-between;
+  .videoTitle {
+    height: 50px;
+    min-width: 200px;
+    font-weight: 700;
+    color: aliceblue;
+    line-height: 50px;
+    background-image: url("../assets/images/videotitle.svg");
+    background-size: cover;
+  }
+  .videoOff {
+    cursor: pointer;
+    height: 50px;
+    min-width: 150px;
+    font-weight: 700;
+    color: aliceblue;
+    line-height: 50px;
+    background-image: url("../assets/images/videoOff.svg");
+    background-size: cover;
+  }
+  .videoPoint {
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+    min-width: 100px;
+    justify-content: space-around;
+    span {
+      display: inline-block;
+      margin-top: 20px;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background: #0875f2;
+    }
+  }
+}
+.chartPart {
+  position: fixed;
+  height: 90%;
+  width: 90%;
+  z-index: 200;
+  background: #0167dd;
+  #echarts_part {
+    height: 100%;
+    width: 100%;
+  }
+}
 .yujin_bottom {
   position: absolute;
   bottom: 10px;
@@ -1151,7 +1219,7 @@ h3 {
     min-width: 40px;
     display: inline-block;
     color: #02a7f0;
-    font-size: 14px;
+    font-size: 0.4rem;
     border: solid 1px #02a7f0;
     margin-right: 3px;
     padding: 0 2px;
