@@ -2,7 +2,7 @@
   <div class="fzjc">
     <div class="left">
       <div class="leftdiv">
-        <h3>垃圾生产量</h3>
+        <h3>垃圾清运量</h3>
         <div class="btnlist">
           <span
             v-for="(item, index) in btnlist1"
@@ -15,7 +15,7 @@
         <div id="left_line_bar"></div>
       </div>
       <div class="leftdiv">
-        <h3>项目建设</h3>
+        <h3>能力分析</h3>
         <div class="leftbottom">
           <div class="listhead">
             <span>序号</span>
