@@ -354,11 +354,12 @@ export default {
         points.push(new T.LngLat(item[0], item[1]));
       });
       var polygon = new T.Polygon([points], {
-        color: "black",
-        weight: 3,
-        opacity: 0.2,
-        fillColor: "blue",
-        fillOpacity: 0.2,
+        color: "blue",
+        weight: 1.5,
+        opacity: 1,
+        fillColor: "#E2E1F4",
+        lineStyle: "dashed",
+        fillOpacity: 0.3,
       });
       //向地图上添加面
       this.tMap.addOverLay(polygon);

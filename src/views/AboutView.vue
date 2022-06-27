@@ -15,7 +15,7 @@
         <div id="leftbar"></div>
       </div>
       <div class="leftdiv">
-        <h3>能力分析</h3>
+        <h3 style="margin-bottom: 10px">能力分析</h3>
         <div class="leftbottom">
           <div class="listhead">
             <span>序号</span>
@@ -524,6 +524,11 @@ export default {
         legendData = ["每小时评价数", "当日累计评价数"];
         option = {
           color: colors,
+          grid: {
+            left: 70,
+            bottom: 30,
+            right: 20,
+          },
           tooltip: {
             trigger: "axis",
             axisPointer: {
@@ -545,6 +550,9 @@ export default {
               type: "category",
               axisTick: {
                 alignWithLabel: true,
+              },
+              axisLabel: {
+                clolor: "#fff",
               },
               data: xData,
             },
@@ -570,6 +578,10 @@ export default {
               type: "value",
               name: "当日累计评价数",
               position: "right",
+              nameTextStyle: {
+                overflow: "break",
+                width: 10,
+              },
               alignTicks: true,
               axisLine: {
                 show: true,
@@ -592,7 +604,6 @@ export default {
             {
               name: "当日累计评价数",
               type: "line",
-              // yAxisIndex: 1,
               data: yDataRight,
             },
           ],
@@ -730,6 +741,9 @@ export default {
         color: colors,
         tooltip: {
           trigger: "axis",
+        },
+        grid: {
+          bottom: 40,
         },
         legend: {
           data: ["当月产生量", "去年同期产生量", "同比增长率"],
@@ -970,7 +984,6 @@ export default {
 }
 .rightbottom {
   border: solid 1px rgb(11, 100, 233);
-  border-radius: 10px;
   z-index: 10;
   height: calc(100% - 100px);
   overflow: hidden;
@@ -1122,14 +1135,14 @@ h3 {
       #rightline {
         border: solid 1px #0167dd;
         width: 100%;
-        height: calc(100% - 81px);
+        height: calc(100% - 78px);
       }
     }
   }
 }
 .leftbottom {
-  border: solid 1px skyblue;
-  height: 40vh;
+  border: solid 1px #0167dd;
+  height: calc(100% - 78px);
   div {
     display: flex;
     justify-content: space-around;
@@ -1156,10 +1169,10 @@ h3 {
   justify-content: space-around;
   span {
     cursor: pointer;
-    min-width: 40px;
+    min-width: 30px;
     display: inline-block;
     color: #02a7f0;
-    font-size: 14px;
+    font-size: 0.5rem;
     border: solid 1px #02a7f0;
     margin-right: 3px;
     padding: 0 2px;
