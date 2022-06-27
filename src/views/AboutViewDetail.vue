@@ -152,7 +152,7 @@
       </div>
     </div>
     <div class="chartPart" v-show="enlargeShow">
-      <div class="titleContainer">
+      <div class="titleContainer1">
         <div class="videoPoint">
           <span></span><span></span><span></span> <span></span><span></span
           ><span></span>
@@ -669,15 +669,14 @@ export default {
         legendData = ["每小时评价数", "当日累计评价数"];
         option = {
           color: colors,
+          grid: {
+            left: 70,
+            bottom: 30,
+            right: 10,
+          },
           tooltip: {
             trigger: "axis",
-            axisPointer: {
-              type: "cross",
-              label: {
-                color: "#000",
-                backgroundColor: "#fff",
-              },
-            },
+            axisPointer: {},
           },
           legend: {
             data: legendData,
@@ -690,6 +689,9 @@ export default {
               type: "category",
               axisTick: {
                 alignWithLabel: true,
+              },
+              axisLabel: {
+                clolor: "#fff",
               },
               data: xData,
             },
@@ -732,14 +734,13 @@ export default {
         option = {
           color: colors,
           grid: {
-            // containLabel: true,
-            left: 90,
+            left: 70,
+            bottom: 30,
+            right: 10,
           },
           tooltip: {
             trigger: "axis",
-            axisPointer: {
-              type: "cross",
-            },
+            axisPointer: {},
           },
           legend: {
             data: legendData,
@@ -802,11 +803,14 @@ export default {
         }
         option = {
           color: colors,
+          grid: {
+            left: 70,
+            bottom: 30,
+            right: 10,
+          },
           tooltip: {
             trigger: "axis",
-            axisPointer: {
-              type: "cross",
-            },
+            axisPointer: {},
           },
           legend: {
             data: legendData,
@@ -886,9 +890,9 @@ export default {
             type: "category",
             data: this.grabge.deptName,
             axisLabel: {
-              interval: 0,
+              // interval: 0,
               color: "#fff",
-              rotate: -30,
+              // rotate: -30,
             },
           },
         ],
@@ -907,7 +911,7 @@ export default {
             axisLine: {
               show: true,
               lineStyle: {
-                color: colors[0],
+                color: "#fff",
               },
             },
             axisLabel: {
@@ -948,53 +952,55 @@ export default {
 .enlargeTitle {
   cursor: pointer;
 }
-.titleContainer {
-  background: #455dc7;
-  display: flex;
-  justify-content: space-between;
-  .videoTitle {
-    height: 50px;
-    min-width: 200px;
-    font-weight: 700;
-    color: aliceblue;
-    line-height: 50px;
-    background-image: url("../assets/images/videotitle.svg");
-    background-size: cover;
-  }
-  .videoOff {
-    cursor: pointer;
-    height: 50px;
-    min-width: 150px;
-    font-weight: 700;
-    color: aliceblue;
-    line-height: 50px;
-    background-image: url("../assets/images/videoOff.svg");
-    background-size: cover;
-  }
-  .videoPoint {
-    height: 50px;
-    line-height: 50px;
-    display: flex;
-    min-width: 100px;
-    justify-content: space-around;
-    span {
-      display: inline-block;
-      margin-top: 20px;
-      width: 10px;
-      height: 10px;
-      border-radius: 5px;
-      background: #0875f2;
-    }
-  }
-}
 .chartPart {
   position: fixed;
-  height: 90%;
+  height: 80%;
   width: 90%;
   z-index: 200;
-  background: #0167dd;
+  background: #8ca0b7;
+  .titleContainer1 {
+    background: #455dc7;
+    display: flex;
+    // justify-content: space-between;
+    .videoTitle {
+      width: 70%;
+      height: 50px;
+      // min-width: 200px;
+      font-size: 35px;
+      font-weight: 700;
+      color: aliceblue;
+      line-height: 50px;
+    }
+    .videoOff {
+      width: 15%;
+      cursor: pointer;
+      height: 50px;
+      width: 150px;
+      font-weight: 700;
+      color: aliceblue;
+      line-height: 50px;
+      background-image: url("../assets/images/videoOff.svg");
+      background-size: cover;
+    }
+    .videoPoint {
+      width: 15%;
+      height: 50px;
+      line-height: 50px;
+      display: flex;
+      min-width: 100px;
+      justify-content: space-around;
+      span {
+        display: inline-block;
+        margin-top: 20px;
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        background: #0875f2;
+      }
+    }
+  }
   #echarts_part {
-    height: 100%;
+    height: calc(100% - 50px);
     width: 100%;
   }
 }

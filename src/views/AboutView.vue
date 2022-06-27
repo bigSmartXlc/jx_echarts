@@ -161,7 +161,7 @@
       </div>
     </div>
     <div class="chartPart" v-show="enlargeShow">
-      <div class="titleContainer">
+      <div class="titleContainer2">
         <div class="videoPoint">
           <span></span><span></span><span></span> <span></span><span></span
           ><span></span>
@@ -191,6 +191,7 @@ export default {
       charts_part_option: [],
       left_option: [],
       right_option: [],
+      enlarge_chart_map: null,
       leftChart: null,
       rightChart: null,
       carrentDate: null,
@@ -255,6 +256,13 @@ export default {
     };
   },
   watch: {
+    enlargeShow: {
+      handler: function (val) {
+        if (val) {
+          this.charts_part_option.dispose();
+        }
+      },
+    },
     garbageType: {
       handler: function () {
         this.getWeight();
@@ -350,11 +358,11 @@ export default {
       this.enlargeTitle = L == "left" ? "垃圾清运量" : "质量评价";
       setTimeout(() => {
         var chartDom = document.getElementById("echarts_part");
-        var enlarge_chart = echarts.init(chartDom);
-        enlarge_chart.clear();
-        enlarge_chart.hideLoading();
+        this.enlarge_chart_map = echarts.init(chartDom);
+        this.enlarge_chart_map.clear();
+        this.enlarge_chart_map.hideLoading();
         this.charts_part_option &&
-          enlarge_chart.setOption(this.charts_part_option);
+          this.enlarge_chart_map.setOption(this.charts_part_option);
       }, 200);
     },
     //切换红黑榜区域
@@ -562,13 +570,7 @@ export default {
           },
           tooltip: {
             trigger: "axis",
-            axisPointer: {
-              type: "cross",
-              label: {
-                color: "#000",
-                backgroundColor: "#fff",
-              },
-            },
+            axisPointer: {},
           },
           legend: {
             data: legendData,
@@ -583,7 +585,7 @@ export default {
                 alignWithLabel: true,
               },
               axisLabel: {
-                clolor: "#fff",
+                color: "#fff",
               },
               data: xData,
             },
@@ -626,14 +628,13 @@ export default {
         option = {
           color: colors,
           grid: {
-            // containLabel: true,
-            left: 90,
+            left: 70,
+            bottom: 30,
+            right: 10,
           },
           tooltip: {
             trigger: "axis",
-            axisPointer: {
-              type: "cross",
-            },
+            axisPointer: {},
           },
           legend: {
             data: legendData,
@@ -647,6 +648,9 @@ export default {
               axisTick: {
                 alignWithLabel: true,
               },
+              axisLabel: {
+                color: "#fff",
+              },
               data: xData,
             },
           ],
@@ -659,7 +663,7 @@ export default {
               axisLine: {
                 show: true,
                 lineStyle: {
-                  color: colors[2],
+                  color: "#fff",
                 },
               },
               axisLabel: {
@@ -695,9 +699,12 @@ export default {
           color: colors,
           tooltip: {
             trigger: "axis",
-            axisPointer: {
-              type: "cross",
-            },
+            axisPointer: {},
+          },
+          grid: {
+            left: 70,
+            bottom: 30,
+            right: 10,
           },
           legend: {
             data: legendData,
@@ -711,6 +718,9 @@ export default {
               axisTick: {
                 alignWithLabel: true,
               },
+              axisLabel: {
+                color: "#fff",
+              },
               data: xData,
             },
           ],
@@ -723,7 +733,7 @@ export default {
               axisLine: {
                 show: true,
                 lineStyle: {
-                  color: colors[2],
+                  color: "#fff",
                 },
               },
               axisLabel: {
@@ -777,8 +787,8 @@ export default {
             type: "category",
             data: this.grabge.deptName,
             axisLabel: {
-              interval: 0,
-              rotate: -30,
+              // interval: 0,
+              // rotate: -30,
               color: "#fff",
             },
           },
@@ -798,7 +808,7 @@ export default {
             axisLine: {
               show: true,
               lineStyle: {
-                color: colors[0],
+                color: "#fff",
               },
             },
             axisLabel: {
@@ -994,23 +1004,21 @@ export default {
 }
 .chartPart {
   position: fixed;
-  height: 90%;
+  height: 80%;
   width: 90%;
   z-index: 200;
-  background: #0167dd;
-  .titleContainer {
+  background: #8ca0b7;
+  .titleContainer2 {
     background: #455dc7;
-    // display: flex;
+    display: flex;
     // justify-content: space-between;
     .videoTitle {
       width: 70%;
       height: 50px;
-      // min-width: 200px;
+      font-size: 35px;
       font-weight: 700;
       color: aliceblue;
       line-height: 50px;
-      // background-image: url("../assets/images/videotitle.svg");
-      // background-size: cover;
     }
     .videoOff {
       width: 15%;
@@ -1041,7 +1049,7 @@ export default {
     }
   }
   #echarts_part {
-    height: 100%;
+    height: calc(100% - 50px);
     width: 100%;
   }
 }
@@ -1242,7 +1250,7 @@ h3 {
     color: #02a7f0;
     font-size: 0.4rem;
     border: solid 1px #02a7f0;
-    margin-right: 3px;
+    margin-right: 1px;
     padding: 0 2px;
     border-radius: 3px;
   }

@@ -458,7 +458,7 @@ export default {
             },
             data: map3Ddata,
             viewControl: {
-              distance: 130, // 地图视角 控制初始大小
+              distance: 110, // 地图视角 控制初始大小
               rotateSensitivity: 1, // 旋转
               zoomSensitivity: 1, // 缩放
             },
