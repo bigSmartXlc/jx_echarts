@@ -10,7 +10,6 @@
             style="
               height: 300px;
               overflow: hidden;
-              width: 400px;
               color: white;
               font-size: 18px;
               text-align: center;
@@ -30,10 +29,10 @@
         </div>
         <h3>项目建设</h3>
         <ul class="thead">
-          <span style="width: 100px">序号</span>
+          <span style="width: 50px">序号</span>
           <span style="width: 100px">区县</span>
           <span style="width: 100px">项目数</span>
-          <span style="width: 100px">完成进度</span>
+          <span style="width: 150px">完成进度</span>
         </ul>
         <div class="box" id="table_box">
           <VueSeamlessScroll
@@ -49,15 +48,12 @@
           >
             <ul id="comment1">
               <li v-for="(item, index) in leftBottom" :key="index">
-                <span>{{ item.index }}</span>
-                <span>{{ item.position }}</span>
-                <span>{{ item.num }}</span>
-                <span>
-                  <span class="spanP">
-                    <div class="spanS1" :style="{ width: item.jingdu }">
-                      {{ item.jingdu }}
-                    </div>
-                  </span>
+                <span style="width: 50px">{{ item.index }}</span>
+                <span style="width: 100px">{{ item.position }}</span>
+                <span style="width: 100px">{{ item.num }}</span>
+                <span style="width: 150px">
+                  <span class="spanP" :style="{ width: item.jingdu }"></span
+                  ><span class="spanS1">{{ item.jingdu }}</span>
                 </span>
               </li>
             </ul>
@@ -75,175 +71,83 @@
             <div
               :class="{ menu_active: tabContent == 0 }"
               class="tab-menu-span"
-              @click="tabContent = 0"
+              @click="tabContentToggle(0)"
             >
               投放
             </div>
             <div
               :class="{ menu_active: tabContent == 1 }"
               class="tab-menu-span"
-              @click="tabContent = 1"
+              @click="tabContentToggle(1)"
             >
               收集
             </div>
             <div
               :class="{ menu_active: tabContent == 2 }"
               class="tab-menu-span"
-              @click="tabContent = 2"
+              @click="tabContentToggle(2)"
             >
               运输
             </div>
             <div
               :class="{ menu_active: tabContent == 3 }"
               class="tab-menu-span"
-              @click="tabContent = 3"
+              @click="tabContentToggle(3)"
             >
               处置
             </div>
           </div>
-          <!-- tab list -->
-          <div class="tab-list">
-            <div
-              class="tab-list-span animate__animated animate__flipInY"
-              v-show="tabContent === 0"
-            >
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
+          <div class="core-dynamic-content-container">
+            <div class="scroll-wrapper" ref="scroll">
+              <div class="scroll-content" v-if="tabContent === 0">
+                <div
+                  class="scroll-item animate__animated animate__flipInY"
+                  v-for="(item, index) in dataList1"
+                  :key="index"
+                >
+                  <span class="name">
+                    <img src="../assets/images/u608.svg" alt="" srcset="" />
+                    {{ item.name }}</span
+                  ><span class="num">{{ item.num }}</span>
+                </div>
+              </div>
+              <div class="scroll-content" v-if="tabContent === 1">
+                <div
+                  class="scroll-item animate__animated animate__flipInY"
+                  v-for="(item, index) in dataList2"
+                  :key="index"
+                >
+                  <span class="name">
+                    <img src="../assets/images/u608.svg" alt="" srcset="" />
+                    {{ item.name }}</span
+                  ><span class="num">{{ item.num }}</span>
+                </div>
+              </div>
+              <div class="scroll-content" v-if="tabContent === 2">
+                <div
+                  class="scroll-item animate__animated animate__flipInY"
+                  v-for="(item, index) in dataList3"
+                  :key="index"
+                >
+                  <span class="name">
+                    <img src="../assets/images/u608.svg" alt="" srcset="" />
+                    {{ item.name }}</span
+                  ><span class="num">{{ item.num }}</span>
+                </div>
+              </div>
+              <div class="scroll-content" v-if="tabContent === 3">
+                <div
+                  class="scroll-item animate__animated animate__flipInY"
+                  v-for="(item, index) in dataList4"
+                  :key="index"
+                >
+                  <span class="name">
+                    <img src="../assets/images/u608.svg" alt="" srcset="" />
+                    {{ item.name }}</span
+                  ><span class="num">{{ item.num }}</span>
+                </div>
+              </div>
             </div>
-            <div
-              class="tab-list-span animate__animated animate__flipInY"
-              v-show="tabContent === 1"
-            >
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-            </div>
-            <div
-              class="tab-list-span animate__animated animate__flipInY"
-              v-show="tabContent === 2"
-            >
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-            </div>
-            <div
-              class="tab-list-span animate__animated animate__flipInY"
-              v-show="tabContent === 3"
-            >
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-            </div>
-            <div style="clear: both"></div>
           </div>
         </div>
       </div>
@@ -274,6 +178,7 @@ import * as echarts from "echarts";
 import VueSeamlessScroll from "vue-seamless-scroll";
 import yls_json from "./ljpt_xz.json";
 import "echarts-gl";
+import BScroll from "@better-scroll/core";
 export default {
   components: {
     VueSeamlessScroll,
@@ -295,6 +200,82 @@ export default {
   },
   data() {
     return {
+      dataList1: [
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+      ],
+      dataList2: [
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+      ],
+      dataList3: [
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+      ],
+      dataList4: [
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+      ],
       solutionShow: false,
       solution: null,
       solution_title: null,
@@ -374,12 +355,34 @@ export default {
         { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
         { index: 12, position: "桐乡市", num: 5, jingdu: "50%" },
       ],
+      bs: null,
     };
   },
   mounted() {
     this.map();
+    setTimeout(() => {
+      this.$nextTick(() => {
+        this.init();
+      });
+    }, 1000);
   },
   methods: {
+    tabContentToggle(val) {
+      this.tabContent = val;
+      setTimeout(() => {
+        this.bs.refresh();
+      }, 2000);
+    },
+    init() {
+      this.bs = new BScroll(this.$refs.scroll, { click: true });
+      console.log(this.bs);
+      this.bs.on("scrollStart", () => {
+        console.log("scrollStart-");
+      });
+      this.bs.on("scrollEnd", (pos) => {
+        console.log(pos);
+      });
+    },
     yjitemClick(item) {
       this.solution = item.solution;
       this.solution_title = item.name;
@@ -458,13 +461,8 @@ export default {
             type: "scatter3D",
             name: "yls",
             coordinateSystem: "geo3D",
-            symbol:
-              "path://M201.142857 58.514286v658.285714s131.657143-160.914286 336.457143-73.142857c80.457143 43.885714 153.6 109.714286 277.942857 109.714286 124.342857 0 204.8-73.142857 204.8-73.142858V43.885714s-182.857143 182.857143-409.6 29.257143C552.228571 29.257143 449.828571-14.628571 369.371429 7.314286 281.6 29.257143 201.142857 58.514286 201.142857 58.514286M54.857143 1024c-29.257143 0-51.2-21.942857-51.2-58.514286V51.2C3.657143 21.942857 25.6 0 54.857143 0s51.2 21.942857 51.2 51.2v914.285714c7.314286 36.571429-14.628571 58.514286-51.2 58.514286z",
-            // symbolSize: 20,
-            //http://47.99.127.192:9903/images/%E9%A6%96%E9%A1%B5/u31.svg
-            // symbol:
-            //   "image://http://47.99.127.192:9903/images/%E9%A6%96%E9%A1%B5/u31.svg",
-            symbolSize: 30,
+            symbol: "pin",
+            symbolSize: 20,
             animation: true,
             zlevel: -8,
             itemStyle: {
@@ -540,31 +538,6 @@ export default {
               zoomSensitivity: 1, // 缩放
             },
           },
-          // {
-          //   type: "scatter3D",
-          //   coordinateSystem: "geo3D",
-          //   zlevel: 1,
-          //   effect: "symbol",
-          //   symbolSize: "7",
-          //   rippleEffect: {
-          //     period: 6,
-          //     brushType: "stroke",
-          //     scale: 8,
-          //   },
-          //   emphasis: {
-          //     itemStyle: {
-          //       color: "#ff1863",
-          //     },
-          //     label: {
-          //       show: true,
-          //     },
-          //   },
-          //   itemStyle: {
-          //     color: "#FF5722",
-          //     opacity: 1,
-          //   },
-          //   data: this.scatter_coord,
-          // },
         ],
       };
       myChart.hideLoading();
@@ -592,6 +565,61 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+h3 {
+  display: inline-block;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 250px;
+  height: 40px;
+  color: #fff;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 40px;
+  background-image: url(../assets/images/u385.svg);
+}
+.core-dynamic-content-container {
+  text-align: center;
+  height: calc(100% - 50px);
+  .scroll-wrapper {
+    height: 100%;
+    overflow: hidden;
+    .scroll-content {
+      color: #fff;
+      margin: 0 10px;
+    }
+    .scroll-content .name {
+      display: inline-block;
+      padding-left: 10px;
+      font-weight: 800;
+      text-align: left;
+      width: 45%;
+      height: 85px;
+    }
+    .scroll-content .num {
+      display: inline-block;
+      font-size: 25px;
+      color: #00ece4;
+      font-weight: 800;
+      text-align: center;
+      width: 50%;
+      height: 85px;
+    }
+    .scroll-item {
+      font-size: 24px;
+      font-weight: bold;
+      border-bottom: 1px solid #eee;
+      margin-top: 3px;
+      line-height: 85px;
+      background: rgba(3, 157, 247, 0.2);
+      border-radius: 5px;
+      text-align: center;
+    }
+    .scroll-item:hover {
+      background: rgba(3, 88, 247, 0.5) !important;
+    }
+  }
+}
+
 .solution {
   position: fixed;
   left: 200px;
@@ -643,17 +671,22 @@ export default {
     }
   }
 }
+// .spanP {
+//   border: solid 1px red;
+//   height: 26px;
+//   line-height: 26px;
+//   display: flex;
+//   justify-content: space-around;
+//   .spanS1 {
+//     background: red;
+//     height: 26px;
+//     color: #000;
+//   }
+// }
 .spanP {
-  border: solid 1px red;
-  height: 26px;
-  line-height: 26px;
-  display: flex;
-  justify-content: space-around;
-  .spanS1 {
-    background: red;
-    height: 26px;
-    color: #000;
-  }
+  display: inline-block;
+  border-bottom: solid 20px;
+  border-right: solid 20px transparent;
 }
 .chart-wrapper {
   z-index: 1;
@@ -662,18 +695,6 @@ export default {
   position: absolute;
   left: 0;
   top: 0;
-}
-h3 {
-  margin: 0;
-  line-height: 70px;
-  font-family: Source Han Sans CN;
-  font-size: 28px;
-  font-weight: bold;
-  color: transparent;
-  text-align: center;
-  background: linear-gradient(0deg, #bff5ff 0%, #00ece4 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .select-panel {
@@ -692,9 +713,6 @@ h3 {
   z-index: 1;
 }
 .right {
-  border: solid 1px rgb(11, 100, 233);
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
   width: 28%;
   height: 100%;
   z-index: 10;
@@ -711,9 +729,8 @@ h3 {
   padding: 0 !important;
 }
 #table_box span {
-  width: 100px;
   display: inline-block;
-  text-align: center;
+  // text-align: center;
 }
 .thead {
   width: 400px;
@@ -770,42 +787,8 @@ h3 {
 .tab-class {
   width: 100%;
   height: calc(100% - 70px);
-}
-.tab-list {
-  width: 100%;
-  height: calc(100% - 50px);
-  overflow: hidden;
-}
-
-.tab-list-span {
-  color: #fff;
-  margin: 0 10px;
-}
-.tab-list-span .name {
-  display: inline-block;
-  padding-left: 10px;
-  font-weight: 800;
-  text-align: left;
-  width: 45%;
-  height: 85px;
-}
-.tab-list-span .num {
-  display: inline-block;
-  font-size: 25px;
-  color: #00ece4;
-  font-weight: 800;
-  text-align: center;
-  width: 50%;
-  height: 85px;
-}
-.tab-list-span p {
-  margin-top: 3px;
-  line-height: 85px;
-  background: rgba(3, 157, 247, 0.2);
-  border-radius: 5px;
-}
-.tab-list-span p:hover {
-  background: rgba(3, 88, 247, 0.5) !important;
+  border: solid 1px rgb(11, 100, 233);
+  border-radius: 10px;
 }
 #tbody li,
 #tbody1 li {

@@ -95,6 +95,19 @@
         </VueSeamlessScroll>
       </div>
     </div>
+    <div class="core-dynamic-content-container">
+      <div class="scroll-wrapper" ref="scroll">
+        <div class="scroll-content c1" key="1" v-if="!switcher">
+          <div class="scroll-item" v-for="n in nums1" :key="n">{{ n }}</div>
+        </div>
+        <div class="scroll-content c2" key="2" v-else>
+          <div class="scroll-item" v-for="n in nums2" :key="n">
+            {{ nums2 - n + 1 }}
+          </div>
+        </div>
+      </div>
+      <button class="btn" @click="handleClick">switch content element</button>
+    </div>
   </div>
 </template>
 
@@ -104,12 +117,16 @@ import * as echarts from "echarts";
 import "echarts-gl";
 import yls_json from "./jx.json";
 import VueSeamlessScroll from "vue-seamless-scroll";
+import BScroll from "@better-scroll/core";
 export default {
   components: {
     VueSeamlessScroll,
   },
   data() {
     return {
+      nums1: 30,
+      nums2: 60,
+      switcher: false,
       echarts,
       data: {},
       yls_json,
@@ -238,11 +255,27 @@ export default {
     this.getFeixian().then(() => {
       setTimeout(() => {
         this.drawFeixian();
+        this.init();
       }, 1000);
     });
     // this.getWieght();
   },
   methods: {
+    init() {
+      this.bs = new BScroll(this.$refs.scroll, {
+        probeType: 3,
+      });
+      this.bs.on("contentChanged", (content) => {
+        console.log("--- newContent ---");
+        console.log(content);
+      });
+      this.bs.on("scroll", () => {
+        console.log("scrolling-");
+      });
+      this.bs.on("scrollEnd", () => {
+        console.log("scrollingEnd");
+      });
+    },
     //地磅称重 // 车辆载重
     getWieght() {
       this.$http({
@@ -471,6 +504,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.core-dynamic-content-container {
+  text-align: center;
+  .scroll-wrapper {
+    height: 300px;
+    overflow: hidden;
+    .scroll-item {
+      height: 50px;
+      line-height: 50px;
+      font-size: 24px;
+      font-weight: bold;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+      &:nth-child(2n) {
+        background-color: #f3f5f7;
+      }
+      &:nth-child(2n + 1) {
+        background-color: #42b983;
+      }
+    }
+  }
+}
 ul {
   list-style: none;
 }
