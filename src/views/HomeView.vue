@@ -42,7 +42,6 @@
             style="
               height: 300px;
               overflow: hidden;
-              width: 400px;
               color: white;
               font-size: 18px;
               text-align: center;
@@ -73,10 +72,34 @@
         <div class="tab-class">
           <!-- 菜单 -->
           <div class="tab-menu">
-            <div class="tab-menu-span" @click="tabContent = 0">投放</div>
-            <div class="tab-menu-span" @click="tabContent = 1">收集</div>
-            <div class="tab-menu-span" @click="tabContent = 2">运输</div>
-            <div class="tab-menu-span" @click="tabContent = 3">处置</div>
+            <div
+              :class="{ menu_active: tabContent == 0 }"
+              class="tab-menu-span"
+              @click="tabContent = 0"
+            >
+              投放
+            </div>
+            <div
+              :class="{ menu_active: tabContent == 1 }"
+              class="tab-menu-span"
+              @click="tabContent = 1"
+            >
+              收集
+            </div>
+            <div
+              :class="{ menu_active: tabContent == 2 }"
+              class="tab-menu-span"
+              @click="tabContent = 2"
+            >
+              运输
+            </div>
+            <div
+              :class="{ menu_active: tabContent == 3 }"
+              class="tab-menu-span"
+              @click="tabContent = 3"
+            >
+              处置
+            </div>
           </div>
           <!-- tab list -->
           <div class="tab-list">
@@ -660,7 +683,7 @@ h3 {
 }
 .left {
   width: 28%;
-  height: calc(100% - 90px);
+  height: 100%;
   text-align: center;
   z-index: 10;
 }
@@ -673,7 +696,7 @@ h3 {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   width: 28%;
-  height: calc(100% - 90px);
+  height: 100%;
   z-index: 10;
 }
 #table_box {
@@ -708,7 +731,7 @@ h3 {
 }
 .box {
   position: relative;
-  width: 400px;
+  width: 100%;
   background-color: transparent;
   margin: auto;
   overflow: hidden;
@@ -746,9 +769,12 @@ h3 {
 }
 .tab-class {
   width: 100%;
+  height: calc(100% - 70px);
 }
 .tab-list {
   width: 100%;
+  height: calc(100% - 50px);
+  overflow: hidden;
 }
 
 .tab-list-span {
@@ -791,14 +817,21 @@ h3 {
 #tbody td {
   text-align: center;
 }
+.home {
+  height: calc(100% - 90px);
+}
 .content {
   display: flex;
   justify-content: space-between;
+  height: 100%;
 }
 .active {
   background-color: #0c66a5 !important;
 }
 .li_bg {
   background: #041d4e;
+}
+.menu_active {
+  background-color: #0c66a5 !important;
 }
 </style>

@@ -17,8 +17,13 @@
             "
           >
             <ul id="tbody">
-              <li v-for="(item, index) in lefttopdata" :key="index">
-                {{ item }}
+              <li
+                v-for="(item, index) in lefttopdata"
+                :key="index"
+                :class="{ li_bg: index % 2 == 0 }"
+                @click="yjitemClick(item)"
+              >
+                {{ item.name }}
               </li>
             </ul>
           </VueSeamlessScroll>
@@ -37,7 +42,6 @@
             style="
               height: 300px;
               overflow: hidden;
-              width: 400px;
               color: white;
               font-size: 18px;
               text-align: center;
@@ -69,10 +73,34 @@
         <div class="tab-class">
           <!-- 菜单 -->
           <div class="tab-menu">
-            <div class="tab-menu-span" @click="tabContent = 0">投放</div>
-            <div class="tab-menu-span" @click="tabContent = 1">收集</div>
-            <div class="tab-menu-span" @click="tabContent = 2">运输</div>
-            <div class="tab-menu-span" @click="tabContent = 3">处置</div>
+            <div
+              :class="{ menu_active: tabContent == 0 }"
+              class="tab-menu-span"
+              @click="tabContent = 0"
+            >
+              投放
+            </div>
+            <div
+              :class="{ menu_active: tabContent == 1 }"
+              class="tab-menu-span"
+              @click="tabContent = 1"
+            >
+              收集
+            </div>
+            <div
+              :class="{ menu_active: tabContent == 2 }"
+              class="tab-menu-span"
+              @click="tabContent = 2"
+            >
+              运输
+            </div>
+            <div
+              :class="{ menu_active: tabContent == 3 }"
+              class="tab-menu-span"
+              @click="tabContent = 3"
+            >
+              处置
+            </div>
           </div>
           <!-- tab list -->
           <div class="tab-list">
@@ -221,6 +249,24 @@
         </div>
       </div>
     </div>
+    <div v-show="solutionShow" class="solution">
+      <div class="titleContainer">
+        <div class="videoPoint">
+          <span></span><span></span><span></span> <span></span><span></span
+          ><span></span>
+        </div>
+        <div class="videoTitle">{{ solution_title }}</div>
+        <div>
+          <img src="../assets/images/yjt.svg" alt="" srcset="" />
+          <img src="../assets/images/yjt.svg" alt="" srcset="" />
+          <img src="../assets/images/yjt.svg" alt="" srcset="" />
+        </div>
+      </div>
+      <div class="solutionContent">
+        <p>{{ solution }}</p>
+      </div>
+      <div class="videoOff" @click="solutionShow = false">关闭</div>
+    </div>
   </div>
 </template>
 
@@ -250,6 +296,9 @@ export default {
   },
   data() {
     return {
+      solutionShow: false,
+      solution: null,
+      solution_title: null,
       tMap: null,
       mapdata: [],
       centerMap: [],
@@ -257,18 +306,41 @@ export default {
       tabContent: 0,
       color: ["#fecb9a", "#fefdce", "#fefa7d", "#cdccfb", "#cdf99d", "#fdcdcc"],
       lefttopdata: [
-        "消息1 : 2006年1月John ",
-        "消息1 : 2006年1月John ",
-        "消息2 : 2007年7月，jQuery 1.1.3版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息4 : 2010年1月，",
+        {
+          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          solution:
+            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+        },
+        {
+          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          solution:
+            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+        },
+        {
+          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          solution:
+            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+        },
+        {
+          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          solution:
+            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+        },
+        {
+          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          solution:
+            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+        },
+        {
+          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          solution:
+            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+        },
+        {
+          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          solution:
+            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+        },
       ],
       leftBottom: [
         { index: 1, position: "桐乡市", num: 5, jingdu: "10%" },
@@ -324,6 +396,11 @@ export default {
     // this.setCityChart();
   },
   methods: {
+    yjitemClick(item) {
+      this.solution = item.solution;
+      this.solution_title = item.name;
+      this.solutionShow = true;
+    },
     toggleArea(areaName) {
       this.mapdata = {
         type: "FeatureCollection",
@@ -576,6 +653,57 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.solution {
+  position: fixed;
+  left: 200px;
+  top: 100px;
+  width: 70%;
+  height: 70% !important;
+  background: #697196;
+  opacity: 1;
+  z-index: 300;
+  .solutionContent {
+    height: calc(100% - 140px);
+    overflow: auto;
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: 700;
+    p {
+      text-indent: 50px;
+      text-align: left;
+    }
+  }
+}
+.titleContainer {
+  background: #183bd8;
+  display: flex;
+  justify-content: space-between;
+  z-index: 500;
+  .videoTitle {
+    height: 50px;
+    min-width: 200px;
+    font-weight: 700;
+    color: aliceblue;
+    line-height: 50px;
+    background-image: url("../assets/images/videotitle.svg");
+    background-size: cover;
+  }
+  .videoPoint {
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+    min-width: 100px;
+    justify-content: space-around;
+    span {
+      display: inline-block;
+      margin-top: 20px;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background: #0875f2;
+    }
+  }
+}
 .spanP {
   border: solid 1px red;
   height: 26px;
@@ -616,7 +744,7 @@ h3 {
 }
 .left {
   width: 28%;
-  height: calc(100% - 90px);
+  height: 100%;
   text-align: center;
   z-index: 10;
 }
@@ -629,7 +757,7 @@ h3 {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   width: 28%;
-  height: calc(100% - 90px);
+  height: 100%;
   z-index: 10;
 }
 #table_box {
@@ -664,7 +792,7 @@ h3 {
 }
 .box {
   position: relative;
-  width: 400px;
+  width: 100%;
   background-color: transparent;
   margin: auto;
   overflow: hidden;
@@ -702,9 +830,12 @@ h3 {
 }
 .tab-class {
   width: 100%;
+  height: calc(100% - 70px);
 }
 .tab-list {
   width: 100%;
+  height: calc(100% - 50px);
+  overflow: hidden;
 }
 
 .tab-list-span {
@@ -737,19 +868,28 @@ h3 {
 .tab-list-span p:hover {
   background: rgba(3, 88, 247, 0.5) !important;
 }
-#tbody li,
-#tbody1 li {
-  display: flex;
-  justify-content: space-between;
+#tbody li {
+  font-size: 12px;
+  padding-left: 15px;
 }
 #tbody td {
   text-align: center;
 }
+.home {
+  height: calc(100% - 90px);
+}
 .content {
   display: flex;
   justify-content: space-between;
+  height: 100%;
 }
 .active {
+  background-color: #0c66a5 !important;
+}
+.li_bg {
+  background: #041d4e;
+}
+.menu_active {
   background-color: #0c66a5 !important;
 }
 </style>
