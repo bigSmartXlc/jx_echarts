@@ -17,8 +17,13 @@
             "
           >
             <ul id="tbody">
-              <li v-for="(item, index) in lefttopdata" :key="index">
-                {{ item }}
+              <li
+                v-for="(item, index) in lefttopdata"
+                :key="index"
+                :class="{ li_bg: index % 2 == 0 }"
+                @click="yjitemClick(item)"
+              >
+                {{ item.name }}
               </li>
             </ul>
           </VueSeamlessScroll>
@@ -220,6 +225,24 @@
         </div>
       </div>
     </div>
+    <div v-show="solutionShow" class="solution">
+      <div class="titleContainer">
+        <div class="videoPoint">
+          <span></span><span></span><span></span> <span></span><span></span
+          ><span></span>
+        </div>
+        <div class="videoTitle">{{ solution_title }}</div>
+        <div>
+          <img src="../assets/images/yjt.svg" alt="" srcset="" />
+          <img src="../assets/images/yjt.svg" alt="" srcset="" />
+          <img src="../assets/images/yjt.svg" alt="" srcset="" />
+        </div>
+      </div>
+      <div class="solutionContent">
+        <p>{{ solution }}</p>
+      </div>
+      <div class="videoOff" @click="solutionShow = false">关闭</div>
+    </div>
   </div>
 </template>
 
@@ -249,6 +272,9 @@ export default {
   },
   data() {
     return {
+      solutionShow: false,
+      solution: null,
+      solution_title: null,
       myChart: null,
       tabContent: 0,
       btnlist3: [
@@ -264,18 +290,41 @@ export default {
       ],
       color: ["#fecb9a", "#fefdce", "#fefa7d", "#cdccfb", "#cdf99d", "#fdcdcc"],
       lefttopdata: [
-        "消息1 : 2006年1月John Resig等人创建了jQuery",
-        "消息1 : 2006年1月John Resig等人创建了jQuery",
-        "消息2 : 2007年7月，jQuery 1.1.3版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息3 : 2008年5月，jQuery 1.2.6版发布",
-        "消息4 : 2010年1月，也是jQuery的四周年生日",
+        {
+          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          solution:
+            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+        },
+        {
+          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          solution:
+            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+        },
+        {
+          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          solution:
+            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+        },
+        {
+          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          solution:
+            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+        },
+        {
+          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          solution:
+            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+        },
+        {
+          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          solution:
+            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+        },
+        {
+          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          solution:
+            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+        },
       ],
       leftBottom: [
         { index: 1, position: "桐乡市", num: 5, jingdu: "10%" },
@@ -308,6 +357,11 @@ export default {
     this.map();
   },
   methods: {
+    yjitemClick(item) {
+      this.solution = item.solution;
+      this.solution_title = item.name;
+      this.solutionShow = true;
+    },
     map() {
       // 初始化图表
       let data = yls_json;
@@ -515,6 +569,57 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.solution {
+  position: fixed;
+  left: 200px;
+  top: 100px;
+  width: 70%;
+  height: 70% !important;
+  background: #697196;
+  opacity: 1;
+  z-index: 300;
+  .solutionContent {
+    height: calc(100% - 140px);
+    overflow: auto;
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: 700;
+    p {
+      text-indent: 50px;
+      text-align: left;
+    }
+  }
+}
+.titleContainer {
+  background: #183bd8;
+  display: flex;
+  justify-content: space-between;
+  z-index: 500;
+  .videoTitle {
+    height: 50px;
+    min-width: 200px;
+    font-weight: 700;
+    color: aliceblue;
+    line-height: 50px;
+    background-image: url("../assets/images/videotitle.svg");
+    background-size: cover;
+  }
+  .videoPoint {
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+    min-width: 100px;
+    justify-content: space-around;
+    span {
+      display: inline-block;
+      margin-top: 20px;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background: #0875f2;
+    }
+  }
+}
 .spanP {
   border: solid 1px red;
   height: 26px;
@@ -680,6 +785,8 @@ h3 {
 #tbody1 li {
   display: flex;
   justify-content: space-between;
+  font-size: 12px;
+  margin-left: 5px;
 }
 #tbody td {
   text-align: center;
@@ -690,5 +797,8 @@ h3 {
 }
 .active {
   background-color: #0c66a5 !important;
+}
+.li_bg {
+  background: #041d4e;
 }
 </style>
