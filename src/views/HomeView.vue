@@ -2,62 +2,77 @@
   <div class="home">
     <div class="content">
       <div class="left">
-        <h3>规划引领</h3>
-        <div class="box" id="review_box">
-          <VueSeamlessScroll
-            :data="lefttopdata"
-            :class-option="seamlessScrollOption"
-            style="
-              height: 300px;
-              overflow: hidden;
-              color: white;
-              font-size: 18px;
-              text-align: center;
-            "
-          >
-            <ul id="tbody">
-              <li
-                v-for="(item, index) in lefttopdata"
-                :key="index"
-                :class="{ li_bg: index % 2 == 0 }"
-                @click="yjitemClick(item)"
-              >
-                {{ item.name }}
-              </li>
-            </ul>
-          </VueSeamlessScroll>
+        <div class="left_top">
+          <h3>规划引领</h3>
+          <div id="review_box">
+            <VueSeamlessScroll
+              :data="lefttopdata"
+              :class-option="seamlessScrollOption"
+              style="
+                height: 100%;
+                overflow: hidden;
+                color: white;
+                font-size: 18px;
+                text-align: center;
+              "
+            >
+              <ul class="tbody">
+                <li
+                  v-for="(item, index) in lefttopdata"
+                  :key="index"
+                  :class="{ li_bg: index % 2 == 0, li_bg1: index % 2 == 1 }"
+                  @click="yjitemClick(item)"
+                >
+                  {{ item.name }}
+                </li>
+              </ul>
+            </VueSeamlessScroll>
+          </div>
         </div>
-        <h3>项目建设</h3>
-        <ul class="thead">
-          <span style="width: 50px">序号</span>
-          <span style="width: 100px">区县</span>
-          <span style="width: 100px">项目数</span>
-          <span style="width: 150px">完成进度</span>
-        </ul>
-        <div class="box" id="table_box">
-          <VueSeamlessScroll
-            :data="leftBottom"
-            :class-option="seamlessScrollOption"
-            style="
-              height: 300px;
-              overflow: hidden;
-              color: white;
-              font-size: 18px;
-              text-align: center;
-            "
-          >
-            <ul id="comment1">
-              <li v-for="(item, index) in leftBottom" :key="index">
-                <span style="width: 50px">{{ item.index }}</span>
-                <span style="width: 100px">{{ item.position }}</span>
-                <span style="width: 100px">{{ item.num }}</span>
-                <span style="width: 150px">
-                  <span class="spanP" :style="{ width: item.jingdu }"></span
-                  ><span class="spanS1">{{ item.jingdu }}</span>
-                </span>
-              </li>
-            </ul>
-          </VueSeamlessScroll>
+        <div class="left_bottom">
+          <h3>项目建设</h3>
+          <ul class="thead">
+            <span style="width: 50px">序号</span>
+            <span style="width: 100px">区县</span>
+            <span style="width: 100px">项目数</span>
+            <span style="width: 150px">完成进度</span>
+          </ul>
+          <div class="box" id="table_box">
+            <VueSeamlessScroll
+              :data="leftBottom"
+              :class-option="seamlessScrollOption"
+              style="
+                height: 100%;
+                overflow: hidden;
+                color: white;
+                font-size: 18px;
+                text-align: center;
+              "
+            >
+              <ul>
+                <li v-for="(item, index) in leftBottom" :key="index">
+                  <span style="width: 50px">{{ item.index }}</span>
+                  <span style="width: 100px">{{ item.position }}</span>
+                  <span style="width: 100px">{{ item.num }}</span>
+                  <span style="width: 150px">
+                    <span
+                      :class="{
+                        spanP1: item.jingdu < 0.5,
+                        spanP2: item.jingdu >= 0.5 && item.jingdu < 0.8,
+                        spanP3: item.jingdu >= 0.8,
+                      }"
+                      class="spanP"
+                      :style="{
+                        backgroundSize: item.jingdu * 100 + '%' + ' 15px',
+                      }"
+                    >
+                    </span>
+                    <span class="spanS1">{{ item.jingdu * 100 }}%</span>
+                  </span>
+                </li>
+              </ul>
+            </VueSeamlessScroll>
+          </div>
         </div>
       </div>
       <div class="center">
@@ -331,29 +346,24 @@ export default {
         },
       ],
       leftBottom: [
-        { index: 1, position: "桐乡市", num: 5, jingdu: "10%" },
-        { index: 2, position: "桐乡市", num: 5, jingdu: "20%" },
-        { index: 3, position: "桐乡市", num: 5, jingdu: "30%" },
-        { index: 4, position: "桐乡市", num: 5, jingdu: "40%" },
-        { index: 5, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 6, position: "桐乡市", num: 5, jingdu: "60%" },
-        { index: 7, position: "桐乡市", num: 5, jingdu: "70%" },
-        { index: 8, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 9, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 10, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 12, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 1, position: "桐乡市", num: 5, jingdu: 0.1 },
+        { index: 2, position: "桐乡市", num: 5, jingdu: 0.2 },
+        { index: 3, position: "桐乡市", num: 5, jingdu: 0.3 },
+        { index: 4, position: "桐乡市", num: 5, jingdu: 0.4 },
+        { index: 5, position: "桐乡市", num: 5, jingdu: 0.5 },
+        { index: 6, position: "桐乡市", num: 5, jingdu: 0.6 },
+        { index: 7, position: "桐乡市", num: 5, jingdu: 0.7 },
+        { index: 8, position: "桐乡市", num: 5, jingdu: 0.8 },
+        { index: 9, position: "桐乡市", num: 5, jingdu: 0.99 },
+        { index: 10, position: "桐乡市", num: 5, jingdu: 0.1 },
+        { index: 11, position: "桐乡市", num: 5, jingdu: 0.2 },
+        { index: 12, position: "桐乡市", num: 5, jingdu: 0.3 },
+        { index: 13, position: "桐乡市", num: 5, jingdu: 0.4 },
+        { index: 14, position: "桐乡市", num: 5, jingdu: 0.5 },
+        { index: 15, position: "桐乡市", num: 5, jingdu: 0.6 },
+        { index: 16, position: "桐乡市", num: 5, jingdu: 0.7 },
+        { index: 17, position: "桐乡市", num: 5, jingdu: 0.8 },
+        { index: 18, position: "桐乡市", num: 5, jingdu: 0.99 },
       ],
       bs: null,
     };
@@ -375,7 +385,6 @@ export default {
     },
     init() {
       this.bs = new BScroll(this.$refs.scroll, { click: true });
-      console.log(this.bs);
       this.bs.on("scrollStart", () => {
         console.log("scrollStart-");
       });
@@ -607,7 +616,6 @@ h3 {
     .scroll-item {
       font-size: 24px;
       font-weight: bold;
-      border-bottom: 1px solid #eee;
       margin-top: 3px;
       line-height: 85px;
       background: rgba(3, 157, 247, 0.2);
@@ -626,7 +634,7 @@ h3 {
   top: 100px;
   width: 70%;
   height: 70% !important;
-  background: #697196;
+  background: #113157;
   opacity: 1;
   z-index: 300;
   .solutionContent {
@@ -642,7 +650,7 @@ h3 {
   }
 }
 .titleContainer {
-  background: #183bd8;
+  background: #041d4e;
   display: flex;
   justify-content: space-between;
   z-index: 500;
@@ -671,23 +679,6 @@ h3 {
     }
   }
 }
-// .spanP {
-//   border: solid 1px red;
-//   height: 26px;
-//   line-height: 26px;
-//   display: flex;
-//   justify-content: space-around;
-//   .spanS1 {
-//     background: red;
-//     height: 26px;
-//     color: #000;
-//   }
-// }
-.spanP {
-  display: inline-block;
-  border-bottom: solid 20px;
-  border-right: solid 20px transparent;
-}
 .chart-wrapper {
   z-index: 1;
   width: 100%;
@@ -707,6 +698,78 @@ h3 {
   height: 100%;
   text-align: center;
   z-index: 10;
+  .left_top {
+    height: 50%;
+    #review_box {
+      height: calc(100% - 50px);
+      .tbody {
+        margin: 0;
+        padding: 0;
+        li {
+          list-style: none;
+          font-size: 14px;
+          height: 90px;
+          line-height: 90px;
+          margin: 0 auto;
+        }
+      }
+    }
+  }
+  .left_bottom {
+    height: 50%;
+    .thead {
+      width: 400px;
+      padding: 0;
+      span {
+        display: inline-block;
+        text-align: center;
+        font-size: 20px;
+        font-weight: 700;
+        color: #03a7f0;
+      }
+    }
+    #table_box {
+      position: relative;
+      height: calc(100% - 105px);
+      background-color: transparent;
+      overflow: hid den;
+      color: #fff;
+      border-radius: 5px;
+      ul {
+        padding: 0 !important;
+        list-style: none;
+        li {
+          display: inline-block;
+          width: 100%;
+          height: 50px;
+          line-height: 50px;
+        }
+      }
+      span {
+        display: inline-block;
+        // text-align: center;
+      }
+      .spanP {
+        display: inline-block;
+        width: 120px;
+        height: 15px;
+        text-align: left;
+        background-repeat: no-repeat;
+      }
+      .spanP1 {
+        background-image: url(../assets/images/jingdu2.svg);
+      }
+      .spanP2 {
+        background-image: url(../assets/images/jingdu1.svg);
+      }
+      .spanP3 {
+        background-image: url(../assets/images/jingdu3.svg);
+      }
+      .spanS1 {
+        width: 30px;
+      }
+    }
+  }
 }
 .center {
   width: 44%;
@@ -717,50 +780,7 @@ h3 {
   height: 100%;
   z-index: 10;
 }
-#table_box {
-  position: relative;
-  height: 375px;
-  background-color: transparent;
-  overflow: hid den;
-  color: #fff;
-  border-radius: 5px;
-}
-#table_box ul {
-  padding: 0 !important;
-}
-#table_box span {
-  display: inline-block;
-  // text-align: center;
-}
-.thead {
-  width: 400px;
-  display: flex;
-  margin: 0 auto;
-  justify-content: space-between;
-}
-.thead span {
-  /* width: 100px; */
-  display: inline-block;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 700;
-  color: #03a7f0;
-}
-.box {
-  position: relative;
-  width: 100%;
-  background-color: transparent;
-  margin: auto;
-  overflow: hidden;
-  color: #fff;
-  border-radius: 5px;
-}
-.box ul li {
-  line-height: 50px;
-  list-style: none;
-  box-sizing: border-box;
-  cursor: pointer;
-}
+
 .tab-menu {
   width: 100%;
   height: 40px;
@@ -774,31 +794,16 @@ h3 {
   width: 80px;
   height: 30px;
   line-height: 30px;
-  border: solid 1px #fff;
   border-radius: 4px;
   cursor: pointer;
   text-align: center;
 }
 
-.tab-menu-span:hover {
-  border: solid 1px rgb(11, 113, 247);
-  border-radius: 5px;
-}
 .tab-class {
   width: 100%;
   height: calc(100% - 70px);
   border: solid 1px rgb(11, 100, 233);
   border-radius: 10px;
-}
-#tbody li,
-#tbody1 li {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  margin-left: 5px;
-}
-#tbody td {
-  text-align: center;
 }
 .home {
   height: calc(100% - 90px);
@@ -812,9 +817,12 @@ h3 {
   background-color: #0c66a5 !important;
 }
 .li_bg {
+  background: #113157;
+}
+.li_bg1 {
   background: #041d4e;
 }
 .menu_active {
-  background-color: #0c66a5 !important;
+  border: solid 1px #0c66a5 !important;
 }
 </style>

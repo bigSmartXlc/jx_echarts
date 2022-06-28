@@ -2,70 +2,80 @@
   <div class="home">
     <div class="content">
       <div class="left">
-        <h3>规划引领</h3>
-        <div class="box" id="review_box">
-          <VueSeamlessScroll
-            :data="lefttopdata"
-            :class-option="seamlessScrollOption"
-            style="
-              height: 300px;
-              overflow: hidden;
-              width: 400px;
-              color: white;
-              font-size: 18px;
-              text-align: center;
-            "
-          >
-            <ul id="tbody">
-              <li
-                v-for="(item, index) in lefttopdata"
-                :key="index"
-                :class="{ li_bg: index % 2 == 0 }"
-                @click="yjitemClick(item)"
-              >
-                {{ item.name }}
-              </li>
-            </ul>
-          </VueSeamlessScroll>
+        <div class="left_top">
+          <h3>规划引领</h3>
+          <div id="review_box">
+            <VueSeamlessScroll
+              :data="lefttopdata"
+              :class-option="seamlessScrollOption"
+              style="
+                height: 100%;
+                overflow: hidden;
+                color: white;
+                font-size: 18px;
+                text-align: center;
+              "
+            >
+              <ul class="tbody">
+                <li
+                  v-for="(item, index) in lefttopdata"
+                  :key="index"
+                  :class="{ li_bg: index % 2 == 0, li_bg1: index % 2 == 1 }"
+                  @click="yjitemClick(item)"
+                >
+                  {{ item.name }}
+                </li>
+              </ul>
+            </VueSeamlessScroll>
+          </div>
         </div>
-        <h3>项目建设</h3>
-        <ul class="thead">
-          <span style="width: 100px">序号</span>
-          <span style="width: 100px">区县</span>
-          <span style="width: 100px">项目数</span>
-          <span style="width: 100px">完成进度</span>
-        </ul>
-        <div class="box" id="table_box">
-          <VueSeamlessScroll
-            :data="leftBottom"
-            :class-option="seamlessScrollOption"
-            style="
-              height: 300px;
-              overflow: hidden;
-              color: white;
-              font-size: 18px;
-              text-align: center;
-            "
-          >
-            <ul id="comment1">
-              <li v-for="(item, index) in leftBottom" :key="index">
-                <span>{{ item.index }}</span>
-                <span>{{ item.position }}</span>
-                <span>{{ item.num }}</span>
-                <span>
-                  <span class="spanP">
-                    <div class="spanS1" :style="{ width: item.jingdu }">
-                      {{ item.jingdu }}
-                    </div>
+        <div class="left_bottom">
+          <h3>项目建设</h3>
+          <ul class="thead">
+            <span style="width: 50px">序号</span>
+            <span style="width: 100px">区县</span>
+            <span style="width: 100px">项目数</span>
+            <span style="width: 150px">完成进度</span>
+          </ul>
+          <div class="box" id="table_box">
+            <VueSeamlessScroll
+              :data="leftBottom"
+              :class-option="seamlessScrollOption"
+              style="
+                height: 100%;
+                overflow: hidden;
+                color: white;
+                font-size: 18px;
+                text-align: center;
+              "
+            >
+              <ul>
+                <li v-for="(item, index) in leftBottom" :key="index">
+                  <span style="width: 50px">{{ item.index }}</span>
+                  <span style="width: 100px">{{ item.position }}</span>
+                  <span style="width: 100px">{{ item.num }}</span>
+                  <span style="width: 150px">
+                    <span
+                      :class="{
+                        spanP1: item.jingdu < 0.5,
+                        spanP2: item.jingdu >= 0.5 && item.jingdu < 0.8,
+                        spanP3: item.jingdu >= 0.8,
+                      }"
+                      class="spanP"
+                      :style="{
+                        backgroundSize: item.jingdu * 100 + '%' + ' 15px',
+                      }"
+                    >
+                    </span>
+                    <span class="spanS1">{{ item.jingdu * 100 }}%</span>
                   </span>
-                </span>
-              </li>
-            </ul>
-          </VueSeamlessScroll>
+                </li>
+              </ul>
+            </VueSeamlessScroll>
+          </div>
         </div>
       </div>
       <div class="center">
-        <h4 style="color: #fff">当前位置-嘉兴市</h4>
         <div class="chart-wrapper" id="chart-city"></div>
       </div>
       <div class="right">
@@ -76,175 +86,83 @@
             <div
               :class="{ menu_active: tabContent == 0 }"
               class="tab-menu-span"
-              @click="tabContent = 0"
+              @click="tabContentToggle(0)"
             >
               投放
             </div>
             <div
               :class="{ menu_active: tabContent == 1 }"
               class="tab-menu-span"
-              @click="tabContent = 1"
+              @click="tabContentToggle(1)"
             >
               收集
             </div>
             <div
               :class="{ menu_active: tabContent == 2 }"
               class="tab-menu-span"
-              @click="tabContent = 2"
+              @click="tabContentToggle(2)"
             >
               运输
             </div>
             <div
               :class="{ menu_active: tabContent == 3 }"
               class="tab-menu-span"
-              @click="tabContent = 3"
+              @click="tabContentToggle(3)"
             >
               处置
             </div>
           </div>
-          <!-- tab list -->
-          <div class="tab-list">
-            <div
-              class="tab-list-span animate__animated animate__flipInY"
-              v-show="tabContent === 0"
-            >
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
-              <p>
-                <span class="name">收集车辆</span><span class="num">3214</span>
-              </p>
+          <div class="core-dynamic-content-container">
+            <div class="scroll-wrapper" ref="scroll">
+              <div class="scroll-content" v-if="tabContent === 0">
+                <div
+                  class="scroll-item animate__animated animate__flipInY"
+                  v-for="(item, index) in dataList1"
+                  :key="index"
+                >
+                  <span class="name">
+                    <img src="../assets/images/u608.svg" alt="" srcset="" />
+                    {{ item.name }}</span
+                  ><span class="num">{{ item.num }}</span>
+                </div>
+              </div>
+              <div class="scroll-content" v-if="tabContent === 1">
+                <div
+                  class="scroll-item animate__animated animate__flipInY"
+                  v-for="(item, index) in dataList2"
+                  :key="index"
+                >
+                  <span class="name">
+                    <img src="../assets/images/u608.svg" alt="" srcset="" />
+                    {{ item.name }}</span
+                  ><span class="num">{{ item.num }}</span>
+                </div>
+              </div>
+              <div class="scroll-content" v-if="tabContent === 2">
+                <div
+                  class="scroll-item animate__animated animate__flipInY"
+                  v-for="(item, index) in dataList3"
+                  :key="index"
+                >
+                  <span class="name">
+                    <img src="../assets/images/u608.svg" alt="" srcset="" />
+                    {{ item.name }}</span
+                  ><span class="num">{{ item.num }}</span>
+                </div>
+              </div>
+              <div class="scroll-content" v-if="tabContent === 3">
+                <div
+                  class="scroll-item animate__animated animate__flipInY"
+                  v-for="(item, index) in dataList4"
+                  :key="index"
+                >
+                  <span class="name">
+                    <img src="../assets/images/u608.svg" alt="" srcset="" />
+                    {{ item.name }}</span
+                  ><span class="num">{{ item.num }}</span>
+                </div>
+              </div>
             </div>
-            <div
-              class="tab-list-span animate__animated animate__flipInY"
-              v-show="tabContent === 1"
-            >
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-              <p>
-                <span class="name">定时定点小区</span
-                ><span class="num">5624</span>
-              </p>
-            </div>
-            <div
-              class="tab-list-span animate__animated animate__flipInY"
-              v-show="tabContent === 2"
-            >
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-              <p>
-                <span class="name">劝导员数量</span
-                ><span class="num">8954</span>
-              </p>
-            </div>
-            <div
-              class="tab-list-span animate__animated animate__flipInY"
-              v-show="tabContent === 3"
-            >
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-              <p>
-                <span class="name">省高标小区</span
-                ><span class="num">1562</span>
-              </p>
-            </div>
-            <div style="clear: both"></div>
           </div>
         </div>
       </div>
@@ -271,10 +189,9 @@
 </template>
 
 <script>
-import * as echarts from "echarts";
 import VueSeamlessScroll from "vue-seamless-scroll";
 import yls_json from "./ljpt_xz.json";
-import "echarts-gl";
+import BScroll from "@better-scroll/core";
 export default {
   components: {
     VueSeamlessScroll,
@@ -296,6 +213,82 @@ export default {
   },
   data() {
     return {
+      dataList1: [
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+        { name: "投放点位", num: 5624 },
+      ],
+      dataList2: [
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+        { name: "收集车辆", num: 5624 },
+      ],
+      dataList3: [
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+        { name: "转运车辆", num: 5624 },
+      ],
+      dataList4: [
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+        { name: "焚烧处置场", num: 5624 },
+      ],
       solutionShow: false,
       solution: null,
       solution_title: null,
@@ -343,29 +336,24 @@ export default {
         },
       ],
       leftBottom: [
-        { index: 1, position: "桐乡市", num: 5, jingdu: "10%" },
-        { index: 2, position: "桐乡市", num: 5, jingdu: "20%" },
-        { index: 3, position: "桐乡市", num: 5, jingdu: "30%" },
-        { index: 4, position: "桐乡市", num: 5, jingdu: "40%" },
-        { index: 5, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 6, position: "桐乡市", num: 5, jingdu: "60%" },
-        { index: 7, position: "桐乡市", num: 5, jingdu: "70%" },
-        { index: 8, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 9, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 10, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 11, position: "桐乡市", num: 5, jingdu: "50%" },
-        { index: 12, position: "桐乡市", num: 5, jingdu: "50%" },
+        { index: 1, position: "桐乡市", num: 5, jingdu: 0.1 },
+        { index: 2, position: "桐乡市", num: 5, jingdu: 0.2 },
+        { index: 3, position: "桐乡市", num: 5, jingdu: 0.3 },
+        { index: 4, position: "桐乡市", num: 5, jingdu: 0.4 },
+        { index: 5, position: "桐乡市", num: 5, jingdu: 0.5 },
+        { index: 6, position: "桐乡市", num: 5, jingdu: 0.6 },
+        { index: 7, position: "桐乡市", num: 5, jingdu: 0.7 },
+        { index: 8, position: "桐乡市", num: 5, jingdu: 0.8 },
+        { index: 9, position: "桐乡市", num: 5, jingdu: 0.99 },
+        { index: 10, position: "桐乡市", num: 5, jingdu: 0.1 },
+        { index: 11, position: "桐乡市", num: 5, jingdu: 0.2 },
+        { index: 12, position: "桐乡市", num: 5, jingdu: 0.3 },
+        { index: 13, position: "桐乡市", num: 5, jingdu: 0.4 },
+        { index: 14, position: "桐乡市", num: 5, jingdu: 0.5 },
+        { index: 15, position: "桐乡市", num: 5, jingdu: 0.6 },
+        { index: 16, position: "桐乡市", num: 5, jingdu: 0.7 },
+        { index: 17, position: "桐乡市", num: 5, jingdu: 0.8 },
+        { index: 18, position: "桐乡市", num: 5, jingdu: 0.99 },
       ],
     };
   },
@@ -387,15 +375,34 @@ export default {
                 console.log("天地图准备完毕");
                 this.tMap = new T.Map("chart-city");
                 this.toggleArea(this.$route.query.areaName);
+                setTimeout(() => {
+                  this.$nextTick(() => {
+                    this.init();
+                  });
+                }, 1000);
               }
             );
           }
         );
       });
     };
-    // this.setCityChart();
   },
   methods: {
+    tabContentToggle(val) {
+      this.tabContent = val;
+      setTimeout(() => {
+        this.bs.refresh();
+      }, 2000);
+    },
+    init() {
+      this.bs = new BScroll(this.$refs.scroll, { click: true });
+      this.bs.on("scrollStart", () => {
+        console.log("scrollStart-");
+      });
+      this.bs.on("scrollEnd", (pos) => {
+        console.log(pos);
+      });
+    },
     yjitemClick(item) {
       this.solution = item.solution;
       this.solution_title = item.name;
@@ -459,207 +466,72 @@ export default {
       };
       document.getElementsByTagName("head")[0].appendChild(domScript);
     },
-    setCityChart() {
-      // if (this.myChart) {
-      //   this.myChart.dispose(); // 销毁实例，实例销毁后无法再被使用。
-      // }
-      // 初始化图表
-      this.myChart = echarts.init(document.getElementById("chart-city"));
-      // JSON文件(地图数据)路径
-
-      // 显示加载动画效果,可以在加载数据前手动调用该接口显示加载动画，在数据加载完成后调用 hideLoading 隐藏加载动画。
-      this.myChart.showLoading();
-      let mapName = "jx";
-      // 引入JSON文件
-      var linedata = [];
-      // this.$http.get("mapjson/ljpt_xz.geojson").then((geoJson) => {
-      // const data = geoJson.data.features.map((item, index) => {
-      //   linedata.push(item.properties.centroid);
-      //   const geoAreaName = item.properties.name; // geo文件中的地理名称
-      //   return {
-      //     name: geoAreaName,
-      //     value: item.properties.centroid,
-      //     itemStyle: {
-      //       color: this.color[index] || "#046357",
-      //     },
-      //   };
-      // });
-      const data = yls_json.features.map((item, index) => {
-        if (item.properties.centroid) {
-          linedata.push([...item.properties.centroid, 1]);
-        }
-        const geoAreaName = item.properties.name; // geo文件中的地理名称
-        return {
-          name: geoAreaName,
-          // value: item.properties.centroid,
-          itemStyle: {
-            color: this.color[index] || "#046357",
-          },
-        };
-      });
-      echarts.registerMap(mapName, yls_json);
-      // 隐藏动画加载效果。
-      this.myChart.hideLoading();
-      // 图表配置项
-      var option = {
-        selectedMode: "multiple", // 选中效果固话
-        tooltip: {
-          // 提示框
-          show: true,
-          trigger: "item",
-          formatter: function (params) {
-            return params.name;
-          },
-        },
-        geo3D: {
-          show: true,
-          map: mapName,
-          boxHeight: 2,
-          shading: "realistic",
-          label: {
-            // 标签的相关设置
-            show: true, // (地图上的城市名称)是否显示标签 [ default: false ]
-            distance: 20,
-            formatter(param) {
-              const city = param.name;
-              return `{sty1|${city}}`;
-            },
-            rich: {
-              sty1: {
-                color: "#ffffff",
-                align: "center",
-              },
-            },
-            textStyle: {
-              // 标签的字体样式
-              color: "#fff", // 地图初始化区域字体颜色
-              fontSize: 18,
-              opacity: 1, // 字体透明度
-            },
-          },
-          itemStyle: {
-            // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
-            opacity: 1, // 图形的不透明度 [ default: 1 ]
-            borderWidth: 1, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
-            borderColor: "#A74A11", // 图形描边的颜色。[ default: #333 ]
-          },
-          emphasis: {
-            // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
-            label: {
-              // label高亮时的配置
-              show: true,
-              textStyle: {
-                color: "#A74A11", // 高亮时标签颜色变为 白色
-              },
-            },
-            itemStyle: {
-              color: "#e11111",
-            },
-          },
-          regions: data,
-          viewControl: {
-            projection: "perspective",
-            distance: 130,
-          },
-        },
-        series: [
-          // {
-          //   name: "map3D",
-          //   type: "map3D", // map3D / map
-          //   zoom: 0.7,
-          //   map: mapName,
-          //   emphasis: {
-          //     // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
-          //     label: {
-          //       // label高亮时的配置
-          //       show: true,
-          //       textStyle: {
-          //         color: "#fff", // 高亮时标签颜色变为 白色
-          //         fontSize: 15, // 高亮时标签字体 变大
-          //       },
-          //     },
-          //     itemStyle: {
-          //       // itemStyle高亮时的配置
-          //       areaColor: "#66ffff", // 高亮时地图板块颜色改变
-          //     },
-          //   },
-          //   tooltip: {
-          //     //提示框组件。
-          //     alwaysShowContent: true,
-          //     hoverAnimation: true,
-          //     trigger: "item", //触发类型 散点图
-          //     enterable: true, //鼠标是否可进入提示框
-          //     transitionDuration: 1, //提示框移动动画过渡时间
-          //     triggerOn: "click",
-          //     formatter: function (params) {
-          //       console.log(params);
-          //       if (params.name) {
-          //         var str = `
-          //       <div class="map-tooltip">
-          //         <div class="city-name">${params.name}</div>
-          //       </div>
-          //       `;
-          //         return str;
-          //       }
-          //     },
-          //     // backgroundColor: 'rgba(30, 54, 124,1)',
-          //     // backgroundColor: '#01FEDD',
-          //     borderWidth: "1px",
-          //     borderRadius: "4",
-          //     borderColor: "#00B2AC",
-          //     textStyle: {
-          //       color: "#00B2AC",
-          //     },
-          //     padding: [5, 10],
-          //   },
-          //   itemStyle: {
-          //     // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
-          //     // areaColor: "#000", // 地图板块的颜色
-          //     opacity: 0.3, // 图形的不透明度 [ default: 1 ]
-          //     borderWidth: 1.5, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
-          //     borderColor: "#ffffff", // 图形描边的颜色。[ default: #333 ]
-          //   },
-          //   data: data,
-          //   viewControl: {
-          //     distance: 130, // 地图视角 控制初始大小
-          //     rotateSensitivity: 1, // 旋转
-          //     zoomSensitivity: 1, // 缩放
-          //   },
-          // },
-          {
-            type: "scatter3D",
-            name: mapName,
-            coordinateSystem: "geo3D",
-            symbol: "triangle",
-            symbolSize: 30,
-            // zlevel: 30,
-            // rippleEffect: {
-            //   period: 6,
-            //   brushType: "stroke",
-            //   scale: 8,
-            // },
-            itemStyle: {
-              color: "#FF5722",
-              opacity: 1,
-            },
-            data: linedata,
-          },
-        ],
-      };
-      this.myChart.setOption(option);
-      // });
-    },
   },
 };
 </script>
 <style lang="scss" scoped>
+h3 {
+  display: inline-block;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 250px;
+  height: 40px;
+  color: #fff;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 40px;
+  background-image: url(../assets/images/u385.svg);
+}
+.core-dynamic-content-container {
+  text-align: center;
+  height: calc(100% - 50px);
+  .scroll-wrapper {
+    height: 100%;
+    overflow: hidden;
+    .scroll-content {
+      color: #fff;
+      margin: 0 10px;
+    }
+    .scroll-content .name {
+      display: inline-block;
+      padding-left: 10px;
+      font-weight: 800;
+      text-align: left;
+      width: 45%;
+      height: 85px;
+    }
+    .scroll-content .num {
+      display: inline-block;
+      font-size: 25px;
+      color: #00ece4;
+      font-weight: 800;
+      text-align: center;
+      width: 50%;
+      height: 85px;
+    }
+    .scroll-item {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 3px;
+      line-height: 85px;
+      background: rgba(3, 157, 247, 0.2);
+      border-radius: 5px;
+      text-align: center;
+    }
+    .scroll-item:hover {
+      background: rgba(3, 88, 247, 0.5) !important;
+    }
+  }
+}
+
 .solution {
   position: fixed;
   left: 200px;
   top: 100px;
   width: 70%;
   height: 70% !important;
-  background: #697196;
+  padding: 0 10px;
+  background: #113157;
   opacity: 1;
   z-index: 300;
   .solutionContent {
@@ -675,7 +547,7 @@ export default {
   }
 }
 .titleContainer {
-  background: #183bd8;
+  background: #041d4e;
   display: flex;
   justify-content: space-between;
   z-index: 500;
@@ -704,18 +576,6 @@ export default {
     }
   }
 }
-.spanP {
-  border: solid 1px red;
-  height: 26px;
-  line-height: 26px;
-  display: flex;
-  justify-content: space-around;
-  .spanS1 {
-    background: red;
-    height: 26px;
-    color: #000;
-  }
-}
 .chart-wrapper {
   z-index: 1;
   width: 100%;
@@ -723,18 +583,6 @@ export default {
   position: absolute;
   left: 0;
   top: 90px;
-}
-h3 {
-  margin: 0;
-  line-height: 70px;
-  font-family: Source Han Sans CN;
-  font-size: 28px;
-  font-weight: bold;
-  color: transparent;
-  text-align: center;
-  background: linear-gradient(0deg, #bff5ff 0%, #00ece4 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .select-panel {
@@ -747,64 +595,89 @@ h3 {
   height: 100%;
   text-align: center;
   z-index: 10;
+  .left_top {
+    height: 50%;
+    #review_box {
+      height: calc(100% - 50px);
+      .tbody {
+        margin: 0;
+        padding: 0;
+        li {
+          list-style: none;
+          font-size: 14px;
+          height: 90px;
+          line-height: 90px;
+          margin: 0 auto;
+        }
+      }
+    }
+  }
+  .left_bottom {
+    height: 50%;
+    .thead {
+      width: 400px;
+      padding: 0;
+      span {
+        display: inline-block;
+        text-align: center;
+        font-size: 20px;
+        font-weight: 700;
+        color: #03a7f0;
+      }
+    }
+    #table_box {
+      position: relative;
+      height: calc(100% - 105px);
+      background-color: transparent;
+      overflow: hid den;
+      color: #fff;
+      border-radius: 5px;
+      ul {
+        padding: 0 !important;
+        list-style: none;
+        li {
+          display: inline-block;
+          width: 100%;
+          height: 50px;
+          line-height: 50px;
+        }
+      }
+      span {
+        display: inline-block;
+        // text-align: center;
+      }
+      .spanP {
+        display: inline-block;
+        width: 120px;
+        height: 15px;
+        text-align: left;
+        background-repeat: no-repeat;
+      }
+      .spanP1 {
+        background-image: url(../assets/images/jingdu2.svg);
+      }
+      .spanP2 {
+        background-image: url(../assets/images/jingdu1.svg);
+      }
+      .spanP3 {
+        background-image: url(../assets/images/jingdu3.svg);
+      }
+      .spanS1 {
+        width: 30px;
+      }
+    }
+  }
 }
 .center {
   width: 44%;
   z-index: 1;
 }
 .right {
-  border: solid 1px rgb(11, 100, 233);
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
   width: 28%;
   height: 100%;
   z-index: 10;
 }
-#table_box {
-  position: relative;
-  height: 375px;
-  background-color: transparent;
-  overflow: hid den;
-  color: #fff;
-  border-radius: 5px;
-}
-#table_box ul {
-  padding: 0 !important;
-}
-#table_box span {
-  width: 100px;
-  display: inline-block;
-  text-align: center;
-}
-.thead {
-  width: 400px;
-  display: flex;
-  margin: 0 auto;
-  justify-content: space-between;
-}
-.thead span {
-  /* width: 100px; */
-  display: inline-block;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 700;
-  color: #03a7f0;
-}
-.box {
-  position: relative;
-  width: 100%;
-  background-color: transparent;
-  margin: auto;
-  overflow: hidden;
-  color: #fff;
-  border-radius: 5px;
-}
-.box ul li {
-  line-height: 50px;
-  list-style: none;
-  box-sizing: border-box;
-  cursor: pointer;
-}
+
 .tab-menu {
   width: 100%;
   height: 40px;
@@ -818,62 +691,16 @@ h3 {
   width: 80px;
   height: 30px;
   line-height: 30px;
-  border: solid 1px #fff;
   border-radius: 4px;
   cursor: pointer;
   text-align: center;
 }
 
-.tab-menu-span:hover {
-  border: solid 1px rgb(11, 113, 247);
-  border-radius: 5px;
-}
 .tab-class {
   width: 100%;
   height: calc(100% - 70px);
-}
-.tab-list {
-  width: 100%;
-  height: calc(100% - 50px);
-  overflow: hidden;
-}
-
-.tab-list-span {
-  color: #fff;
-  margin: 0 10px;
-}
-.tab-list-span .name {
-  display: inline-block;
-  padding-left: 10px;
-  font-weight: 800;
-  text-align: left;
-  width: 45%;
-  height: 85px;
-}
-.tab-list-span .num {
-  display: inline-block;
-  font-size: 25px;
-  color: #00ece4;
-  font-weight: 800;
-  text-align: center;
-  width: 50%;
-  height: 85px;
-}
-.tab-list-span p {
-  margin-top: 3px;
-  line-height: 85px;
-  background: rgba(3, 157, 247, 0.2);
-  border-radius: 5px;
-}
-.tab-list-span p:hover {
-  background: rgba(3, 88, 247, 0.5) !important;
-}
-#tbody li {
-  font-size: 12px;
-  padding-left: 15px;
-}
-#tbody td {
-  text-align: center;
+  border: solid 1px rgb(11, 100, 233);
+  border-radius: 10px;
 }
 .home {
   height: calc(100% - 90px);
@@ -887,9 +714,12 @@ h3 {
   background-color: #0c66a5 !important;
 }
 .li_bg {
+  background: #113157;
+}
+.li_bg1 {
   background: #041d4e;
 }
 .menu_active {
-  background-color: #0c66a5 !important;
+  border: solid 1px #0c66a5 !important;
 }
 </style>
