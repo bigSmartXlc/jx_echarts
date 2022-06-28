@@ -389,10 +389,10 @@ export default {
   width: 70%;
   height: 70% !important;
   background: #697196;
-  opacity: 0.9;
+  opacity: 1;
   z-index: 300;
   .solutionContent {
-    height: 500px;
+    height: calc(100% - 140px);
     overflow: auto;
     color: #ffffff;
     font-size: 26px;
@@ -610,7 +610,7 @@ export default {
   background: #4d5da3;
   ul {
     padding-right: 40px;
-    height: 500px;
+    height: calc(100% - 140px);
     overflow: auto;
     li {
       height: 50px;

@@ -587,8 +587,11 @@ export default {
         url: "api/v1/jky/DwWeightCarMonthWeight/deptMonthWeight",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
-          deptId: "400000000",
-          deptIdEnd: "499999999",
+          // 测试数据
+          // deptId: "400000000",
+          // deptIdEnd: "499999999",
+          deptId: this.formfiled.deptId,
+          deptIdEnd: this.formfiled.deptIdEnd,
           weightMonth: this.carrentMounth,
           garbageType: this.garbageType,
         },
@@ -691,7 +694,7 @@ export default {
                 alignWithLabel: true,
               },
               axisLabel: {
-                clolor: "#fff",
+                color: "#fff",
               },
               data: xData,
             },
@@ -769,7 +772,7 @@ export default {
               axisLine: {
                 show: true,
                 lineStyle: {
-                  color: colors[2],
+                  color: "#fff",
                 },
               },
               axisLabel: {
@@ -803,14 +806,14 @@ export default {
         }
         option = {
           color: colors,
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {},
+          },
           grid: {
             left: 70,
             bottom: 30,
             right: 10,
-          },
-          tooltip: {
-            trigger: "axis",
-            axisPointer: {},
           },
           legend: {
             data: legendData,
@@ -839,7 +842,7 @@ export default {
               axisLine: {
                 show: true,
                 lineStyle: {
-                  color: colors[2],
+                  color: "#fff",
                 },
               },
               axisLabel: {
