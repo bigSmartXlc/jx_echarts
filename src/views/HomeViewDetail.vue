@@ -117,56 +117,63 @@
           </div>
           <div class="core-dynamic-content-container">
             <div class="scroll-wrapper" ref="scroll">
-              <div class="scroll-content" v-if="tabContent === 0">
+              <div class="scroll-content" v-show="tabContent === 0">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
                   @click="right_item_click(index, item)"
-                  :class="{ active_right_item: active_right_item == index }"
+                  :class="{
+                    active_right_item:
+                      active_right_item == index && tabContent === 0,
+                  }"
                   v-for="(item, index) in dataList1"
                   :key="index"
                 >
-                  <span class="name">
-                    <img src="../assets/images/u608.svg" alt="" srcset="" />
-                    {{ item.name }}</span
+                  <span class="name"> {{ item.name }}</span
                   ><span class="num">{{ item.num }}</span>
                 </div>
               </div>
-              <div class="scroll-content" v-if="tabContent === 1">
+              <div class="scroll-content" v-show="tabContent === 1">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
                   @click="right_item_click(index, item)"
+                  :class="{
+                    active_right_item:
+                      active_right_item == index && tabContent === 1,
+                  }"
                   v-for="(item, index) in dataList2"
                   :key="index"
                 >
-                  <span class="name">
-                    <img src="../assets/images/u608.svg" alt="" srcset="" />
-                    {{ item.name }}</span
+                  <span class="name"> {{ item.name }}</span
                   ><span class="num">{{ item.num }}</span>
                 </div>
               </div>
-              <div class="scroll-content" v-if="tabContent === 2">
+              <div class="scroll-content" v-show="tabContent === 2">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
                   @click="right_item_click(index, item)"
+                  :class="{
+                    active_right_item:
+                      active_right_item == index && tabContent === 2,
+                  }"
                   v-for="(item, index) in dataList3"
                   :key="index"
                 >
-                  <span class="name">
-                    <img src="../assets/images/u608.svg" alt="" srcset="" />
-                    {{ item.name }}</span
+                  <span class="name"> {{ item.name }}</span
                   ><span class="num">{{ item.num }}</span>
                 </div>
               </div>
-              <div class="scroll-content" v-if="tabContent === 3">
+              <div class="scroll-content" v-show="tabContent === 3">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
                   @click="right_item_click(index, item)"
+                  :class="{
+                    active_right_item:
+                      active_right_item == index && tabContent === 3,
+                  }"
                   v-for="(item, index) in dataList4"
                   :key="index"
                 >
-                  <span class="name">
-                    <img src="../assets/images/u608.svg" alt="" srcset="" />
-                    {{ item.name }}</span
+                  <span class="name"> {{ item.name }}</span
                   ><span class="num">{{ item.num }}</span>
                 </div>
               </div>
@@ -201,31 +208,57 @@
       </div>
       <div class="videoOff" @click="solutionShow = false">关闭</div>
     </div>
-    <!-- <div v-show="solutionShow" class="solution">
-      <div class="titleContainer">
-        <div class="videoPoint">
-          <span></span><span></span><span></span> <span></span><span></span
-          ><span></span>
+    <div class="chartPart commom_dialog" v-show="point_click_show">
+      <div class="dialog__header">
+        <div class="header-title">
+          <div class="title_left">
+            <div class="circleIcon"></div>
+            <div class="circleIcon"></div>
+            <div class="circleIcon"></div>
+            <div class="circleIcon" style="background: rgb(5, 68, 137)"></div>
+            <div
+              class="circleIcon"
+              style="background: rgba(8, 77, 173, 0.58)"
+            ></div>
+            <div class="circleIcon" style="background: rgb(8, 40, 78)"></div>
+          </div>
+          <div class="fontStyle">
+            <span
+              v-for="(item, index) in dialogList"
+              :key="index"
+              :class="{ tab_active: dialog_tab_num == index }"
+              @click="dialog_title_click(item, index)"
+            >
+              {{ item }}
+            </span>
+          </div>
+          <div class="videoOff" @click="point_click_show = false">关闭</div>
         </div>
-        <div class="videoTitle">{{ solution_title }}</div>
-        <div>
-          <img src="../assets/images/yjt.svg" alt="" srcset="" />
-          <img src="../assets/images/yjt.svg" alt="" srcset="" />
-          <img src="../assets/images/yjt.svg" alt="" srcset="" />
+        <!---->
+      </div>
+      <div class="dialog_body">
+        <div v-show="dialog_tab_num == 0">
+          <ul class="info">
+            <li>站点类型：垃圾转运站</li>
+            <li>站点名称：嘉兴科技城垃圾中转站</li>
+            <li>站点地址：紫宇路诚信路路口西面</li>
+            <li>总投资额：1936.67</li>
+            <li>占地面积：2707平方米</li>
+            <li>投运日期：2020年7月1日</li>
+            <li>运营单位：嘉兴市嘉源环境卫生管理有限责任公司</li>
+          </ul>
         </div>
+        <div v-show="dialog_tab_num == 1">现场图片</div>
+        <div v-show="dialog_tab_num == 2">定时抓拍</div>
+        <div v-show="dialog_tab_num == 3">现场监控</div>
       </div>
-      <div class="solutionContent">
-        <p>{{ solution }}</p>
-      </div>
-      <div class="videoOff" @click="solutionShow = false">关闭</div>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
 import VueSeamlessScroll from "vue-seamless-scroll";
 import yls_json from "./ljpt_xz.json";
-import BScroll from "@better-scroll/core";
 export default {
   components: {
     VueSeamlessScroll,
@@ -247,6 +280,9 @@ export default {
   },
   data() {
     return {
+      dialog_tab_num: 0,
+      dialogList: ["基本信息", "现场图片", "定时抓拍", "现场监控"],
+      point_click_show: false,
       dataList1: [
         { name: "投放点位", num: 5624 },
         { name: "投放点位", num: 5624 },
@@ -396,7 +432,7 @@ export default {
         { index: 17, position: "桐乡市", num: 5, jingdu: 0.8 },
         { index: 18, position: "桐乡市", num: 5, jingdu: 0.99 },
       ],
-      active_right_item: "",
+      active_right_item: null,
     };
   },
   mounted() {
@@ -417,11 +453,6 @@ export default {
                 console.log("天地图准备完毕");
                 this.tMap = new T.Map("chart-city");
                 this.toggleArea(this.$route.query.areaName);
-                setTimeout(() => {
-                  this.$nextTick(() => {
-                    this.init();
-                  });
-                }, 1000);
               }
             );
           }
@@ -430,24 +461,15 @@ export default {
     };
   },
   methods: {
+    dialog_title_click(item, index) {
+      this.dialog_tab_num = index;
+    },
     right_item_click(index, item) {
       this.active_right_item = index;
-      console.log(item);
     },
     tabContentToggle(val) {
       this.tabContent = val;
-      setTimeout(() => {
-        this.bs.refresh();
-      }, 2000);
-    },
-    init() {
-      this.bs = new BScroll(this.$refs.scroll, { click: true });
-      this.bs.on("scrollStart", () => {
-        console.log("scrollStart-");
-      });
-      this.bs.on("scrollEnd", (pos) => {
-        console.log(pos);
-      });
+      this.active_right_item = null;
     },
     yjitemClick(item) {
       this.solution = item.solution;
@@ -474,6 +496,7 @@ export default {
         new T.LngLat(this.centerMap.centroid[0], this.centerMap.centroid[1]),
         11
       );
+
       document.getElementsByClassName(
         "tdt-control-copyright tdt-control"
       )[0].style.display = "none";
@@ -493,6 +516,19 @@ export default {
       });
       //向地图上添加面
       this.tMap.addOverLay(polygon);
+      //创建标注对象
+      var marker = new T.Marker(
+        new T.LngLat(this.centerMap.centroid[0], this.centerMap.centroid[1])
+      );
+      //向地图上添加标注
+      this.tMap.addOverLay(marker);
+      marker.addEventListener("click", this.marker_click);
+    },
+    marker_click(e) {
+      console.log(e.target);
+      var p = e.target;
+      console.log(p.getLngLat().lng);
+      this.point_click_show = true;
     },
     //加载js
     loadJS(url, success) {
@@ -516,6 +552,16 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.info {
+  list-style: none;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+  li {
+    margin-bottom: 10px;
+    text-align: left;
+  }
+}
 .title_style {
   margin: 0;
   margin-top: 10px;
@@ -536,7 +582,7 @@ export default {
   height: calc(100% - 50px);
   .scroll-wrapper {
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
     .scroll-content {
       color: #fff;
       margin: 0 10px;
@@ -574,14 +620,13 @@ export default {
       content: "";
       float: left;
       height: 86px;
-      background: rgb(36, 184, 243);
-      width: 5px;
+      width: 3px;
     }
 
     .scroll-item:hover {
       background: rgba(36, 67, 116, 0.9) !important;
-      .scroll-item::before {
-        background: rgba(189, 219, 247, 0.9) !important;
+      &::before {
+        background: rgba(11, 138, 180, 0.9) !important;
       }
     }
   }
@@ -653,7 +698,7 @@ export default {
       position: relative;
       height: calc(100% - 58px);
       background-color: transparent;
-      overflow: hidden;
+      overflow: hid den;
       color: #fff;
       border-radius: 5px;
       ul {
@@ -741,9 +786,11 @@ export default {
 }
 .li_bg {
   background: #113157;
+  opacity: 0.5;
 }
 .li_bg1 {
   background: #041d4e;
+  opacity: 0.5;
 }
 .menu_active {
   border: solid 1px #0c66a5 !important;

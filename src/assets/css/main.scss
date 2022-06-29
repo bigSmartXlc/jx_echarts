@@ -26,6 +26,7 @@
       padding: 20px 20px 10px;
       .header-title{
         color: rgb(255, 255, 255); 
+        position: relative;
         font-size: 26px;
         border-image: linear-gradient(90deg,hsla(0,0%,100%,0),#0c5c92 20%,hsla(0,0%,100%,0) 99%) 2 2 2 2;
         border-bottom: 2px solid;
@@ -40,9 +41,18 @@
           }
         }
         .fontStyle{
-          padding: 15px 20px;
           margin-top: -3.2%;
           font-weight: 600;
+          span{
+            display: inline-block;
+            margin-right: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+            background-image: url(../images/dialog_tab_bg.svg);
+          }
+          .tab_active{
+            background-image: url(../images/dialog_tab_active_bg.svg) !important;
+          }
         }
         .rightIcon{
           height: 44px;
@@ -54,8 +64,9 @@
           background: url(../images/title_right.png);
         }
         .videoOff{
-          float: right;
-          margin-top: -3.2%;
+          position: absolute;
+          top: 0;
+          right: 10px;
         }
       }
     }
@@ -82,7 +93,7 @@
       cursor: pointer;
       margin: 0 auto;
       font-weight: 700;
-      line-height: 50px;
+      line-height: 30px;
       background-image: url("../images/btn_bg.svg");
       background-size: contain;
       background-repeat: no-repeat;
@@ -92,4 +103,24 @@
       height: calc(100% - 80px);
       width: 100%;
     }
+  }
+  .core-dynamic-content-container{
+    ::-webkit-scrollbar {/*滚动条整体样式*/
+      width: 10px; /*高宽分别对应横竖滚动条的尺寸*/
+      height: 5px;
+          scrollbar-arrow-color: red;
+      }
+  
+  ::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+      border-radius: 5px;
+          -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+          background: rgba(0,0,0,0.2);
+          scrollbar-arrow-color: red;
+      }
+  
+  ::-webkit-scrollbar-track { /*滚动条里面轨道*/
+      -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+          border-radius: 0;
+          background: rgba(0,0,0,0);
+      }
   }

@@ -117,59 +117,63 @@
           </div>
           <div class="core-dynamic-content-container">
             <div class="scroll-wrapper" ref="scroll">
-              <div class="scroll-content" v-if="tabContent === 0">
+              <div class="scroll-content" v-show="tabContent === 0">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
                   @click="right_item_click(index, item)"
-                  :class="{ active_right_item: active_right_item == index }"
+                  :class="{
+                    active_right_item:
+                      active_right_item == index && tabContent === 0,
+                  }"
                   v-for="(item, index) in dataList1"
                   :key="index"
                 >
-                  <span class="name">
-                    <img src="../assets/images/u608.svg" alt="" srcset="" />
-                    {{ item.name }}</span
+                  <span class="name"> {{ item.name }}</span
                   ><span class="num">{{ item.num }}</span>
                 </div>
               </div>
-              <div class="scroll-content" v-if="tabContent === 1">
+              <div class="scroll-content" v-show="tabContent === 1">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
                   @click="right_item_click(index, item)"
-                  :class="{ active_right_item: active_right_item == index }"
+                  :class="{
+                    active_right_item:
+                      active_right_item == index && tabContent === 1,
+                  }"
                   v-for="(item, index) in dataList2"
                   :key="index"
                 >
-                  <span class="name">
-                    <img src="../assets/images/u608.svg" alt="" srcset="" />
-                    {{ item.name }}</span
+                  <span class="name"> {{ item.name }}</span
                   ><span class="num">{{ item.num }}</span>
                 </div>
               </div>
-              <div class="scroll-content" v-if="tabContent === 2">
+              <div class="scroll-content" v-show="tabContent === 2">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
                   @click="right_item_click(index, item)"
-                  :class="{ active_right_item: active_right_item == index }"
+                  :class="{
+                    active_right_item:
+                      active_right_item == index && tabContent === 2,
+                  }"
                   v-for="(item, index) in dataList3"
                   :key="index"
                 >
-                  <span class="name">
-                    <img src="../assets/images/u608.svg" alt="" srcset="" />
-                    {{ item.name }}</span
+                  <span class="name"> {{ item.name }}</span
                   ><span class="num">{{ item.num }}</span>
                 </div>
               </div>
-              <div class="scroll-content" v-if="tabContent === 3">
+              <div class="scroll-content" v-show="tabContent === 3">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
                   @click="right_item_click(index, item)"
-                  :class="{ active_right_item: active_right_item == index }"
+                  :class="{
+                    active_right_item:
+                      active_right_item == index && tabContent === 3,
+                  }"
                   v-for="(item, index) in dataList4"
                   :key="index"
                 >
-                  <span class="name">
-                    <img src="../assets/images/u608.svg" alt="" srcset="" />
-                    {{ item.name }}</span
+                  <span class="name"> {{ item.name }}</span
                   ><span class="num">{{ item.num }}</span>
                 </div>
               </div>
@@ -392,37 +396,19 @@ export default {
         { index: 18, position: "桐乡市", num: 5, jingdu: 0.99 },
       ],
       bs: null,
-      active_right_item: "",
+      active_right_item: null,
     };
   },
   mounted() {
     this.map();
-    setTimeout(() => {
-      this.$nextTick(() => {
-        this.init();
-      });
-    }, 1000);
   },
   methods: {
     right_item_click(index, item) {
       this.active_right_item = index;
-      console.log(item);
     },
     tabContentToggle(val) {
-      this.active_right_item = "";
       this.tabContent = val;
-      setTimeout(() => {
-        this.bs.refresh();
-      }, 2000);
-    },
-    init() {
-      this.bs = new BScroll(this.$refs.scroll, { click: true });
-      this.bs.on("scrollStart", () => {
-        console.log("scrollStart-");
-      });
-      this.bs.on("scrollEnd", (pos) => {
-        console.log(pos);
-      });
+      this.active_right_item = null;
     },
     yjitemClick(item) {
       this.solution = item.solution;
@@ -625,7 +611,7 @@ export default {
   height: calc(100% - 50px);
   .scroll-wrapper {
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
     .scroll-content {
       color: #fff;
       margin: 0 10px;
@@ -663,14 +649,13 @@ export default {
       content: "";
       float: left;
       height: 86px;
-      background: rgb(36, 184, 243);
-      width: 5px;
+      width: 3px;
     }
 
     .scroll-item:hover {
       background: rgba(36, 67, 116, 0.9) !important;
-      .scroll-item::before {
-        background: rgba(189, 219, 247, 0.9) !important;
+      &::before {
+        background: rgba(11, 138, 180, 0.9) !important;
       }
     }
   }
@@ -830,9 +815,11 @@ export default {
 }
 .li_bg {
   background: #113157;
+  opacity: 0.5;
 }
 .li_bg1 {
   background: #041d4e;
+  opacity: 0.5;
 }
 .menu_active {
   border: solid 1px #0c66a5 !important;

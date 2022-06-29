@@ -646,6 +646,7 @@ export default {
   color: #2c3e50;
   position: relative;
   height: 100vh;
+  overflow: hidden;
   background: url("./assets/images/u1.png");
   .toptitle {
     .xitong,
