@@ -178,21 +178,29 @@
         </div>
       </div>
     </div>
-    <div v-show="solutionShow" class="solution">
-      <div class="titleContainer">
-        <div class="videoPoint">
-          <span></span><span></span><span></span> <span></span><span></span
-          ><span></span>
+    <div v-show="solutionShow" class="solution commom_dialog">
+      <div class="dialog__header">
+        <div class="header-title">
+          <div class="title_left">
+            <div class="circleIcon"></div>
+            <div class="circleIcon"></div>
+            <div class="circleIcon"></div>
+            <div class="circleIcon" style="background: rgb(5, 68, 137)"></div>
+            <div
+              class="circleIcon"
+              style="background: rgba(8, 77, 173, 0.58)"
+            ></div>
+            <div class="circleIcon" style="background: rgb(8, 40, 78)"></div>
+          </div>
+          <div class="fontStyle">{{ solution_title }}</div>
+          <div class="rightIcon"></div>
         </div>
-        <div class="videoTitle">{{ solution_title }}</div>
-        <div>
-          <img src="../assets/images/yjt.svg" alt="" srcset="" />
-          <img src="../assets/images/yjt.svg" alt="" srcset="" />
-          <img src="../assets/images/yjt.svg" alt="" srcset="" />
-        </div>
+        <!---->
       </div>
-      <div class="solutionContent">
-        <p>{{ solution }}</p>
+      <div class="dialog_body">
+        <div class="solutionContent">
+          <p>{{ solution }}</p>
+        </div>
       </div>
       <div class="videoOff" @click="solutionShow = false">关闭</div>
     </div>
@@ -603,8 +611,8 @@ export default {
   margin-bottom: 5px;
   height: 70px;
   color: #fff;
-  font-size: 25px;
-  font-weight: 700;
+  font-size: 40px;
+  font-weight: 500;
   line-height: 70px;
   background-image: url(../assets/images/u385.svg);
   background-size: cover;
@@ -678,58 +686,6 @@ export default {
     linear-gradient(270deg, #0267d8, #0267d8) 100% 100% no-repeat,
     linear-gradient(270deg, #0267d8, #0267d8) 100% 100% no-repeat;
   background-size: 2px 25px, 25px 2px;
-}
-.solution {
-  position: fixed;
-  left: 200px;
-  top: 100px;
-  width: 70%;
-  height: 70% !important;
-  background: #113157;
-  opacity: 1;
-  z-index: 300;
-  .solutionContent {
-    height: calc(100% - 140px);
-    overflow: auto;
-    color: #ffffff;
-    font-size: 26px;
-    font-weight: 700;
-    p {
-      text-indent: 50px;
-      text-align: left;
-    }
-  }
-}
-.titleContainer {
-  background: #041d4e;
-  display: flex;
-  justify-content: space-between;
-  z-index: 500;
-  .videoTitle {
-    height: 50px;
-    min-width: 200px;
-    font-weight: 700;
-    padding: 0 15px;
-    color: aliceblue;
-    line-height: 50px;
-    background-image: url("../assets/images/videotitle.svg");
-    background-size: cover;
-  }
-  .videoPoint {
-    height: 50px;
-    line-height: 50px;
-    display: flex;
-    min-width: 100px;
-    justify-content: space-around;
-    span {
-      display: inline-block;
-      margin-top: 20px;
-      width: 10px;
-      height: 10px;
-      border-radius: 5px;
-      background: #0875f2;
-    }
-  }
 }
 .chart-wrapper {
   z-index: 1;

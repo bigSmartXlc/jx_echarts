@@ -112,51 +112,67 @@
         </div>
       </div>
     </div>
-    <div v-show="yujingShow" class="yujingDialog">
-      <div class="titleContainer">
-        <div class="videoPoint">
-          <span></span><span></span><span></span> <span></span><span></span
-          ><span></span>
+    <div v-show="yujingShow" class="yujingDialog commom_dialog">
+      <div class="dialog__header">
+        <div class="header-title">
+          <div class="title_left">
+            <div class="circleIcon"></div>
+            <div class="circleIcon"></div>
+            <div class="circleIcon"></div>
+            <div class="circleIcon" style="background: rgb(5, 68, 137)"></div>
+            <div
+              class="circleIcon"
+              style="background: rgba(8, 77, 173, 0.58)"
+            ></div>
+            <div class="circleIcon" style="background: rgb(8, 40, 78)"></div>
+          </div>
+          <div class="fontStyle">预警</div>
+          <div class="rightIcon"></div>
         </div>
-        <div class="videoTitle">预警</div>
-        <div>
-          <img src="./assets/images/yjt.svg" alt="" srcset="" />
-          <img src="./assets/images/yjt.svg" alt="" srcset="" />
-          <img src="./assets/images/yjt.svg" alt="" srcset="" />
-        </div>
+        <!---->
       </div>
-      <ul>
-        <li
-          v-for="(item, index) in yujingList"
-          :key="index"
-          :class="{
-            level1: item.level == 1,
-            level2: item.level == 2,
-            level3: item.level == 3,
-          }"
-          @click="yjitemClick(item)"
-        >
-          <img src="./assets/images/gth.svg" alt="" srcset="" width="20" />
-          <span>{{ item.content }}</span>
-        </li>
-      </ul>
+      <div class="dialog_body">
+        <ul>
+          <li
+            v-for="(item, index) in yujingList"
+            :key="index"
+            :class="{
+              level1: item.level == 1,
+              level2: item.level == 2,
+              level3: item.level == 3,
+            }"
+            @click="yjitemClick(item)"
+          >
+            <img src="./assets/images/gth.svg" alt="" srcset="" width="20" />
+            <span>{{ item.content }}</span>
+          </li>
+        </ul>
+      </div>
       <div class="videoOff" @click="yujingClick">关闭</div>
     </div>
-    <div v-show="solutionShow" class="solution">
-      <div class="titleContainer">
-        <div class="videoPoint">
-          <span></span><span></span><span></span> <span></span><span></span
-          ><span></span>
+    <div v-show="solutionShow" class="solution commom_dialog">
+      <div class="dialog__header">
+        <div class="header-title">
+          <div class="title_left">
+            <div class="circleIcon"></div>
+            <div class="circleIcon"></div>
+            <div class="circleIcon"></div>
+            <div class="circleIcon" style="background: rgb(5, 68, 137)"></div>
+            <div
+              class="circleIcon"
+              style="background: rgba(8, 77, 173, 0.58)"
+            ></div>
+            <div class="circleIcon" style="background: rgb(8, 40, 78)"></div>
+          </div>
+          <div class="fontStyle">解决方案</div>
+          <div class="rightIcon"></div>
         </div>
-        <div class="videoTitle">解决方案</div>
-        <div>
-          <img src="./assets/images/yjt.svg" alt="" srcset="" />
-          <img src="./assets/images/yjt.svg" alt="" srcset="" />
-          <img src="./assets/images/yjt.svg" alt="" srcset="" />
-        </div>
+        <!---->
       </div>
-      <div class="solutionContent">
-        <p>{{ solution }}</p>
+      <div class="dialog_body">
+        <div class="solutionContent">
+          <p>{{ solution }}</p>
+        </div>
       </div>
       <div class="videoOff" @click="solutionShow = false">关闭</div>
     </div>
@@ -434,18 +450,6 @@ export default {
     }
   }
 }
-.videoOff {
-  cursor: pointer;
-  height: 50px;
-  width: 150px;
-  margin: 0 auto;
-  font-weight: 700;
-  color: aliceblue;
-  line-height: 50px;
-  background-image: url("./assets/images/videoOff.svg");
-  background-size: cover;
-  z-index: 500;
-}
 .xitongDialog {
   position: fixed;
   left: 200px;
@@ -602,13 +606,6 @@ export default {
   }
 }
 .yujingDialog {
-  position: fixed;
-  left: 200px;
-  top: 100px;
-  z-index: 200;
-  width: 70%;
-  height: 70% !important;
-  background: #4d5da3;
   ul {
     padding-right: 40px;
     height: calc(100% - 140px);

@@ -12,3 +12,84 @@
   .container1 .left{
     color: black !important;
   }
+  .commom_dialog{
+    background: rgba(9,31,60,.8);
+    -webkit-box-sizing: border-box;
+    border: 1px solid #226cbe;
+    position: fixed;
+    left: 200px;
+    top: 100px;
+    z-index: 200;
+    width: 70%;
+    height: 70% !important;
+    .dialog__header{
+      padding: 20px 20px 10px;
+      .header-title{
+        color: rgb(255, 255, 255); 
+        font-size: 26px;
+        border-image: linear-gradient(90deg,hsla(0,0%,100%,0),#0c5c92 20%,hsla(0,0%,100%,0) 99%) 2 2 2 2;
+        border-bottom: 2px solid;
+        .title_left{
+          width: 120px;
+          .circleIcon{
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #0267d5;
+            display: inline-block;
+          }
+        }
+        .fontStyle{
+          padding: 15px 20px;
+          margin-top: -3.2%;
+          font-weight: 600;
+        }
+        .rightIcon{
+          height: 44px;
+          width: 150px;
+          margin-top: -2.2%;
+          float: right;
+          background-size: 100% 100%!important;
+          opacity: .7;
+          background: url(../images/title_right.png);
+        }
+        .videoOff{
+          float: right;
+          margin-top: -3.2%;
+        }
+      }
+    }
+    .dialog_body{
+      height: calc(100% - 148px);
+      padding: 0 15px;
+      .solutionContent{
+        overflow: auto;
+        color: #ffffff;
+        font-size: 26px;
+        font-weight: 700;
+        p {
+          text-indent: 50px;
+          text-align: left;
+        }
+      }
+    }
+    .videoOff {
+      height: 60px;
+      width: 22%;
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      margin: 0 auto;
+      font-weight: 700;
+      line-height: 50px;
+      background-image: url("../images/btn_bg.svg");
+      background-size: contain;
+      background-repeat: no-repeat;
+      z-index: 500;
+    }
+    #echarts_part {
+      height: calc(100% - 80px);
+      width: 100%;
+    }
+  }

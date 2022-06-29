@@ -167,14 +167,24 @@
         </div>
       </div>
     </div>
-    <div class="chartPart" v-show="enlargeShow">
-      <div class="titleContainer2">
-        <div class="videoPoint">
-          <span></span><span></span><span></span> <span></span><span></span
-          ><span></span>
+    <div class="chartPart commom_dialog" v-show="enlargeShow">
+      <div class="dialog__header">
+        <div class="header-title">
+          <div class="title_left">
+            <div class="circleIcon"></div>
+            <div class="circleIcon"></div>
+            <div class="circleIcon"></div>
+            <div class="circleIcon" style="background: rgb(5, 68, 137)"></div>
+            <div
+              class="circleIcon"
+              style="background: rgba(8, 77, 173, 0.58)"
+            ></div>
+            <div class="circleIcon" style="background: rgb(8, 40, 78)"></div>
+          </div>
+          <div class="fontStyle">{{ enlargeTitle }}</div>
+          <div class="videoOff" @click="enlargeShow = false">关闭</div>
         </div>
-        <div class="videoTitle">{{ enlargeTitle }}</div>
-        <div class="videoOff" @click="enlargeShow = false">关闭</div>
+        <!---->
       </div>
       <div id="echarts_part"></div>
     </div>
@@ -1009,58 +1019,6 @@ export default {
 .enlargeTitle {
   cursor: pointer;
 }
-.chartPart {
-  position: fixed;
-  height: 80%;
-  width: 90%;
-  z-index: 200;
-  background: #8ca0b7;
-  .titleContainer2 {
-    background: #455dc7;
-    display: flex;
-    // justify-content: space-between;
-    .videoTitle {
-      width: 70%;
-      height: 50px;
-      font-size: 35px;
-      padding: 0 15px;
-      font-weight: 700;
-      color: aliceblue;
-      line-height: 50px;
-    }
-    .videoOff {
-      width: 15%;
-      cursor: pointer;
-      height: 50px;
-      width: 150px;
-      font-weight: 700;
-      color: aliceblue;
-      line-height: 50px;
-      background-image: url("../assets/images/videoOff.svg");
-      background-size: cover;
-    }
-    .videoPoint {
-      width: 15%;
-      height: 50px;
-      line-height: 50px;
-      display: flex;
-      min-width: 100px;
-      justify-content: space-around;
-      span {
-        display: inline-block;
-        margin-top: 20px;
-        width: 10px;
-        height: 10px;
-        border-radius: 5px;
-        background: #0875f2;
-      }
-    }
-  }
-  #echarts_part {
-    height: calc(100% - 50px);
-    width: 100%;
-  }
-}
 @keyframes fadenum {
   100% {
     transform: rotate(360deg);
@@ -1129,8 +1087,8 @@ export default {
   margin-top: 10px;
   height: 70px;
   color: #fff;
-  font-size: 25px;
-  font-weight: 700;
+  font-size: 40px;
+  font-weight: 500;
   line-height: 70px;
   background-image: url(../assets/images/u385.svg);
   background-size: cover;
