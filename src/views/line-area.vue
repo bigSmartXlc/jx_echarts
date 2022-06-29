@@ -95,6 +95,7 @@
               <video
                 ref="videoPlayer"
                 class="video-js"
+                controls
                 @click="isactive == false ? (isactive = true) : ''"
                 muted
               ></video>
@@ -136,6 +137,7 @@ export default {
       ak: "eae1ItjXiOnR6CvVFg5iR4WuGfG6d380",
       rightshow: false,
       tMap: null,
+      CarTrack: null,
       bmap: null,
       isactive: false,
       cpmpomentDate: "",
@@ -242,6 +244,11 @@ export default {
         this.formfiled.garbageName = item.name;
       }
     });
+  },
+  beforeDestroy() {
+    this.tMap.clearLayers();
+    this.tMap.clearOverLays();
+    this.CarTrack.clear();
   },
   mounted() {
     this.gethuanjie();
@@ -2172,14 +2179,14 @@ export default {
             document.body.appendChild(script);
             script.onload = () => {
               //加载完成去执行代码  ie中不能使用
-              var _CarTrack = new T.CarTrack(this.tMap, {
+              this.CarTrack = new T.CarTrack(this.tMap, {
                 interval: 20,
                 speed: 10,
                 dynamicLine: true,
                 polylinestyle: { color: "#49d68f", weight: 5, opacity: 1 },
                 Datas: point,
               });
-              _CarTrack.start();
+              this.CarTrack.start();
             };
           } else {
             alert("暂无轨迹数据");
@@ -2623,6 +2630,7 @@ ul {
             min-width: 200px;
             font-weight: 700;
             color: aliceblue;
+            padding: 0 15px;
             line-height: 50px;
             background-image: url("../assets/images/videotitle.svg");
             background-size: cover;

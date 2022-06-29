@@ -2,7 +2,9 @@
   <div class="fzjc">
     <div class="left">
       <div class="leftdiv">
-        <h3 class="enlargeTitle" @click="enlarge('left')">垃圾清运量</h3>
+        <div class="enlargeTitle title_style" @click="enlarge('left')">
+          垃圾清运量
+        </div>
         <div class="btnlist">
           <span
             v-for="(item, index) in btnlist1"
@@ -12,11 +14,11 @@
             >{{ item.name }}</span
           >
         </div>
-        <div id="leftbar"></div>
+        <div id="leftbar" class="map_border"></div>
       </div>
       <div class="leftdiv">
-        <h3 style="margin-bottom: 10px">能力分析</h3>
-        <div class="leftbottom">
+        <div style="margin-bottom: 10px" class="title_style">能力分析</div>
+        <div class="leftbottom map_border">
           <div class="listhead">
             <span>序号</span>
             <span>指标名称</span>
@@ -35,8 +37,9 @@
       </div>
     </div>
     <div class="sanlv">
-      <div>
-        <div>
+      <div class="lv_container">
+        <div class="bg_content">
+          <img src="../assets/images/sanlvbg1.svg" alt="" srcset="" />
           <img src="../assets/images/sanlvbg2.png" alt="" />
           <img src="../assets/images/sanlvbg3.png" alt="" />
         </div>
@@ -45,8 +48,9 @@
           <span>{{ sanlv.knowRate }}%</span>
         </div>
       </div>
-      <div>
-        <div>
+      <div class="lv_container">
+        <div class="bg_content">
+          <img src="../assets/images/sanlvbg1.svg" alt="" srcset="" />
           <img src="../assets/images/sanlvbg2.png" alt="" />
           <img src="../assets/images/sanlvbg3.png" alt="" />
         </div>
@@ -55,8 +59,9 @@
           <span>{{ sanlv.joinRate }}%</span>
         </div>
       </div>
-      <div>
-        <div>
+      <div class="lv_container">
+        <div class="bg_content">
+          <img src="../assets/images/sanlvbg1.svg" alt="" srcset="" />
           <img src="../assets/images/sanlvbg2.png" alt="" />
           <img src="../assets/images/sanlvbg3.png" alt="" />
         </div>
@@ -71,7 +76,9 @@
     </div>
     <div class="right">
       <div class="rightdiv">
-        <h3 @click="enlarge('right')" class="enlargeTitle">质量评价</h3>
+        <div @click="enlarge('right')" class="enlargeTitle title_style">
+          质量评价
+        </div>
         <div class="btnlist">
           <span
             @click="evaluationType = item.value"
@@ -81,10 +88,10 @@
             >{{ item.name }}</span
           >
         </div>
-        <div id="rightline"></div>
+        <div id="rightline" class="map_border"></div>
       </div>
       <div class="rightdiv">
-        <h3>红黑榜</h3>
+        <div class="title_style">红黑榜</div>
         <div class="btnlist">
           <span
             @click="toggleArea(item)"
@@ -94,7 +101,7 @@
             >{{ item.deptName }}</span
           >
         </div>
-        <div class="rightbottom" :key="rightkey">
+        <div class="rightbottom map_border" :key="rightkey">
           <div
             v-show="table == true"
             class="tableone animate__animated animate__fadeInRight"
@@ -1016,6 +1023,7 @@ export default {
       width: 70%;
       height: 50px;
       font-size: 35px;
+      padding: 0 15px;
       font-weight: 700;
       color: aliceblue;
       line-height: 50px;
@@ -1059,9 +1067,8 @@ export default {
   }
 }
 .rightbottom {
-  border: solid 1px rgb(11, 100, 233);
   z-index: 10;
-  height: calc(100% - 100px);
+  height: calc(100% - 108px);
   overflow: hidden;
   .tableone {
     text-align: left;
@@ -1117,17 +1124,19 @@ export default {
   background-color: #587e8f;
   border-radius: 5px;
 }
-h3 {
+.title_style {
   margin: 0;
-  display: inline-block;
   margin-top: 10px;
-  width: 250px;
-  height: 40px;
+  height: 70px;
   color: #fff;
   font-size: 25px;
   font-weight: 700;
-  line-height: 40px;
+  line-height: 70px;
   background-image: url(../assets/images/u385.svg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 64%;
+  text-align: center;
 }
 .returnBtn {
   font-size: 14px;
@@ -1157,27 +1166,40 @@ h3 {
     justify-content: space-around;
     margin-top: 20px;
     z-index: 2;
-    div {
+    .lv_container {
       position: relative;
-      width: 100px;
-      height: 100px;
-      img {
-        width: 100%;
-        top: 0;
-        left: 0;
-        position: absolute;
-        animation: fadenum 5s infinite;
-      }
-      img:first-child {
-        z-index: 1;
-      }
-      img:last-child {
-        z-index: 2;
+      width: 120px;
+      height: 120px;
+      .bg_content {
+        text-align: center;
+        margin: 0 auto;
+        img {
+          position: absolute;
+          animation: fadenum 5s infinite;
+        }
+        img:first-child {
+          top: 20px;
+          left: 20px;
+          z-index: 1;
+          width: 80px;
+        }
+        img:nth-child(2) {
+          top: 6px;
+          left: 6px;
+          z-index: 2;
+          width: 108px;
+        }
+        img:last-child {
+          top: 0;
+          left: 0;
+          z-index: 3;
+          width: 120px;
+        }
       }
       .sanlvdate {
         position: absolute;
-        top: 0;
-        left: 0;
+        top: 14px;
+        left: 23px;
         z-index: 3;
         span {
           margin-top: 10px;
@@ -1189,16 +1211,27 @@ h3 {
       }
     }
   }
+  .map_border {
+    border: solid 2px #0167dd;
+    background: linear-gradient(270deg, #0267d8, #0267d8) 0 0 no-repeat,
+      linear-gradient(180deg, #0267d8, #0267d8) 0 0 no-repeat,
+      linear-gradient(270deg, #0267d8, #0267d8) 100% 0 no-repeat,
+      linear-gradient(180deg, #0267d8, #0267d8) 100% 0 no-repeat,
+      linear-gradient(270deg, #0267d8, #0267d8) 0 100% no-repeat,
+      linear-gradient(180deg, #0267d8, #0267d8) 0 100% no-repeat,
+      linear-gradient(270deg, #0267d8, #0267d8) 100% 100% no-repeat,
+      linear-gradient(270deg, #0267d8, #0267d8) 100% 100% no-repeat;
+    background-size: 2px 25px, 25px 2px;
+  }
   .left {
     width: 30%;
     z-index: 2;
     .leftdiv {
       height: 50%;
       width: 100%;
-      #leftbar {
-        border: solid 1px #0167dd;
+      .map_border {
         width: 100%;
-        height: calc(100% - 81px);
+        height: calc(100% - 108px);
       }
     }
   }
@@ -1211,13 +1244,15 @@ h3 {
       #rightline {
         border: solid 1px #0167dd;
         width: 100%;
-        height: calc(100% - 78px);
+        height: calc(100% - 98px);
       }
+    }
+    .title_style {
+      margin-left: 36%;
     }
   }
 }
 .leftbottom {
-  border: solid 1px #0167dd;
   height: calc(100% - 78px);
   div {
     display: flex;

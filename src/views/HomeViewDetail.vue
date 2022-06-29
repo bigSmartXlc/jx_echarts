@@ -3,7 +3,7 @@
     <div class="content">
       <div class="left">
         <div class="left_top">
-          <h3>规划引领</h3>
+          <div class="enlargeTitle title_style">规划引领</div>
           <div id="review_box">
             <VueSeamlessScroll
               :data="lefttopdata"
@@ -23,55 +23,58 @@
                   :class="{ li_bg: index % 2 == 0, li_bg1: index % 2 == 1 }"
                   @click="yjitemClick(item)"
                 >
-                  {{ item.name }}
+                  <span style="margin-right: 30px">{{ item.area }}</span
+                  >{{ item.name }}
                 </li>
               </ul>
             </VueSeamlessScroll>
           </div>
         </div>
         <div class="left_bottom">
-          <h3>项目建设</h3>
-          <ul class="thead">
-            <span style="width: 50px">序号</span>
-            <span style="width: 100px">区县</span>
-            <span style="width: 100px">项目数</span>
-            <span style="width: 150px">完成进度</span>
-          </ul>
-          <div class="box" id="table_box">
-            <VueSeamlessScroll
-              :data="leftBottom"
-              :class-option="seamlessScrollOption"
-              style="
-                height: 100%;
-                overflow: hidden;
-                color: white;
-                font-size: 18px;
-                text-align: center;
-              "
-            >
-              <ul>
-                <li v-for="(item, index) in leftBottom" :key="index">
-                  <span style="width: 50px">{{ item.index }}</span>
-                  <span style="width: 100px">{{ item.position }}</span>
-                  <span style="width: 100px">{{ item.num }}</span>
-                  <span style="width: 150px">
-                    <span
-                      :class="{
-                        spanP1: item.jingdu < 0.5,
-                        spanP2: item.jingdu >= 0.5 && item.jingdu < 0.8,
-                        spanP3: item.jingdu >= 0.8,
-                      }"
-                      class="spanP"
-                      :style="{
-                        backgroundSize: item.jingdu * 100 + '%' + ' 15px',
-                      }"
-                    >
+          <div class="enlargeTitle title_style">项目建设</div>
+          <div class="map_border">
+            <ul class="thead">
+              <span style="width: 50px">序号</span>
+              <span style="width: 100px">区县</span>
+              <span style="width: 100px">项目数</span>
+              <span style="width: 150px">完成进度</span>
+            </ul>
+            <div class="box" id="table_box">
+              <VueSeamlessScroll
+                :data="leftBottom"
+                :class-option="seamlessScrollOption"
+                style="
+                  height: 100%;
+                  overflow: hidden;
+                  color: white;
+                  font-size: 18px;
+                  text-align: center;
+                "
+              >
+                <ul>
+                  <li v-for="(item, index) in leftBottom" :key="index">
+                    <span style="width: 50px">{{ item.index }}</span>
+                    <span style="width: 100px">{{ item.position }}</span>
+                    <span style="width: 100px">{{ item.num }}</span>
+                    <span style="width: 150px">
+                      <span
+                        :class="{
+                          spanP1: item.jingdu < 0.5,
+                          spanP2: item.jingdu >= 0.5 && item.jingdu < 0.8,
+                          spanP3: item.jingdu >= 0.8,
+                        }"
+                        class="spanP"
+                        :style="{
+                          backgroundSize: item.jingdu * 100 + '%' + ' 15px',
+                        }"
+                      >
+                      </span>
+                      <span class="spanS1">{{ item.jingdu * 100 }}%</span>
                     </span>
-                    <span class="spanS1">{{ item.jingdu * 100 }}%</span>
-                  </span>
-                </li>
-              </ul>
-            </VueSeamlessScroll>
+                  </li>
+                </ul>
+              </VueSeamlessScroll>
+            </div>
           </div>
         </div>
       </div>
@@ -79,8 +82,8 @@
         <div class="chart-wrapper" id="chart-city"></div>
       </div>
       <div class="right">
-        <h3>基础资源</h3>
-        <div class="tab-class">
+        <div class="enlargeTitle title_style right_title">基础资源</div>
+        <div class="tab-class map_border">
           <!-- 菜单 -->
           <div class="tab-menu">
             <div
@@ -117,6 +120,8 @@
               <div class="scroll-content" v-if="tabContent === 0">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
+                  @click="right_item_click(index, item)"
+                  :class="{ active_right_item: active_right_item == index }"
                   v-for="(item, index) in dataList1"
                   :key="index"
                 >
@@ -129,6 +134,7 @@
               <div class="scroll-content" v-if="tabContent === 1">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
+                  @click="right_item_click(index, item)"
                   v-for="(item, index) in dataList2"
                   :key="index"
                 >
@@ -141,6 +147,7 @@
               <div class="scroll-content" v-if="tabContent === 2">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
+                  @click="right_item_click(index, item)"
                   v-for="(item, index) in dataList3"
                   :key="index"
                 >
@@ -153,6 +160,7 @@
               <div class="scroll-content" v-if="tabContent === 3">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
+                  @click="right_item_click(index, item)"
                   v-for="(item, index) in dataList4"
                   :key="index"
                 >
@@ -300,37 +308,44 @@ export default {
       color: ["#fecb9a", "#fefdce", "#fefa7d", "#cdccfb", "#cdf99d", "#fdcdcc"],
       lefttopdata: [
         {
-          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          area: "嘉兴市",
           solution:
             "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
         },
         {
-          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          area: "嘉兴市",
           solution:
             "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
         },
         {
-          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          area: "嘉兴市",
           solution:
             "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
         },
         {
-          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          area: "嘉兴市",
           solution:
             "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
         },
         {
-          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          area: "嘉兴市",
           solution:
             "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
         },
         {
-          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          area: "嘉兴市",
           solution:
             "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
         },
         {
-          name: "消息1 : 嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
+          area: "嘉兴市",
           solution:
             "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
         },
@@ -355,6 +370,7 @@ export default {
         { index: 17, position: "桐乡市", num: 5, jingdu: 0.8 },
         { index: 18, position: "桐乡市", num: 5, jingdu: 0.99 },
       ],
+      active_right_item: "",
     };
   },
   mounted() {
@@ -388,6 +404,10 @@ export default {
     };
   },
   methods: {
+    right_item_click(index, item) {
+      this.active_right_item = index;
+      console.log(item);
+    },
     tabContentToggle(val) {
       this.tabContent = val;
       setTimeout(() => {
@@ -470,17 +490,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-h3 {
-  display: inline-block;
-  margin-top: 5px;
+.title_style {
+  margin: 0;
+  margin-top: 10px;
   margin-bottom: 5px;
-  width: 250px;
-  height: 40px;
+  height: 70px;
   color: #fff;
   font-size: 25px;
   font-weight: 700;
-  line-height: 40px;
+  line-height: 70px;
   background-image: url(../assets/images/u385.svg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 64%;
+  text-align: center;
 }
 .core-dynamic-content-container {
   text-align: center;
@@ -491,6 +514,9 @@ h3 {
     .scroll-content {
       color: #fff;
       margin: 0 10px;
+      .active_right_item {
+        background: rgb(129, 122, 122) !important;
+      }
     }
     .scroll-content .name {
       display: inline-block;
@@ -514,23 +540,44 @@ h3 {
       font-weight: bold;
       margin-top: 3px;
       line-height: 85px;
-      background: rgba(3, 157, 247, 0.2);
+      background: rgba(36, 67, 116, 0.5);
       border-radius: 5px;
       text-align: center;
     }
+    .scroll-item::before {
+      content: "";
+      float: left;
+      height: 86px;
+      background: rgb(36, 184, 243);
+      width: 5px;
+    }
+
     .scroll-item:hover {
-      background: rgba(3, 88, 247, 0.5) !important;
+      background: rgba(36, 67, 116, 0.9) !important;
+      .scroll-item::before {
+        background: rgba(189, 219, 247, 0.9) !important;
+      }
     }
   }
 }
-
+.map_border {
+  border: solid 2px #0167dd;
+  background: linear-gradient(270deg, #0267d8, #0267d8) 0 0 no-repeat,
+    linear-gradient(180deg, #0267d8, #0267d8) 0 0 no-repeat,
+    linear-gradient(270deg, #0267d8, #0267d8) 100% 0 no-repeat,
+    linear-gradient(180deg, #0267d8, #0267d8) 100% 0 no-repeat,
+    linear-gradient(270deg, #0267d8, #0267d8) 0 100% no-repeat,
+    linear-gradient(180deg, #0267d8, #0267d8) 0 100% no-repeat,
+    linear-gradient(270deg, #0267d8, #0267d8) 100% 100% no-repeat,
+    linear-gradient(270deg, #0267d8, #0267d8) 100% 100% no-repeat;
+  background-size: 2px 25px, 25px 2px;
+}
 .solution {
   position: fixed;
   left: 200px;
   top: 100px;
   width: 70%;
   height: 70% !important;
-  padding: 0 10px;
   background: #113157;
   opacity: 1;
   z-index: 300;
@@ -555,6 +602,7 @@ h3 {
     height: 50px;
     min-width: 200px;
     font-weight: 700;
+    padding: 0 15px;
     color: aliceblue;
     line-height: 50px;
     background-image: url("../assets/images/videotitle.svg");
@@ -598,7 +646,7 @@ h3 {
   .left_top {
     height: 50%;
     #review_box {
-      height: calc(100% - 50px);
+      height: calc(100% - 80px);
       .tbody {
         margin: 0;
         padding: 0;
@@ -614,8 +662,10 @@ h3 {
   }
   .left_bottom {
     height: 50%;
+    .map_border {
+      height: calc(100% - 100px);
+    }
     .thead {
-      width: 400px;
       padding: 0;
       span {
         display: inline-block;
@@ -627,13 +677,14 @@ h3 {
     }
     #table_box {
       position: relative;
-      height: calc(100% - 105px);
+      height: calc(100% - 58px);
       background-color: transparent;
-      overflow: hid den;
+      overflow: hidden;
       color: #fff;
       border-radius: 5px;
       ul {
         padding: 0 !important;
+        margin: 0;
         list-style: none;
         li {
           display: inline-block;
@@ -676,6 +727,9 @@ h3 {
   width: 28%;
   height: 100%;
   z-index: 10;
+  .right_title {
+    margin-left: 16%;
+  }
 }
 
 .tab-menu {
@@ -698,9 +752,7 @@ h3 {
 
 .tab-class {
   width: 100%;
-  height: calc(100% - 70px);
-  border: solid 1px rgb(11, 100, 233);
-  border-radius: 10px;
+  height: calc(100% - 90px);
 }
 .home {
   height: calc(100% - 90px);

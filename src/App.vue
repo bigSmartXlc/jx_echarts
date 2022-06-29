@@ -412,6 +412,7 @@ export default {
     height: 50px;
     min-width: 200px;
     font-weight: 700;
+    padding: 0 15px;
     color: aliceblue;
     line-height: 50px;
     background-image: url("./assets/images/videotitle.svg");
