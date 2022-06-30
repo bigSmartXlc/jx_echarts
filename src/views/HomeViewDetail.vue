@@ -215,11 +215,7 @@
       </div>
       <div class="videoOff" @click="solutionShow = false">关闭</div>
     </div>
-    <div
-      class="chartPart commom_dialog"
-      v-show="point_click_show"
-      :key="info_dialog_key"
-    >
+    <div class="commom_dialog" v-show="point_click_show" :key="info_dialog_key">
       <div class="dialog__header">
         <div class="header-title">
           <div class="title_left">
@@ -248,7 +244,7 @@
         <!---->
       </div>
       <div class="dialog_body">
-        <div v-show="dialog_tab_num == 0">
+        <div class="tab_content" v-show="dialog_tab_num == 0">
           <ul class="info">
             <li>站点类型：{{ info_object.paramName }}</li>
             <li>站点名称：{{ info_object.projectName }}</li>
@@ -259,9 +255,48 @@
             <li>运营单位：{{ info_object.operationUnit }}</li>
           </ul>
         </div>
-        <div v-show="dialog_tab_num == 1">现场图片</div>
-        <div v-show="dialog_tab_num == 2">定时抓拍</div>
-        <div v-show="dialog_tab_num == 3">现场监控</div>
+        <div class="tab_content" v-show="dialog_tab_num == 1">
+          <div class="aimg_content">
+            <img src="@/assets/images/ebg.jpg" alt="" srcset="" />
+          </div>
+          <div class="img_list">
+            <ul>
+              <li v-for="(item, index) in imgUrlList" :key="index">
+                <img :src="item.url" alt="" srcset="" />
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="tab_content" v-show="dialog_tab_num == 2">
+          <div class="aimg_content">
+            <img src="@/assets/images/u1.png" alt="" srcset="" />
+          </div>
+          <div class="img_list">
+            <ul>
+              <li v-for="(item, index) in liveUrlList" :key="index">
+                <img :src="item.url" alt="" srcset="" />
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="tab_content" v-show="dialog_tab_num == 3">
+          <div class="aimg_content">
+            <video
+              ref="videoPlayer"
+              class="video-js"
+              controls
+              @click="isactive == false ? (isactive = true) : ''"
+              muted
+            ></video>
+          </div>
+          <div class="img_list">
+            <ul>
+              <li v-for="(item, index) in videoUrlList" :key="index">
+                <img :src="item.url" alt="" srcset="" />
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -291,10 +326,12 @@ export default {
   },
   data() {
     return {
+      imgUrlList: [],
+      liveUrlList: [],
       info_dialog_key: "info_dialog_key",
       dialog_tab_num: 0,
       dialogList: ["基本信息", "现场图片", "定时抓拍", "现场监控"],
-      point_click_show: false,
+      point_click_show: true,
       dataList1: [],
       dataList2: [],
       dataList3: [],
@@ -626,6 +663,26 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.dialog_body {
+  .tab_content {
+    width: 100%;
+    height: 100%;
+    .aimg_content {
+      display: inline-block;
+      width: 70%;
+      height: 100%;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .img_list {
+      width: 30%;
+      display: inline-block;
+      height: 100%;
+    }
+  }
+}
 .info {
   list-style: none;
   color: #fff;

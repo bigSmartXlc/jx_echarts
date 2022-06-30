@@ -2,14 +2,14 @@
 <template>
   <div class="container1">
     <div class="left">
-      <div class="typelist">
+      <div class="typelist select_container">
         <div
           class="selectdata"
           @click="typeopen == 1 ? (typeopen = 0) : (typeopen = 1)"
         >
           {{ formfiled.garbageName }}
         </div>
-        <ul v-show="typeopen == 1">
+        <ul v-show="typeopen == 1" class="select_list">
           <li
             v-for="(item, index) in typelist"
             :key="index"
@@ -25,7 +25,7 @@
           format="YYYY-MM-DD HH:mm:ss"
         />
       </div>
-      <div class="huanjie">
+      <div class="huanjie select_container">
         <div>
           <div
             class="selectdata"
@@ -33,7 +33,7 @@
           >
             {{ formfiled.vehicleModelListName }}
           </div>
-          <ul v-show="typeopen == 2">
+          <ul v-show="typeopen == 2" class="select_list">
             <li
               v-for="item in huanjie"
               :key="item.rowId"
@@ -44,14 +44,14 @@
           </ul>
         </div>
       </div>
-      <div class="areatree">
+      <div class="areatree select_container">
         <div
           class="selectdata"
           @click="typeopen == 4 ? (typeopen = 0) : (typeopen = 4)"
         >
           {{ formfiled.deptName }}
         </div>
-        <ul v-show="typeopen == 4">
+        <ul v-show="typeopen == 4" class="select_list">
           <li
             v-for="(item, index) in arealist"
             :key="index"
@@ -126,9 +126,11 @@ import videojs from "video.js";
 import "echarts-gl";
 require("echarts/extension/bmap/bmap");
 import yls_json from "./ljpt_xz.json";
+// import Select from "@/components/Select";
 export default {
   components: {
     VueDatepickerLocal,
+    // Select,
   },
   data() {
     return {
@@ -743,13 +745,27 @@ ul {
     height: calc(100% - 150px);
     border-radius: 5px;
     color: aliceblue;
-    overflow: auto;
     .selectdata {
       cursor: pointer;
       height: 35px;
       border-radius: 5px;
       line-height: 35px;
       background: linear-gradient(45deg, #14f3c3, #3111e2);
+      position: relative;
+    }
+    .select_container {
+      position: relative;
+      margin: 5px 0;
+      .select_list {
+        position: absolute;
+        top: 35px;
+        z-index: 50;
+        width: 100%;
+        li {
+          width: 100%;
+          background: linear-gradient(45deg, #0875f2, #c2cbf1);
+        }
+      }
     }
     .dateselect {
       width: 100%;
@@ -760,49 +776,9 @@ ul {
       border-radius: 5px;
       line-height: 35px;
     }
-    .typelist {
-      position: relative;
-      margin-bottom: 10px;
-      ul {
-        // position: absolute;
-        // z-index: 100;
-        // top: 35px;
-        // width: 100%;
-        li {
-          background: linear-gradient(45deg, #1eedd9, #84ca91);
-        }
-      }
-    }
-    .huanjie {
-      position: relative;
-      margin-top: 10px;
-      ul {
-        // position: absolute;
-        // z-index: 100;
-        // top: 35px;
-        // width: 100%;
-        li {
-          background: linear-gradient(45deg, #0875f2, #c2cbf1);
-        }
-      }
-    }
-    .areatree {
-      margin-top: 10px;
-      position: relative;
-      ul {
-        // position: absolute;
-        // z-index: 100;
-        // top: 35px;
-        // width: 100%;
-        li {
-          width: 100%;
-          background: linear-gradient(45deg, #27a37a, #84ca91);
-        }
-      }
-    }
     .carlist {
-      // max-height: 600px;
-      // overflow: auto;
+      overflow: auto;
+      height: calc(100% - 160px);
       position: relative;
       .loading {
         position: absolute;
