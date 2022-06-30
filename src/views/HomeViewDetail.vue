@@ -215,7 +215,11 @@
       </div>
       <div class="videoOff" @click="solutionShow = false">关闭</div>
     </div>
-    <div class="chartPart commom_dialog" v-show="point_click_show">
+    <div
+      class="chartPart commom_dialog"
+      v-show="point_click_show"
+      :key="info_dialog_key"
+    >
       <div class="dialog__header">
         <div class="header-title">
           <div class="title_left">
@@ -287,6 +291,7 @@ export default {
   },
   data() {
     return {
+      info_dialog_key: "info_dialog_key",
       dialog_tab_num: 0,
       dialogList: ["基本信息", "现场图片", "定时抓拍", "现场监控"],
       point_click_show: false,
@@ -307,13 +312,32 @@ export default {
       leftBottom: [],
       active_right_item: null,
       villageId: null,
-      info_object: {},
+      info_object: {
+        paramName: "",
+        projectName: "",
+        projectAddress: "",
+        money: "",
+        buildArea: "",
+        endDate: "",
+        operationUnit: "",
+      },
     };
   },
   created() {
     this.deptId = this.$route.query.deptId;
     this.deptIdEnd = this.$route.query.deptIdEnd;
   },
+  // watch: {
+  //   point_click_show: {
+  //     handler: function (val) {
+  //       if (val) {
+  //         setTimeout(() => {
+  //           this.basicInformation();
+  //         }, 1000);
+  //       }
+  //     },
+  //   },
+  // },
   mounted() {
     let script = document.createElement("script");
     script.type = "text/javascript";
@@ -345,8 +369,8 @@ export default {
   methods: {
     //关闭弹窗
     dialog_off() {
-      console.log("关闭");
       this.point_click_show = false;
+      this.info_dialog_key = Math.random();
     },
     //基本信息查询
     basicInformation() {
@@ -359,8 +383,7 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res);
-          this.info_object = res.data.result;
+          Object.assign(this.info_object, res.data.result);
         })
         .catch((err) => {
           console.log(err);
@@ -522,7 +545,6 @@ export default {
     },
     marker_click(e) {
       var p = e.target;
-      console.log(p);
       this.villageId = p.info.rowId;
       this.point_click_show = true;
       this.basicInformation();

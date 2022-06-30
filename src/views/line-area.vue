@@ -69,7 +69,7 @@
             :key="index"
             @click="carSelect(item)"
           >
-            {{ item.vehicleName }}
+            {{ item.vehicleName }}[{{ item.flag == 0 ? "不在线" : "在线" }}]
           </li>
         </ul>
       </div>
@@ -125,7 +125,6 @@ import VueDatepickerLocal from "vue-datepicker-local";
 import videojs from "video.js";
 import "echarts-gl";
 require("echarts/extension/bmap/bmap");
-import { BMPGL } from "./bmpgl.js";
 import yls_json from "./ljpt_xz.json";
 export default {
   components: {
@@ -249,7 +248,9 @@ export default {
   beforeDestroy() {
     this.tMap.clearLayers();
     this.tMap.clearOverLays();
-    this.CarTrack.clear();
+    if (this.CarTrack) {
+      this.CarTrack.clear();
+    }
   },
   mounted() {
     this.gethuanjie();
@@ -362,18 +363,6 @@ export default {
         .then((res) => {
           if (res.data.result) {
             this.timelineData = res.data.result;
-          } else {
-            this.timelineData = [
-              // { deptName: "测试小区1", dateTime: "2022-06-28", weight: "1000" },
-              // { deptName: "测试小区2", dateTime: "2022-06-28", weight: "1500" },
-              // { deptName: "测试小区3", dateTime: "2022-06-28", weight: "3000" },
-              // { deptName: "测试小区4", dateTime: "2022-06-28", weight: "4000" },
-              // { deptName: "测试小区5", dateTime: "2022-06-28", weight: "5000" },
-              // { deptName: "测试小区6", dateTime: "2022-06-28", weight: "6000" },
-              // { deptName: "测试小区7", dateTime: "2022-06-28", weight: "7000" },
-              // { deptName: "测试小区8", dateTime: "2022-06-28", weight: "8000" },
-              // { deptName: "测试小区9", dateTime: "2022-06-28", weight: "9000" },
-            ];
           }
           this.drawTimeline();
         })
@@ -446,6 +435,7 @@ export default {
             };
           } else {
             // alert("暂无轨迹数据");
+            console.log("暂无轨迹数据");
           }
         })
         .catch((err) => {
@@ -604,9 +594,7 @@ export default {
             if (result) {
               Object.values(result).forEach((item) => {
                 item.forEach((num) => {
-                  if (num.flag != 0) {
-                    this.carlist.push(num);
-                  }
+                  this.carlist.push(num);
                 });
               });
             }
@@ -744,7 +732,7 @@ ul {
   width: 100%;
   .left {
     z-index: 100;
-    width: 200px;
+    width: 300px;
     display: inline-block;
     background: rgba(255, 255, 255, 0.13);
     position: absolute;
@@ -762,6 +750,9 @@ ul {
       border-radius: 5px;
       line-height: 35px;
       background: linear-gradient(45deg, #14f3c3, #3111e2);
+    }
+    .dateselect {
+      width: 100%;
     }
     ul > li {
       cursor: pointer;
@@ -823,6 +814,7 @@ ul {
       }
       ul {
         li {
+          font-size: 14px;
           background: linear-gradient(45deg, #2ba327, #607964);
         }
       }
