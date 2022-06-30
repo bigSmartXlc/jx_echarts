@@ -23,8 +23,8 @@
                   :class="{ li_bg: index % 2 == 0, li_bg1: index % 2 == 1 }"
                   @click="yjitemClick(item)"
                 >
-                  <span style="margin-right: 30px">{{ item.area }}</span
-                  >{{ item.name }}
+                  <div class="l_top_cityname">{{ item.cityName }}</div>
+                  <div class="l_top_title">{{ item.title }}</div>
                 </li>
               </ul>
             </VueSeamlessScroll>
@@ -39,7 +39,7 @@
               <span style="width: 100px">项目数</span>
               <span style="width: 150px">完成进度</span>
             </ul>
-            <div class="box" id="table_box">
+            <div id="table_box">
               <VueSeamlessScroll
                 :data="leftBottom"
                 :class-option="seamlessScrollOption"
@@ -53,23 +53,30 @@
               >
                 <ul>
                   <li v-for="(item, index) in leftBottom" :key="index">
-                    <span style="width: 50px">{{ item.index }}</span>
-                    <span style="width: 100px">{{ item.position }}</span>
-                    <span style="width: 100px">{{ item.num }}</span>
+                    <span style="width: 50px">{{ index + 1 }}</span>
+                    <span style="width: 100px">
+                      <span>{{ item.projectName }}</span></span
+                    >
+                    <span style="width: 100px">{{ item.projectValue }}</span>
                     <span style="width: 150px">
                       <span
                         :class="{
-                          spanP1: item.jingdu < 0.5,
-                          spanP2: item.jingdu >= 0.5 && item.jingdu < 0.8,
-                          spanP3: item.jingdu >= 0.8,
+                          spanP1: parseFloat(item.completionSchedule) < 50,
+                          spanP2:
+                            parseFloat(item.completionSchedule) >= 50 &&
+                            parseFloat(item.completionSchedule) < 80,
+                          spanP3: parseFloat(item.completionSchedule) >= 80,
                         }"
                         class="spanP"
                         :style="{
-                          backgroundSize: item.jingdu * 100 + '%' + ' 15px',
+                          backgroundSize:
+                            parseFloat(item.completionSchedule) + '%' + ' 15px',
                         }"
                       >
                       </span>
-                      <span class="spanS1">{{ item.jingdu * 100 }}%</span>
+                      <span class="spanS1"
+                        >{{ parseFloat(item.completionSchedule) }}%</span
+                      >
                     </span>
                   </li>
                 </ul>
@@ -87,94 +94,94 @@
           <!-- 菜单 -->
           <div class="tab-menu">
             <div
-              :class="{ menu_active: tabContent == 0 }"
-              class="tab-menu-span"
-              @click="tabContentToggle(0)"
-            >
-              投放
-            </div>
-            <div
-              :class="{ menu_active: tabContent == 1 }"
-              class="tab-menu-span"
-              @click="tabContentToggle(1)"
-            >
-              收集
-            </div>
-            <div
               :class="{ menu_active: tabContent == 2 }"
               class="tab-menu-span"
               @click="tabContentToggle(2)"
             >
-              运输
+              投放
             </div>
             <div
               :class="{ menu_active: tabContent == 3 }"
               class="tab-menu-span"
               @click="tabContentToggle(3)"
             >
+              收集
+            </div>
+            <div
+              :class="{ menu_active: tabContent == 4 }"
+              class="tab-menu-span"
+              @click="tabContentToggle(4)"
+            >
+              运输
+            </div>
+            <div
+              :class="{ menu_active: tabContent == 5 }"
+              class="tab-menu-span"
+              @click="tabContentToggle(5)"
+            >
               处置
             </div>
           </div>
           <div class="core-dynamic-content-container">
             <div class="scroll-wrapper" ref="scroll">
-              <div class="scroll-content" v-show="tabContent === 0">
-                <div
-                  class="scroll-item animate__animated animate__flipInY"
-                  @click="right_item_click(index, item)"
-                  :class="{
-                    active_right_item:
-                      active_right_item == index && tabContent === 0,
-                  }"
-                  v-for="(item, index) in dataList1"
-                  :key="index"
-                >
-                  <span class="name"> {{ item.name }}</span
-                  ><span class="num">{{ item.num }}</span>
-                </div>
-              </div>
-              <div class="scroll-content" v-show="tabContent === 1">
-                <div
-                  class="scroll-item animate__animated animate__flipInY"
-                  @click="right_item_click(index, item)"
-                  :class="{
-                    active_right_item:
-                      active_right_item == index && tabContent === 1,
-                  }"
-                  v-for="(item, index) in dataList2"
-                  :key="index"
-                >
-                  <span class="name"> {{ item.name }}</span
-                  ><span class="num">{{ item.num }}</span>
-                </div>
-              </div>
               <div class="scroll-content" v-show="tabContent === 2">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
-                  @click="right_item_click(index, item)"
+                  @click="right_item_click(index, item, tabContent)"
                   :class="{
                     active_right_item:
                       active_right_item == index && tabContent === 2,
                   }"
-                  v-for="(item, index) in dataList3"
+                  v-for="(item, index) in dataList1"
                   :key="index"
                 >
-                  <span class="name"> {{ item.name }}</span
-                  ><span class="num">{{ item.num }}</span>
+                  <span class="name"> {{ item.projectName }}</span
+                  ><span class="num">{{ item.projectValueTotal }}</span>
                 </div>
               </div>
               <div class="scroll-content" v-show="tabContent === 3">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
-                  @click="right_item_click(index, item)"
+                  @click="right_item_click(index, item, tabContent)"
                   :class="{
                     active_right_item:
                       active_right_item == index && tabContent === 3,
                   }"
+                  v-for="(item, index) in dataList2"
+                  :key="index"
+                >
+                  <span class="name"> {{ item.projectName }}</span
+                  ><span class="num">{{ item.projectValueTotal }}</span>
+                </div>
+              </div>
+              <div class="scroll-content" v-show="tabContent === 4">
+                <div
+                  class="scroll-item animate__animated animate__flipInY"
+                  @click="right_item_click(index, item, tabContent)"
+                  :class="{
+                    active_right_item:
+                      active_right_item == index && tabContent === 4,
+                  }"
+                  v-for="(item, index) in dataList3"
+                  :key="index"
+                >
+                  <span class="name"> {{ item.projectName }}</span
+                  ><span class="num">{{ item.projectValueTotal }}</span>
+                </div>
+              </div>
+              <div class="scroll-content" v-show="tabContent === 5">
+                <div
+                  class="scroll-item animate__animated animate__flipInY"
+                  @click="right_item_click(index, item, tabContent)"
+                  :class="{
+                    active_right_item:
+                      active_right_item == index && tabContent === 5,
+                  }"
                   v-for="(item, index) in dataList4"
                   :key="index"
                 >
-                  <span class="name"> {{ item.name }}</span
-                  ><span class="num">{{ item.num }}</span>
+                  <span class="name"> {{ item.projectName }}</span
+                  ><span class="num">{{ item.projectValueTotal }}</span>
                 </div>
               </div>
             </div>
@@ -203,7 +210,7 @@
       </div>
       <div class="dialog_body">
         <div class="solutionContent">
-          <p>{{ solution }}</p>
+          <p class="dialog_prog" v-html="solution"></p>
         </div>
       </div>
       <div class="videoOff" @click="solutionShow = false">关闭</div>
@@ -232,20 +239,20 @@
               {{ item }}
             </span>
           </div>
-          <div class="videoOff" @click="point_click_show = false">关闭</div>
+          <div class="videoOff" @click="dialog_off()">关闭</div>
         </div>
         <!---->
       </div>
       <div class="dialog_body">
         <div v-show="dialog_tab_num == 0">
           <ul class="info">
-            <li>站点类型：垃圾转运站</li>
-            <li>站点名称：嘉兴科技城垃圾中转站</li>
-            <li>站点地址：紫宇路诚信路路口西面</li>
-            <li>总投资额：1936.67</li>
-            <li>占地面积：2707平方米</li>
-            <li>投运日期：2020年7月1日</li>
-            <li>运营单位：嘉兴市嘉源环境卫生管理有限责任公司</li>
+            <li>站点类型：{{ info_object.paramName }}</li>
+            <li>站点名称：{{ info_object.projectName }}</li>
+            <li>站点地址：{{ info_object.projectAddress }}</li>
+            <li>总投资额：{{ info_object.money }}</li>
+            <li>占地面积：{{ info_object.buildArea }}</li>
+            <li>投运日期：{{ info_object.endDate }}</li>
+            <li>运营单位：{{ info_object.operationUnit }}</li>
           </ul>
         </div>
         <div v-show="dialog_tab_num == 1">现场图片</div>
@@ -283,82 +290,10 @@ export default {
       dialog_tab_num: 0,
       dialogList: ["基本信息", "现场图片", "定时抓拍", "现场监控"],
       point_click_show: false,
-      dataList1: [
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-      ],
-      dataList2: [
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-      ],
-      dataList3: [
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-      ],
-      dataList4: [
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-      ],
+      dataList1: [],
+      dataList2: [],
+      dataList3: [],
+      dataList4: [],
       solutionShow: false,
       solution: null,
       solution_title: null,
@@ -366,74 +301,18 @@ export default {
       mapdata: [],
       centerMap: [],
       myChart: null,
-      tabContent: 0,
+      tabContent: 2,
       color: ["#fecb9a", "#fefdce", "#fefa7d", "#cdccfb", "#cdf99d", "#fdcdcc"],
-      lefttopdata: [
-        {
-          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-          area: "嘉兴市",
-          solution:
-            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-        },
-        {
-          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-          area: "嘉兴市",
-          solution:
-            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-        },
-        {
-          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-          area: "嘉兴市",
-          solution:
-            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-        },
-        {
-          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-          area: "嘉兴市",
-          solution:
-            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-        },
-        {
-          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-          area: "嘉兴市",
-          solution:
-            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-        },
-        {
-          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-          area: "嘉兴市",
-          solution:
-            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-        },
-        {
-          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-          area: "嘉兴市",
-          solution:
-            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-        },
-      ],
-      leftBottom: [
-        { index: 1, position: "桐乡市", num: 5, jingdu: 0.1 },
-        { index: 2, position: "桐乡市", num: 5, jingdu: 0.2 },
-        { index: 3, position: "桐乡市", num: 5, jingdu: 0.3 },
-        { index: 4, position: "桐乡市", num: 5, jingdu: 0.4 },
-        { index: 5, position: "桐乡市", num: 5, jingdu: 0.5 },
-        { index: 6, position: "桐乡市", num: 5, jingdu: 0.6 },
-        { index: 7, position: "桐乡市", num: 5, jingdu: 0.7 },
-        { index: 8, position: "桐乡市", num: 5, jingdu: 0.8 },
-        { index: 9, position: "桐乡市", num: 5, jingdu: 0.99 },
-        { index: 10, position: "桐乡市", num: 5, jingdu: 0.1 },
-        { index: 11, position: "桐乡市", num: 5, jingdu: 0.2 },
-        { index: 12, position: "桐乡市", num: 5, jingdu: 0.3 },
-        { index: 13, position: "桐乡市", num: 5, jingdu: 0.4 },
-        { index: 14, position: "桐乡市", num: 5, jingdu: 0.5 },
-        { index: 15, position: "桐乡市", num: 5, jingdu: 0.6 },
-        { index: 16, position: "桐乡市", num: 5, jingdu: 0.7 },
-        { index: 17, position: "桐乡市", num: 5, jingdu: 0.8 },
-        { index: 18, position: "桐乡市", num: 5, jingdu: 0.99 },
-      ],
+      lefttopdata: [],
+      leftBottom: [],
       active_right_item: null,
+      villageId: null,
+      info_object: {},
     };
+  },
+  created() {
+    this.deptId = this.$route.query.deptId;
+    this.deptIdEnd = this.$route.query.deptIdEnd;
   },
   mounted() {
     let script = document.createElement("script");
@@ -453,6 +332,9 @@ export default {
                 console.log("天地图准备完毕");
                 this.tMap = new T.Map("chart-city");
                 this.toggleArea(this.$route.query.areaName);
+                this.planningGuidance();
+                this.projectConstruction();
+                this.basicResources(2);
               }
             );
           }
@@ -461,19 +343,201 @@ export default {
     };
   },
   methods: {
+    //关闭弹窗
+    dialog_off() {
+      console.log("关闭");
+      this.point_click_show = false;
+    },
+    //基本信息查询
+    basicInformation() {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/basicInformation",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          villageId: this.villageId,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          this.info_object = res.data.result;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //现场图片
+    livePicture() {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/livePicture",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          villageId: this.villageId,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    queryCameraImgByVillageId() {
+      this.$http({
+        method: "get",
+        url: "api/v1/jky/queryCameraImgByVillageId",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        params: {
+          villageId: this.villageId,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    queryCameraByVillageId() {
+      this.$http({
+        method: "get",
+        url: "/api/v1/jky/queryCameraByVillageId",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        params: {
+          villageId: this.villageId,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //基础资源
+    basicResources(val) {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/planConstruct/basicResources",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: this.deptId,
+          deptIdEnd: this.deptIdEnd,
+          state: val,
+        },
+      })
+        .then((res) => {
+          if (val == 2) {
+            this.dataList1 = res.data.result;
+          } else if (val == 3) {
+            this.dataList2 = res.data.result;
+          } else if (val == 4) {
+            this.dataList3 = res.data.result;
+          } else if (val == 5) {
+            this.dataList4 = res.data.result;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //项目建设
+    projectConstruction() {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/planConstruct/projectConstruction",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: this.deptId,
+          deptIdEnd: this.deptIdEnd,
+          state: 1,
+        },
+      })
+        .then((res) => {
+          console.log(res.data.result);
+          this.leftBottom = res.data.result;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    // 规划引领
+    planningGuidance() {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/planConstruct/planningGuidance",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: this.deptId,
+          deptIdEnd: this.deptIdEnd,
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          this.lefttopdata = res.data.result;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     dialog_title_click(item, index) {
       this.dialog_tab_num = index;
     },
-    right_item_click(index, item) {
+    right_item_click(index, item, tabContent) {
       this.active_right_item = index;
+      this.subpageMapPoints(item, tabContent);
+    },
+    //地图点位信息查询
+    subpageMapPoints(item, state) {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/planConstruct/subpageMapPoints",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: this.deptId,
+          deptIdEnd: this.deptIdEnd,
+          projectName: item.projectName,
+          projectType: item.projectType,
+          state: state,
+        },
+      })
+        .then((res) => {
+          var data = JSON.parse(JSON.stringify(res.data.result));
+          this.drawPoint(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    // 天地图添加标记并绑定点击事件
+    drawPoint(data) {
+      data.forEach((item) => {
+        var marker = new T.Marker(new T.LngLat(item.lng, item.lat));
+        marker.info = item;
+        //向地图上添加标注
+        this.tMap.addOverLay(marker);
+        marker.addEventListener("click", this.marker_click);
+      });
+    },
+    marker_click(e) {
+      var p = e.target;
+      console.log(p);
+      this.villageId = p.info.rowId;
+      this.point_click_show = true;
+      this.basicInformation();
+      this.livePicture();
+      this.queryCameraImgByVillageId();
+      this.queryCameraByVillageId();
     },
     tabContentToggle(val) {
+      this.basicResources(val);
       this.tabContent = val;
       this.active_right_item = null;
     },
     yjitemClick(item) {
-      this.solution = item.solution;
-      this.solution_title = item.name;
+      this.solution = item.content;
+      this.solution_title = item.title;
       this.solutionShow = true;
     },
     toggleArea(areaName) {
@@ -517,18 +581,6 @@ export default {
       //向地图上添加面
       this.tMap.addOverLay(polygon);
       //创建标注对象
-      var marker = new T.Marker(
-        new T.LngLat(this.centerMap.centroid[0], this.centerMap.centroid[1])
-      );
-      //向地图上添加标注
-      this.tMap.addOverLay(marker);
-      marker.addEventListener("click", this.marker_click);
-    },
-    marker_click(e) {
-      console.log(e.target);
-      var p = e.target;
-      console.log(p.getLngLat().lng);
-      this.point_click_show = true;
     },
     //加载js
     loadJS(url, success) {
@@ -675,6 +727,20 @@ export default {
           height: 90px;
           line-height: 90px;
           margin: 0 auto;
+          .l_top_cityname {
+            display: inline-block;
+            width: 12%;
+            vertical-align: top;
+          }
+          .l_top_title {
+            display: inline-block;
+            width: 88%;
+            overflow: hidden;
+            /*文本不会换行*/
+            white-space: nowrap;
+            /*当文本溢出包含元素时，以省略号表示超出的文本*/
+            text-overflow: ellipsis;
+          }
         }
       }
     }
@@ -698,7 +764,7 @@ export default {
       position: relative;
       height: calc(100% - 58px);
       background-color: transparent;
-      overflow: hid den;
+      overflow: hiddden;
       color: #fff;
       border-radius: 5px;
       ul {

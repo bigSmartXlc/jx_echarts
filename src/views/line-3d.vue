@@ -95,7 +95,7 @@
           </ul>
 
           <VueSeamlessScroll
-            :data="leftBottom"
+            :data="leftBottom1"
             :class-option="seamlessScrollOption"
             key="top"
             style="
@@ -109,14 +109,14 @@
             <div v-show="table == 1" class="table">
               <div
                 class="tbody"
-                v-for="(item, index) in leftBottom"
+                v-for="(item, index) in leftBottom1"
                 :key="index"
               >
-                <span style="width: 40px">{{ item.index }}</span>
-                <span style="width: 145px">{{ item.position }}</span>
-                <span style="width: 80px">{{ item.num }}</span>
-                <span style="width: 110px">{{ item.jingdu }}</span>
-                <span style="width: 65px">{{ item.wieght }}</span>
+                <span style="width: 40px">{{ index + 1 }}</span>
+                <span style="width: 145px">{{ item.siteName }}</span>
+                <span style="width: 80px">{{ item.weighName }}</span>
+                <span style="width: 110px">{{ item.garbageSource }}</span>
+                <span style="width: 65px">{{ item.weight3 }}</span>
                 <span style="width: 105px">{{ item.time }}</span>
               </div>
             </div>
@@ -130,9 +130,10 @@
             <span style="width: 110px">运输次数</span>
             <span style="width: 110px">运输总重量</span>
             <span style="width: 105px">次均装重量</span>
+            <span style="width: 120px">次均满载率(%)</span>
           </ul>
           <VueSeamlessScroll
-            :data="leftBottom"
+            :data="leftBottom2"
             :class-option="seamlessScrollOption"
             key="bottom"
             style="
@@ -146,15 +147,16 @@
             <div class="table">
               <div
                 class="tbody"
-                v-for="(item, index) in leftBottom"
+                v-for="(item, index) in leftBottom2"
                 :key="index"
               >
-                <span style="width: 40px">{{ item.index }}</span>
-                <span style="width: 145px">{{ item.position }}</span>
-                <span style="width: 80px">{{ item.num }}</span>
-                <span style="width: 110px">{{ item.jingdu }}</span>
-                <span style="width: 110px">{{ item.wieght }}</span>
-                <span style="width: 105px">{{ item.time }}</span>
+                <span style="width: 40px">{{ index + 1 }}</span>
+                <span style="width: 145px">{{ item.deptName }}</span>
+                <span style="width: 80px">{{ item.weighName }}</span>
+                <span style="width: 110px">{{ item.count }}</span>
+                <span style="width: 110px">{{ item.sumWeight }}</span>
+                <span style="width: 105px">{{ item.avgWeight }}</span>
+                <span style="width: 120px">{{ item.avgRatio }}</span>
               </div>
             </div>
           </VueSeamlessScroll>
@@ -165,7 +167,7 @@
 </template>
 
 <script>
-import * as echarts from "echarts/lib/echarts.js";
+import * as echarts from "echarts";
 import "echarts-gl";
 import yls_json from "./ljpt_xz.json";
 import anime from "animejs";
@@ -192,70 +194,194 @@ export default {
         "#6c9336",
         "#81703d",
       ],
-      garbageType: 10,
+      garbageType: 40,
       chart: null,
       lines_coord: [],
       scatter_coords: [],
       scatter_coord: [],
       selectcity: null,
-      leftBottom: [
+      leftBottom1: [
         {
-          index: 1,
-          position: "桐乡市",
-          num: 5,
-          jingdu: "10%",
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
           time: "2022-02-08",
-          wieght: 900,
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
         },
         {
-          index: 1,
-          position: "桐乡市",
-          num: 5,
-          jingdu: "10%",
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
           time: "2022-02-08",
-          wieght: 900,
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
         },
         {
-          index: 1,
-          position: "桐乡市",
-          num: 5,
-          jingdu: "10%",
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
           time: "2022-02-08",
-          wieght: 900,
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
         },
         {
-          index: 1,
-          position: "桐乡市",
-          num: 5,
-          jingdu: "10%",
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
           time: "2022-02-08",
-          wieght: 900,
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
         },
         {
-          index: 1,
-          position: "桐乡市",
-          num: 5,
-          jingdu: "10%",
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
           time: "2022-02-08",
-          wieght: 900,
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
         },
         {
-          index: 1,
-          position: "桐乡市",
-          num: 5,
-          jingdu: "10%",
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
           time: "2022-02-08",
-          wieght: 900,
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
         },
         {
-          index: 1,
-          position: "桐乡市",
-          num: 5,
-          jingdu: "10%",
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
           time: "2022-02-08",
-          wieght: 900,
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
+        },
+        {
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
+          time: "2022-02-08",
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
         },
       ],
+      leftBottom2: [
+        {
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
+          time: "2022-02-08",
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
+        },
+        {
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
+          time: "2022-02-08",
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
+        },
+        {
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
+          time: "2022-02-08",
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
+        },
+        {
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
+          time: "2022-02-08",
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
+        },
+        {
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
+          time: "2022-02-08",
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
+        },
+        {
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
+          time: "2022-02-08",
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
+        },
+        {
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
+          time: "2022-02-08",
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
+        },
+        {
+          siteName: "桐乡市",
+          weighName: 5,
+          garbageSource: "10%",
+          time: "2022-02-08",
+          count: "13132",
+          sumWeight: "21212",
+          avgWeight: "121",
+          avgRatio: "13231",
+          weight3: 900,
+        },
+      ],
+      carrentDate: null,
+      yesterday: null,
     };
   },
   watch: {
@@ -278,7 +404,7 @@ export default {
     seamlessScrollOption() {
       return {
         step: 1, // 数值越大速度滚动越快
-        // limitMoveNum: 2, // 开始无缝滚动的数据量 this.dataList.length
+        limitMoveNum: 7, // 开始无缝滚动的数据量 this.dataList.length
         hoverStop: true, // 是否开启鼠标悬停stop
         direction: 1, // 0向下 1向上 2向左 3向右
         openWatch: true, // 开启数据实时监控刷新dom
@@ -288,12 +414,34 @@ export default {
       };
     },
   },
+  created() {
+    this.dateSwitch();
+    this.getYeasterDay();
+  },
   mounted() {
-    // this.getFeixian(10);
-    this.drawFeixian();
     this.getWieght();
+    this.drawFeixian();
   },
   methods: {
+    dateSwitch() {
+      var date = new Date();
+      var y = date.getFullYear();
+      var M = date.getMonth() + 1;
+      M = M < 10 ? "0" + M : M;
+      var d = date.getDate();
+      d = d < 10 ? "0" + d : d;
+      this.carrentDate = y + "-" + M + "-" + d;
+    },
+    getYeasterDay() {
+      var time = new Date().getTime() - 24 * 60 * 60 * 1000;
+      var yesterday = new Date(time);
+      var y = yesterday.getFullYear();
+      var M = yesterday.getMonth() + 1;
+      M = M < 10 ? "0" + M : M;
+      var d = yesterday.getDate();
+      d = d < 10 ? "0" + d : d;
+      this.yesterday = y + "-" + M + "-" + d;
+    },
     //地磅称重 // 车辆载重
     getWieght() {
       this.$http({
@@ -302,13 +450,16 @@ export default {
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
           deptId: "400000000",
-          // garbageType: this.garbageType.toString(),
-          garbageType: "40",
-          start: "2022-05-19",
-          end: "2022-06-10",
+          garbageType: this.garbageType.toString(),
+          start: this.yesterday,
+          end: this.carrentDate,
+          pageNum: 1,
+          pageSize: 20,
         },
       }).then((res) => {
-        console.log(1, res);
+        if (res.data.result) {
+          this.leftBottom1 = res.data.result.list;
+        }
       });
       this.$http({
         method: "post",
@@ -318,10 +469,13 @@ export default {
           deptId: "400000000",
           garbageType: this.garbageType.toString(),
           deptIdEnd: "499999999",
-          startTime: "2022-05-19",
+          startTime: this.yesterday,
         },
       }).then((res) => {
         console.log(2, res);
+        if (res.data.result) {
+          this.leftBottom2 = res.data.result;
+        }
       });
     },
     //飞线
@@ -367,42 +521,11 @@ export default {
               //通过Array.from()方法将 set 转化为数组 并赋给新数组
               this.scatter_coord = Array.from(set);
               setTimeout(() => {
-                switch (garbageType) {
-                  case 10:
-                    this.drawFeixian(this.color[0]);
-                    break;
-                  case 20:
-                    this.drawFeixian(this.color[1]);
-                    break;
-                  case 30:
-                    this.drawFeixian(this.color[2]);
-                    break;
-                  case 31:
-                    this.drawFeixian(this.color[3]);
-                    break;
-                  case 32:
-                    this.drawFeixian(this.color[4]);
-                    break;
-                  case 40:
-                    this.drawFeixian(this.color[5]);
-                    break;
-                  case 70:
-                    this.drawFeixian(this.color[6]);
-                    break;
-                  case 60:
-                    this.drawFeixian(this.color[7]);
-                    break;
-                  case 80:
-                    this.drawFeixian(this.color[8]);
-                    break;
-                  default:
-                    this.drawFeixian(this.color[0]);
-                    break;
-                }
+                this.drawFeixian();
               }, 300);
             }
           } else if (typeof res.data === "object") {
-            this.drawFeixian(this.color[0]);
+            this.drawFeixian();
             alert(res.data.message);
           }
         })
@@ -428,9 +551,7 @@ export default {
         const geoAreaName = item.properties.name; // geo文件中的地理名称
         return {
           name: geoAreaName,
-          // value: item.properties.centroid,
           itemStyle: {
-            // color: this.color[index] || "#046357",
             color: "#324ca4",
           },
         };
@@ -440,9 +561,6 @@ export default {
           text: "当前位置-嘉兴市",
           left: 200,
           top: 160,
-          textStyle: {
-            color: "#fff",
-          },
         },
         geo3D: {
           map: "yls",
@@ -614,6 +732,7 @@ export default {
           },
         ],
       };
+      this.chart.clear();
       this.chart.hideLoading();
       this.chart.setOption(option);
       this.chart.on("click", (res) => {
@@ -740,7 +859,7 @@ ul {
     border: solid 1px #66bbf9;
   }
   .rightContainer {
-    width: 25%;
+    width: 35%;
     position: absolute;
     right: 10px;
     height: 80%;

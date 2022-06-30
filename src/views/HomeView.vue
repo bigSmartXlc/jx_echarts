@@ -23,8 +23,8 @@
                   :class="{ li_bg: index % 2 == 0, li_bg1: index % 2 == 1 }"
                   @click="yjitemClick(item)"
                 >
-                  <span style="margin-right: 30px">{{ item.area }}</span
-                  >{{ item.name }}
+                  <div class="l_top_cityname">{{ item.cityName }}</div>
+                  <div class="l_top_title">{{ item.title }}</div>
                 </li>
               </ul>
             </VueSeamlessScroll>
@@ -53,23 +53,30 @@
               >
                 <ul>
                   <li v-for="(item, index) in leftBottom" :key="index">
-                    <span style="width: 50px">{{ item.index }}</span>
-                    <span style="width: 100px">{{ item.position }}</span>
-                    <span style="width: 100px">{{ item.num }}</span>
+                    <span style="width: 50px">{{ index + 1 }}</span>
+                    <span style="width: 100px">
+                      <span>{{ item.projectName }}</span></span
+                    >
+                    <span style="width: 100px">{{ item.projectValue }}</span>
                     <span style="width: 150px">
                       <span
                         :class="{
-                          spanP1: item.jingdu < 0.5,
-                          spanP2: item.jingdu >= 0.5 && item.jingdu < 0.8,
-                          spanP3: item.jingdu >= 0.8,
+                          spanP1: parseFloat(item.completionSchedule) < 50,
+                          spanP2:
+                            parseFloat(item.completionSchedule) >= 50 &&
+                            parseFloat(item.completionSchedule) < 80,
+                          spanP3: parseFloat(item.completionSchedule) >= 80,
                         }"
                         class="spanP"
                         :style="{
-                          backgroundSize: item.jingdu * 100 + '%' + ' 15px',
+                          backgroundSize:
+                            parseFloat(item.completionSchedule) + '%' + ' 15px',
                         }"
                       >
                       </span>
-                      <span class="spanS1">{{ item.jingdu * 100 }}%</span>
+                      <span class="spanS1"
+                        >{{ parseFloat(item.completionSchedule) }}%</span
+                      >
                     </span>
                   </li>
                 </ul>
@@ -87,94 +94,94 @@
           <!-- 菜单 -->
           <div class="tab-menu">
             <div
-              :class="{ menu_active: tabContent == 0 }"
-              class="tab-menu-span"
-              @click="tabContentToggle(0)"
-            >
-              投放
-            </div>
-            <div
-              :class="{ menu_active: tabContent == 1 }"
-              class="tab-menu-span"
-              @click="tabContentToggle(1)"
-            >
-              收集
-            </div>
-            <div
               :class="{ menu_active: tabContent == 2 }"
               class="tab-menu-span"
               @click="tabContentToggle(2)"
             >
-              运输
+              投放
             </div>
             <div
               :class="{ menu_active: tabContent == 3 }"
               class="tab-menu-span"
               @click="tabContentToggle(3)"
             >
+              收集
+            </div>
+            <div
+              :class="{ menu_active: tabContent == 4 }"
+              class="tab-menu-span"
+              @click="tabContentToggle(4)"
+            >
+              运输
+            </div>
+            <div
+              :class="{ menu_active: tabContent == 5 }"
+              class="tab-menu-span"
+              @click="tabContentToggle(5)"
+            >
               处置
             </div>
           </div>
           <div class="core-dynamic-content-container">
             <div class="scroll-wrapper" ref="scroll">
-              <div class="scroll-content" v-show="tabContent === 0">
-                <div
-                  class="scroll-item animate__animated animate__flipInY"
-                  @click="right_item_click(index, item)"
-                  :class="{
-                    active_right_item:
-                      active_right_item == index && tabContent === 0,
-                  }"
-                  v-for="(item, index) in dataList1"
-                  :key="index"
-                >
-                  <span class="name"> {{ item.name }}</span
-                  ><span class="num">{{ item.num }}</span>
-                </div>
-              </div>
-              <div class="scroll-content" v-show="tabContent === 1">
-                <div
-                  class="scroll-item animate__animated animate__flipInY"
-                  @click="right_item_click(index, item)"
-                  :class="{
-                    active_right_item:
-                      active_right_item == index && tabContent === 1,
-                  }"
-                  v-for="(item, index) in dataList2"
-                  :key="index"
-                >
-                  <span class="name"> {{ item.name }}</span
-                  ><span class="num">{{ item.num }}</span>
-                </div>
-              </div>
               <div class="scroll-content" v-show="tabContent === 2">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
-                  @click="right_item_click(index, item)"
+                  @click="right_item_click(index, item, tabContent)"
                   :class="{
                     active_right_item:
                       active_right_item == index && tabContent === 2,
                   }"
-                  v-for="(item, index) in dataList3"
+                  v-for="(item, index) in dataList1"
                   :key="index"
                 >
-                  <span class="name"> {{ item.name }}</span
-                  ><span class="num">{{ item.num }}</span>
+                  <span class="name"> {{ item.projectName }}</span
+                  ><span class="num">{{ item.projectValueTotal }}</span>
                 </div>
               </div>
               <div class="scroll-content" v-show="tabContent === 3">
                 <div
                   class="scroll-item animate__animated animate__flipInY"
-                  @click="right_item_click(index, item)"
+                  @click="right_item_click(index, item, tabContent)"
                   :class="{
                     active_right_item:
                       active_right_item == index && tabContent === 3,
                   }"
+                  v-for="(item, index) in dataList2"
+                  :key="index"
+                >
+                  <span class="name"> {{ item.projectName }}</span
+                  ><span class="num">{{ item.projectValueTotal }}</span>
+                </div>
+              </div>
+              <div class="scroll-content" v-show="tabContent === 4">
+                <div
+                  class="scroll-item animate__animated animate__flipInY"
+                  @click="right_item_click(index, item, tabContent)"
+                  :class="{
+                    active_right_item:
+                      active_right_item == index && tabContent === 4,
+                  }"
+                  v-for="(item, index) in dataList3"
+                  :key="index"
+                >
+                  <span class="name"> {{ item.projectName }}</span
+                  ><span class="num">{{ item.projectValueTotal }}</span>
+                </div>
+              </div>
+              <div class="scroll-content" v-show="tabContent === 5">
+                <div
+                  class="scroll-item animate__animated animate__flipInY"
+                  @click="right_item_click(index, item, tabContent)"
+                  :class="{
+                    active_right_item:
+                      active_right_item == index && tabContent === 5,
+                  }"
                   v-for="(item, index) in dataList4"
                   :key="index"
                 >
-                  <span class="name"> {{ item.name }}</span
-                  ><span class="num">{{ item.num }}</span>
+                  <span class="name"> {{ item.projectName }}</span
+                  ><span class="num">{{ item.projectValueTotal }}</span>
                 </div>
               </div>
             </div>
@@ -203,7 +210,7 @@
       </div>
       <div class="dialog_body">
         <div class="solutionContent">
-          <p>{{ solution }}</p>
+          <p class="dialog_prog" v-html="solution"></p>
         </div>
       </div>
       <div class="videoOff" @click="solutionShow = false">关闭</div>
@@ -216,7 +223,7 @@ import * as echarts from "echarts";
 import VueSeamlessScroll from "vue-seamless-scroll";
 import yls_json from "./ljpt_xz.json";
 import "echarts-gl";
-import BScroll from "@better-scroll/core";
+// import BScroll from "@better-scroll/core";
 export default {
   components: {
     VueSeamlessScroll,
@@ -238,87 +245,16 @@ export default {
   },
   data() {
     return {
-      dataList1: [
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-        { name: "投放点位", num: 5624 },
-      ],
-      dataList2: [
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-        { name: "收集车辆", num: 5624 },
-      ],
-      dataList3: [
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-        { name: "转运车辆", num: 5624 },
-      ],
-      dataList4: [
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-        { name: "焚烧处置场", num: 5624 },
-      ],
+      dataList1: [],
+      dataList2: [],
+      dataList3: [],
+      dataList4: [],
+      areaNumList: [],
       solutionShow: false,
       solution: null,
       solution_title: null,
       myChart: null,
-      tabContent: 0,
+      tabContent: 2,
       btnlist3: [
         { deptName: "南湖", rowId: 410000000, rowIdEnd: 419999999 },
         { deptName: "秀洲", rowId: 420000000, rowIdEnd: 429999999 },
@@ -331,88 +267,130 @@ export default {
         { deptName: "港区", rowId: 490000000, rowIdEnd: 499999999 },
       ],
       color: ["#fecb9a", "#fefdce", "#fefa7d", "#cdccfb", "#cdf99d", "#fdcdcc"],
-      lefttopdata: [
-        {
-          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-          area: "嘉兴市",
-          solution:
-            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-        },
-        {
-          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-          area: "嘉兴市",
-          solution:
-            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-        },
-        {
-          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-          area: "嘉兴市",
-          solution:
-            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-        },
-        {
-          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-          area: "嘉兴市",
-          solution:
-            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-        },
-        {
-          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-          area: "嘉兴市",
-          solution:
-            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-        },
-        {
-          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-          area: "嘉兴市",
-          solution:
-            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-        },
-        {
-          name: "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-          area: "嘉兴市",
-          solution:
-            "嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排嘉兴市住房和城乡建设局关于2025年垃圾分类规划安排",
-        },
-      ],
-      leftBottom: [
-        { index: 1, position: "桐乡市", num: 5, jingdu: 0.1 },
-        { index: 2, position: "桐乡市", num: 5, jingdu: 0.2 },
-        { index: 3, position: "桐乡市", num: 5, jingdu: 0.3 },
-        { index: 4, position: "桐乡市", num: 5, jingdu: 0.4 },
-        { index: 5, position: "桐乡市", num: 5, jingdu: 0.5 },
-        { index: 6, position: "桐乡市", num: 5, jingdu: 0.6 },
-        { index: 7, position: "桐乡市", num: 5, jingdu: 0.7 },
-        { index: 8, position: "桐乡市", num: 5, jingdu: 0.8 },
-        { index: 9, position: "桐乡市", num: 5, jingdu: 0.99 },
-        { index: 10, position: "桐乡市", num: 5, jingdu: 0.1 },
-        { index: 11, position: "桐乡市", num: 5, jingdu: 0.2 },
-        { index: 12, position: "桐乡市", num: 5, jingdu: 0.3 },
-        { index: 13, position: "桐乡市", num: 5, jingdu: 0.4 },
-        { index: 14, position: "桐乡市", num: 5, jingdu: 0.5 },
-        { index: 15, position: "桐乡市", num: 5, jingdu: 0.6 },
-        { index: 16, position: "桐乡市", num: 5, jingdu: 0.7 },
-        { index: 17, position: "桐乡市", num: 5, jingdu: 0.8 },
-        { index: 18, position: "桐乡市", num: 5, jingdu: 0.99 },
-      ],
+      lefttopdata: [],
+      leftBottom: [],
       bs: null,
       active_right_item: null,
     };
   },
   mounted() {
     this.map();
+    this.planningGuidance();
+    this.projectConstruction();
+    this.basicResources(2);
   },
   methods: {
-    right_item_click(index, item) {
+    //基础资源
+    basicResources(val) {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/planConstruct/basicResources",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: "400000000",
+          deptIdEnd: "499999999",
+          state: val,
+        },
+      })
+        .then((res) => {
+          if (val == 2) {
+            this.dataList1 = res.data.result;
+          } else if (val == 3) {
+            this.dataList2 = res.data.result;
+          } else if (val == 4) {
+            this.dataList3 = res.data.result;
+          } else if (val == 5) {
+            this.dataList4 = res.data.result;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //项目建设
+    projectConstruction() {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/planConstruct/projectConstruction",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: "400000000",
+          deptIdEnd: "499999999",
+          state: 1,
+        },
+      })
+        .then((res) => {
+          console.log(res.data.result);
+          this.leftBottom = res.data.result;
+          // this.lefttopdata = res.data.result;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //地图点位信息查询
+    mainpageMapQuantity(item, state) {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/planConstruct/mainpageMapQuantity",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: "400000000",
+          deptIdEnd: "499999999",
+          projectName: item.projectName,
+          projectType: item.projectType,
+          state: state,
+        },
+      })
+        .then((res) => {
+          var data = JSON.parse(JSON.stringify(res.data.result));
+          console.log(data);
+          data.forEach((item) => {
+            this.btnlist3.forEach((n) => {
+              if (n.rowId == item.deptId) {
+                item.deptName = n.deptName;
+              }
+            });
+          });
+          console.log(data);
+          this.areaNumList = data;
+          this.map();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    // 规划引领
+    planningGuidance() {
+      this.$http({
+        method: "post",
+        url: "api/v1/jky/planConstruct/planningGuidance",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        data: {
+          deptId: "400000000",
+          deptIdEnd: "499999999",
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          this.lefttopdata = res.data.result;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    right_item_click(index, item, tabContent) {
       this.active_right_item = index;
+      this.mainpageMapQuantity(item, tabContent);
     },
     tabContentToggle(val) {
+      this.basicResources(val);
       this.tabContent = val;
       this.active_right_item = null;
     },
     yjitemClick(item) {
-      this.solution = item.solution;
-      this.solution_title = item.name;
+      this.solution = item.content;
+      this.solution_title = item.title;
       this.solutionShow = true;
     },
     map() {
@@ -420,16 +398,23 @@ export default {
       let data = yls_json;
       echarts.registerMap("yls", data);
       var myChart = echarts.init(document.getElementById("chart-city"));
-
       // JSON文件(地图数据)路径
-
       // 显示加载动画效果,可以在加载数据前手动调用该接口显示加载动画，在数据加载完成后调用 hideLoading 隐藏加载动画。
       myChart.showLoading();
-
       // 引入JSON文件
       var linedata = [];
       const map3Ddata = yls_json.features.map((item) => {
-        if (item.properties.centroid) {
+        var area_value = 0;
+        if (this.areaNumList.length > 0) {
+          this.areaNumList.forEach((n) => {
+            if (item.properties.name.indexOf(n.deptName) != -1) {
+              area_value = n.projectValue;
+              if (item.properties.centroid) {
+                linedata.push([...item.properties.centroid, area_value]);
+              }
+            }
+          });
+        } else {
           linedata.push([...item.properties.centroid, 0]);
         }
         const geoAreaName = item.properties.name; // geo文件中的地理名称
@@ -488,7 +473,7 @@ export default {
             name: "yls",
             coordinateSystem: "geo3D",
             symbol: "pin",
-            symbolSize: 20,
+            symbolSize: 15,
             animation: true,
             zlevel: -8,
             itemStyle: {
@@ -496,7 +481,20 @@ export default {
               opacity: 1,
             },
             label: {
-              distance: 20,
+              show: true,
+              distance: 0,
+              position: "left",
+              formatter(param) {
+                const num = param.data[2];
+                return `{sty1|${num > 0 ? num : ""}}`;
+              },
+              rich: {
+                sty1: {
+                  color: "#fff",
+                  fontSize: 26,
+                  fontWeight: 700,
+                },
+              },
             },
             data: linedata,
           },
@@ -515,7 +513,7 @@ export default {
               },
               rich: {
                 sty1: {
-                  color: "#02a7f0",
+                  color: "#ffffff",
                   align: "center",
                   fontSize: 18,
                   fontWeight: 700,
@@ -704,6 +702,20 @@ export default {
           height: 90px;
           line-height: 90px;
           margin: 0 auto;
+          .l_top_cityname {
+            display: inline-block;
+            width: 12%;
+            vertical-align: top;
+          }
+          .l_top_title {
+            display: inline-block;
+            width: 88%;
+            overflow: hidden;
+            /*文本不会换行*/
+            white-space: nowrap;
+            /*当文本溢出包含元素时，以省略号表示超出的文本*/
+            text-overflow: ellipsis;
+          }
         }
       }
     }
@@ -727,7 +739,7 @@ export default {
       position: relative;
       height: calc(100% - 58px);
       background-color: transparent;
-      overflow: hid den;
+      overflow: hiddden;
       color: #fff;
       border-radius: 5px;
       ul {

@@ -23,7 +23,7 @@
     width: 70%;
     height: 70% !important;
     .dialog__header{
-      padding: 20px 20px 10px;
+      padding: 10px 20px 20px 20px;
       .header-title{
         color: rgb(255, 255, 255); 
         position: relative;
@@ -65,22 +65,32 @@
         }
         .videoOff{
           position: absolute;
-          top: 0;
+          top: -10px;
+          z-index: 200;
           right: 10px;
         }
       }
     }
     .dialog_body{
       height: calc(100% - 148px);
-      padding: 0 15px;
+      width: 100%;
+      margin-bottom: 15px;
       .solutionContent{
+        height: 100%;
+        width: 100%;
         overflow: auto;
+        padding:0 auto;
         color: #ffffff;
         font-size: 26px;
         font-weight: 700;
-        p {
+        .dialog_progf {
+          height: 100%;
+          width: 100%;
           text-indent: 50px;
           text-align: left;
+        }
+        p{
+          color: #ffffff;
         }
       }
     }
@@ -91,7 +101,7 @@
       color: #fff;
       font-size: 24px;
       cursor: pointer;
-      margin: 0 auto;
+      margin: 5px auto 0px;
       font-weight: 700;
       line-height: 30px;
       background-image: url("../images/btn_bg.svg");
