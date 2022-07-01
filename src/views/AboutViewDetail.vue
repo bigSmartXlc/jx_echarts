@@ -360,32 +360,27 @@ export default {
         this.loadJS(
           "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
           () => {
-            this.loadJS(
-              "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
-              () => {
-                console.log("天地图准备完毕");
-                this.tMap = new T.Map("main");
-                this.toggleArea(this.$route.query.areaName);
-                this.getdata();
-                this.getRedBlack();
-                this.getSanlv();
-                this.getYuJing();
-                setTimeout(() => {
-                  this.getWeight();
-                  this.getEvaluation(
-                    "api/v1/jky/dailyEvaluation",
-                    {
-                      deptId: this.formfiled.deptId,
-                      deptIdEnd: this.formfiled.deptIdEnd,
-                      // date: this.carrentDate,
-                      // 测试数据
-                      date: "2022-05-17",
-                    },
-                    10
-                  );
-                }, 1000);
-              }
-            );
+            console.log("天地图准备完毕");
+            this.tMap = new T.Map("main");
+            this.toggleArea(this.$route.query.areaName);
+            this.getdata();
+            this.getRedBlack();
+            this.getSanlv();
+            this.getYuJing();
+            setTimeout(() => {
+              this.getWeight();
+              this.getEvaluation(
+                "api/v1/jky/dailyEvaluation",
+                {
+                  deptId: this.formfiled.deptId,
+                  deptIdEnd: this.formfiled.deptIdEnd,
+                  // date: this.carrentDate,
+                  // 测试数据
+                  date: "2022-05-17",
+                },
+                10
+              );
+            }, 1000);
           }
         );
       });

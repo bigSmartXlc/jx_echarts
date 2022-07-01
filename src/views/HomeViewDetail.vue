@@ -35,12 +35,13 @@
           <div class="map_border">
             <ul class="thead">
               <span style="width: 50px">序号</span>
-              <span style="width: 100px">区县</span>
-              <span style="width: 100px">项目数</span>
+              <span style="width: 150px">区县</span>
+              <span style="width: 70px">项目数</span>
               <span style="width: 150px">完成进度</span>
             </ul>
             <div id="table_box">
               <VueSeamlessScroll
+                v-if="leftBottom.length > 0"
                 :data="leftBottom"
                 :class-option="seamlessScrollOption"
                 style="
@@ -54,10 +55,10 @@
                 <ul>
                   <li v-for="(item, index) in leftBottom" :key="index">
                     <span style="width: 50px">{{ index + 1 }}</span>
-                    <span style="width: 100px">
+                    <span style="width: 150px">
                       <span>{{ item.projectName }}</span></span
                     >
-                    <span style="width: 100px">{{ item.projectValue }}</span>
+                    <span style="width: 70px">{{ item.projectValue }}</span>
                     <span style="width: 150px">
                       <span
                         :class="{
@@ -243,7 +244,7 @@
         </div>
         <!---->
       </div>
-      <div class="dialog_body">
+      <div class="dialog_body" style="height: calc(100% - 108px)">
         <div class="tab_content" v-show="dialog_tab_num == 0">
           <ul class="info">
             <li>站点类型：{{ info_object.paramName }}</li>
@@ -257,11 +258,16 @@
         </div>
         <div class="tab_content" v-show="dialog_tab_num == 1">
           <div class="aimg_content">
-            <img src="@/assets/images/ebg.jpg" alt="" srcset="" />
+            <img :src="current_img_url" alt="" srcset="" />
           </div>
           <div class="img_list">
             <ul>
-              <li v-for="(item, index) in imgUrlList" :key="index">
+              <li
+                v-for="(item, index) in imgUrlList"
+                :key="index"
+                @click="current_img_url = item.url"
+                :class="{ video_active: current_img_url == item.url }"
+              >
                 <img :src="item.url" alt="" srcset="" />
               </li>
             </ul>
@@ -269,12 +275,18 @@
         </div>
         <div class="tab_content" v-show="dialog_tab_num == 2">
           <div class="aimg_content">
-            <img src="@/assets/images/u1.png" alt="" srcset="" />
+            <img :src="current_live_img_url" alt="" srcset="" />
           </div>
           <div class="img_list">
             <ul>
-              <li v-for="(item, index) in liveUrlList" :key="index">
+              <li
+                v-for="(item, index) in liveUrlList"
+                :key="index"
+                :class="{ video_active: current_live_img_url == item.url }"
+                @click="current_live_img_url = item.url"
+              >
                 <img :src="item.url" alt="" srcset="" />
+                <p>{{ item.dateTime }}</p>
               </li>
             </ul>
           </div>
@@ -291,8 +303,15 @@
           </div>
           <div class="img_list">
             <ul>
-              <li v-for="(item, index) in videoUrlList" :key="index">
-                <img :src="item.url" alt="" srcset="" />
+              <li
+                v-for="(item, index) in videoUrlList"
+                :key="index"
+                @click="video_select(item, index)"
+                :class="{ video_active: video_active_item == index }"
+              >
+                <div class="video_name">
+                  {{ item.cameraName }}
+                </div>
               </li>
             </ul>
           </div>
@@ -305,6 +324,7 @@
 <script>
 import VueSeamlessScroll from "vue-seamless-scroll";
 import yls_json from "./ljpt_xz.json";
+import videojs from "video.js";
 export default {
   components: {
     VueSeamlessScroll,
@@ -317,21 +337,22 @@ export default {
         limitMoveNum: 2, // 开始无缝滚动的数据量 this.dataList.length
         hoverStop: true, // 是否开启鼠标悬停stop
         direction: 1, // 0向下 1向上 2向左 3向右
-        openWatch: true, // 开启数据实时监控刷新dom
-        singleHeight: 0, // 单步运动停止的高度(默认值0是无缝不停止的滚动) direction => 0/1
-        singleWidth: 0, // 单步运动停止的宽度(默认值0是无缝不停止的滚动) direction => 2/3
-        waitTime: 1000, // 单步运动停止的时间(默认值1000ms)
       };
     },
   },
   data() {
     return {
+      current_img_url: "",
+      current_live_img_url: "",
       imgUrlList: [],
       liveUrlList: [],
+      videoUrlList: [],
+      player: null,
+      video_active_item: null,
       info_dialog_key: "info_dialog_key",
       dialog_tab_num: 0,
       dialogList: ["基本信息", "现场图片", "定时抓拍", "现场监控"],
-      point_click_show: true,
+      point_click_show: false,
       dataList1: [],
       dataList2: [],
       dataList3: [],
@@ -348,15 +369,15 @@ export default {
       lefttopdata: [],
       leftBottom: [],
       active_right_item: null,
-      villageId: null,
+      villageId: "",
       info_object: {
-        paramName: "",
-        projectName: "",
-        projectAddress: "",
-        money: "",
-        buildArea: "",
-        endDate: "",
-        operationUnit: "",
+        paramName: "暂无信息",
+        projectName: "暂无信息",
+        projectAddress: "暂无信息",
+        money: "暂无信息",
+        buildArea: "暂无信息",
+        endDate: "暂无信息",
+        operationUnit: "暂无信息",
       },
     };
   },
@@ -364,17 +385,6 @@ export default {
     this.deptId = this.$route.query.deptId;
     this.deptIdEnd = this.$route.query.deptIdEnd;
   },
-  // watch: {
-  //   point_click_show: {
-  //     handler: function (val) {
-  //       if (val) {
-  //         setTimeout(() => {
-  //           this.basicInformation();
-  //         }, 1000);
-  //       }
-  //     },
-  //   },
-  // },
   mounted() {
     let script = document.createElement("script");
     script.type = "text/javascript";
@@ -387,26 +397,50 @@ export default {
         this.loadJS(
           "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
           () => {
-            this.loadJS(
-              "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
-              () => {
-                console.log("天地图准备完毕");
-                this.tMap = new T.Map("chart-city");
-                this.toggleArea(this.$route.query.areaName);
-                this.planningGuidance();
-                this.projectConstruction();
-                this.basicResources(2);
-              }
-            );
+            console.log("天地图准备完毕");
+            this.tMap = new T.Map("chart-city");
+            this.toggleArea(this.$route.query.areaName);
+            this.planningGuidance();
+            this.projectConstruction();
+            this.basicResources(2);
           }
         );
       });
     };
   },
   methods: {
+    //视频选择
+    video_select(item, index) {
+      this.video_active_item = index;
+      this.$http({
+        method: "get",
+        url: "/api/v1/jky/pjcamera/getUrlAddress",
+        baseURL: "http://o792k95b.xiaomy.net/",
+        params: {
+          rowId: item.rowId,
+        },
+      })
+        .then((res) => {
+          setTimeout(() => {
+            this.player = videojs(this.$refs.videoPlayer);
+            this.player.src(res.data.result);
+            videojs(this.$refs.videoPlayer).ready(function () {
+              this.player = this;
+              this.player.play();
+            });
+          }, 1000);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     //关闭弹窗
     dialog_off() {
       this.point_click_show = false;
+      if (this.player) {
+        this.player.pause();
+        this.player.dispose();
+      }
       this.info_dialog_key = Math.random();
     },
     //基本信息查询
@@ -416,7 +450,8 @@ export default {
         url: "api/v1/jky/basicInformation",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
-          villageId: this.villageId,
+          // villageId: this.villageId,
+          villageId: "400211963",
         },
       })
         .then((res) => {
@@ -433,42 +468,54 @@ export default {
         url: "api/v1/jky/livePicture",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
-          villageId: this.villageId,
+          villageId: "400012965",
+          // villageId: this.villageId,
         },
       })
         .then((res) => {
-          console.log(res);
+          if (res.data.result) {
+            this.imgUrlList = res.data.result;
+          }
         })
         .catch((err) => {
           console.log(err);
         });
     },
+    //实时抓拍
     queryCameraImgByVillageId() {
       this.$http({
         method: "get",
         url: "api/v1/jky/queryCameraImgByVillageId",
         baseURL: "http://o792k95b.xiaomy.net/",
         params: {
-          villageId: this.villageId,
+          // villageId: this.villageId,
+          villageId: "400011841",
         },
       })
         .then((res) => {
-          console.log(res);
+          if (res.data.result) {
+            this.liveUrlList = res.data.result;
+          }
         })
         .catch((err) => {
           console.log(err);
         });
     },
+    //监控视频
     queryCameraByVillageId() {
       this.$http({
-        method: "get",
+        method: "post",
         url: "/api/v1/jky/queryCameraByVillageId",
         baseURL: "http://o792k95b.xiaomy.net/",
-        params: {
-          villageId: this.villageId,
+        data: {
+          // villageId: this.villageId,
+          villageId: "400223319",
         },
       })
         .then((res) => {
+          if (res.data.result) {
+            this.videoUrlList = res.data.result;
+          }
           console.log(res);
         })
         .catch((err) => {
@@ -516,7 +563,9 @@ export default {
       })
         .then((res) => {
           console.log(res.data.result);
-          this.leftBottom = res.data.result;
+          if (res.data.result) {
+            this.leftBottom = res.data.result;
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -535,14 +584,20 @@ export default {
       })
         .then((res) => {
           console.log(res);
-          this.lefttopdata = res.data.result;
+          if (res.data.result) {
+            this.lefttopdata = res.data.result;
+          }
         })
         .catch((err) => {
           console.log(err);
         });
     },
     dialog_title_click(item, index) {
+      console.log(item);
       this.dialog_tab_num = index;
+      if (this.player) {
+        this.player.pause();
+      }
     },
     right_item_click(index, item, tabContent) {
       this.active_right_item = index;
@@ -563,8 +618,10 @@ export default {
         },
       })
         .then((res) => {
-          var data = JSON.parse(JSON.stringify(res.data.result));
-          this.drawPoint(data);
+          if (res.data.result) {
+            var data = JSON.parse(JSON.stringify(res.data.result));
+            this.drawPoint(data);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -667,9 +724,19 @@ export default {
   .tab_content {
     width: 100%;
     height: 100%;
+    .info {
+      list-style: none;
+      color: #fff;
+      font-size: 32px;
+      font-weight: 700;
+      li {
+        margin-bottom: 10px;
+        text-align: left;
+      }
+    }
     .aimg_content {
       display: inline-block;
-      width: 70%;
+      width: 80%;
       height: 100%;
       img {
         width: 100%;
@@ -677,20 +744,34 @@ export default {
       }
     }
     .img_list {
-      width: 30%;
+      width: 20%;
       display: inline-block;
       height: 100%;
+      ul {
+        height: 100%;
+        overflow: auto;
+        color: #fff;
+        list-style: none;
+        margin: 0 auto;
+        padding: 0;
+        border-left: solid 1px #03a7f0;
+        li {
+          cursor: pointer;
+        }
+        img {
+          width: 100%;
+          height: 130px;
+        }
+        .video_name {
+          height: 30px;
+          line-height: 30px;
+        }
+        .video_active {
+          border: solid 1px #03a7f0;
+          border-radius: 5px;
+        }
+      }
     }
-  }
-}
-.info {
-  list-style: none;
-  color: #fff;
-  font-size: 32px;
-  font-weight: 700;
-  li {
-    margin-bottom: 10px;
-    text-align: left;
   }
 }
 .title_style {
@@ -708,60 +789,7 @@ export default {
   width: 64%;
   text-align: center;
 }
-.core-dynamic-content-container {
-  text-align: center;
-  height: calc(100% - 50px);
-  .scroll-wrapper {
-    height: 100%;
-    overflow: auto;
-    .scroll-content {
-      color: #fff;
-      margin: 0 10px;
-      .active_right_item {
-        background: rgb(129, 122, 122) !important;
-      }
-    }
-    .scroll-content .name {
-      display: inline-block;
-      padding-left: 10px;
-      font-weight: 800;
-      text-align: left;
-      width: 45%;
-      height: 85px;
-    }
-    .scroll-content .num {
-      display: inline-block;
-      font-size: 25px;
-      color: #00ece4;
-      font-weight: 800;
-      text-align: center;
-      width: 50%;
-      height: 85px;
-    }
-    .scroll-item {
-      font-size: 24px;
-      font-weight: bold;
-      margin-top: 3px;
-      line-height: 85px;
-      background: rgba(36, 67, 116, 0.5);
-      border-radius: 5px;
-      text-align: center;
-    }
-    .scroll-item::before {
-      content: "";
-      float: left;
-      height: 86px;
-      width: 3px;
-    }
 
-    .scroll-item:hover {
-      background: rgba(36, 67, 116, 0.9) !important;
-      &::before {
-        background: rgba(11, 138, 180, 0.9) !important;
-      }
-    }
-  }
-}
 .map_border {
   border: solid 2px #0167dd;
   background: linear-gradient(270deg, #0267d8, #0267d8) 0 0 no-repeat,
@@ -783,11 +811,6 @@ export default {
   top: 90px;
 }
 
-.select-panel {
-  position: absolute;
-  z-index: 2;
-  color: #ffffff;
-}
 .left {
   width: 28%;
   height: 100%;
@@ -854,7 +877,12 @@ export default {
           display: inline-block;
           width: 100%;
           height: 50px;
-          line-height: 50px;
+          margin-bottom: 10px;
+          span {
+            display: inline-block;
+            height: 100%;
+            vertical-align: top;
+          }
         }
       }
       span {
@@ -894,38 +922,91 @@ export default {
   .right_title {
     margin-left: 16%;
   }
+  .tab-class {
+    width: 100%;
+    height: calc(100% - 90px);
+    .tab-menu {
+      width: 100%;
+      height: 40px;
+      padding-top: 10px;
+      color: #f5f6f8;
+      display: flex;
+      justify-content: space-around;
+      .tab-menu-span {
+        width: 80px;
+        height: 30px;
+        line-height: 30px;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+      }
+    }
+    .core-dynamic-content-container {
+      text-align: center;
+      height: calc(100% - 50px);
+      .scroll-wrapper {
+        height: 100%;
+        overflow: auto;
+        .scroll-content {
+          color: #fff;
+          margin: 0 10px;
+          .active_right_item {
+            background: rgb(129, 122, 122) !important;
+          }
+        }
+        .scroll-content .name {
+          display: inline-block;
+          padding-left: 10px;
+          font-weight: 800;
+          text-align: left;
+          width: 45%;
+          height: 85px;
+        }
+        .scroll-content .num {
+          display: inline-block;
+          font-size: 25px;
+          color: #00ece4;
+          font-weight: 800;
+          text-align: center;
+          width: 50%;
+          height: 85px;
+        }
+        .scroll-item {
+          font-size: 24px;
+          font-weight: bold;
+          margin-top: 3px;
+          line-height: 85px;
+          background: rgba(36, 67, 116, 0.5);
+          border-radius: 5px;
+          text-align: center;
+        }
+        .scroll-item::before {
+          content: "";
+          float: left;
+          height: 86px;
+          width: 3px;
+        }
+
+        .scroll-item:hover {
+          background: rgba(36, 67, 116, 0.9) !important;
+          &::before {
+            background: rgba(11, 138, 180, 0.9) !important;
+          }
+        }
+      }
+    }
+  }
 }
 
-.tab-menu {
-  width: 100%;
-  height: 40px;
-  padding-top: 10px;
-  color: #f5f6f8;
-  display: flex;
-  justify-content: space-around;
-}
-
-.tab-menu-span {
-  width: 80px;
-  height: 30px;
-  line-height: 30px;
-  border-radius: 4px;
-  cursor: pointer;
-  text-align: center;
-}
-
-.tab-class {
-  width: 100%;
-  height: calc(100% - 90px);
-}
 .home {
   height: calc(100% - 90px);
+  .content {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+  }
 }
-.content {
-  display: flex;
-  justify-content: space-between;
-  height: 100%;
-}
+
 .active {
   background-color: #0c66a5 !important;
 }

@@ -151,7 +151,7 @@
                 :key="index"
               >
                 <span style="width: 40px">{{ index + 1 }}</span>
-                <span style="width: 145px">{{ item.deptName }}</span>
+                <span style="width: 145px">{{ item.systemName }}</span>
                 <span style="width: 80px">{{ item.weighName }}</span>
                 <span style="width: 110px">{{ item.count }}</span>
                 <span style="width: 110px">{{ item.sumWeight }}</span>
@@ -204,6 +204,17 @@ export default {
       leftBottom2: [],
       carrentDate: null,
       yesterday: null,
+      arealist: [
+        { name: "南湖", deptId: "410000000" },
+        { name: "秀洲", deptId: "420000000" },
+        { name: "嘉善", deptId: "430000000" },
+        { name: "平湖", deptId: "460000000" },
+        { name: "海盐", deptId: "440000000" },
+        { name: "海宁", deptId: "450000000" },
+        { name: "桐乡", deptId: "470000000" },
+        { name: "经开", deptId: "480000000" },
+        { name: "港区", deptId: "490000000" },
+      ],
     };
   },
   watch: {
@@ -272,9 +283,11 @@ export default {
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
           deptId: "400000000",
-          garbageType: this.garbageType.toString(),
+          ids: "400000000",
+          weighType: "1",
+          rubbishTypes: [this.garbageType.toString()],
           start: this.yesterday,
-          end: this.carrentDate,
+          end: this.yesterday,
           pageNum: 1,
           pageSize: 20,
         },
@@ -298,7 +311,8 @@ export default {
       }).then((res) => {
         console.log(2, res);
         if (res.data.result) {
-          this.leftBottom2 = res.data.result;
+          res.data.result.list.forEach((item) => {});
+          this.leftBottom2 = res.data.result.list;
         }
       });
     },
@@ -714,12 +728,12 @@ ul {
         .tbody {
           width: 100%;
           height: 70px;
-          line-height: 70px;
           display: flex;
           justify-content: space-around;
           margin-bottom: 30px;
           background: rgba(255, 255, 255, 0.13);
           span {
+            margin: auto;
             font-size: 14px;
             font-weight: 600;
           }

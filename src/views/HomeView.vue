@@ -35,8 +35,8 @@
           <div class="map_border">
             <ul class="thead">
               <span style="width: 50px">序号</span>
-              <span style="width: 100px">区县</span>
-              <span style="width: 100px">项目数</span>
+              <span style="width: 150px">区县</span>
+              <span style="width: 70px">项目数</span>
               <span style="width: 150px">完成进度</span>
             </ul>
             <div id="table_box">
@@ -54,10 +54,10 @@
                 <ul>
                   <li v-for="(item, index) in leftBottom" :key="index">
                     <span style="width: 50px">{{ index + 1 }}</span>
-                    <span style="width: 100px">
+                    <span style="width: 150px">
                       <span>{{ item.projectName }}</span></span
                     >
-                    <span style="width: 100px">{{ item.projectValue }}</span>
+                    <span style="width: 70px">{{ item.projectValue }}</span>
                     <span style="width: 150px">
                       <span
                         :class="{
@@ -343,18 +343,18 @@ export default {
         },
       })
         .then((res) => {
-          var data = JSON.parse(JSON.stringify(res.data.result));
-          console.log(data);
-          data.forEach((item) => {
-            this.btnlist3.forEach((n) => {
-              if (n.rowId == item.deptId) {
-                item.deptName = n.deptName;
-              }
+          if (res.data.result) {
+            var data = JSON.parse(JSON.stringify(res.data.result));
+            data.forEach((item) => {
+              this.btnlist3.forEach((n) => {
+                if (n.rowId == item.deptId) {
+                  item.deptName = n.deptName;
+                }
+              });
             });
-          });
-          console.log(data);
-          this.areaNumList = data;
-          this.map();
+            this.areaNumList = data;
+            this.map();
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -604,60 +604,6 @@ export default {
   width: 64%;
   text-align: center;
 }
-.core-dynamic-content-container {
-  text-align: center;
-  height: calc(100% - 50px);
-  .scroll-wrapper {
-    height: 100%;
-    overflow: auto;
-    .scroll-content {
-      color: #fff;
-      margin: 0 10px;
-      .active_right_item {
-        background: rgb(129, 122, 122) !important;
-      }
-    }
-    .scroll-content .name {
-      display: inline-block;
-      padding-left: 10px;
-      font-weight: 800;
-      text-align: left;
-      width: 45%;
-      height: 85px;
-    }
-    .scroll-content .num {
-      display: inline-block;
-      font-size: 25px;
-      color: #00ece4;
-      font-weight: 800;
-      text-align: center;
-      width: 50%;
-      height: 85px;
-    }
-    .scroll-item {
-      font-size: 24px;
-      font-weight: bold;
-      margin-top: 3px;
-      line-height: 85px;
-      background: rgba(36, 67, 116, 0.5);
-      border-radius: 5px;
-      text-align: center;
-    }
-    .scroll-item::before {
-      content: "";
-      float: left;
-      height: 86px;
-      width: 3px;
-    }
-
-    .scroll-item:hover {
-      background: rgba(36, 67, 116, 0.9) !important;
-      &::before {
-        background: rgba(11, 138, 180, 0.9) !important;
-      }
-    }
-  }
-}
 .map_border {
   border: solid 2px #0167dd;
   background: linear-gradient(270deg, #0267d8, #0267d8) 0 0 no-repeat,
@@ -679,11 +625,6 @@ export default {
   top: 0;
 }
 
-.select-panel {
-  position: absolute;
-  z-index: 2;
-  color: #ffffff;
-}
 .left {
   width: 28%;
   height: 100%;
@@ -750,7 +691,12 @@ export default {
           display: inline-block;
           width: 100%;
           height: 50px;
-          line-height: 50px;
+          margin-bottom: 10px;
+          span {
+            display: inline-block;
+            height: 100%;
+            vertical-align: top;
+          }
         }
       }
       span {
@@ -790,38 +736,91 @@ export default {
   .right_title {
     margin-left: 16%;
   }
+  .tab-class {
+    width: 100%;
+    height: calc(100% - 90px);
+    .tab-menu {
+      width: 100%;
+      height: 40px;
+      padding-top: 10px;
+      color: #f5f6f8;
+      display: flex;
+      justify-content: space-around;
+      .tab-menu-span {
+        width: 80px;
+        height: 30px;
+        line-height: 30px;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+      }
+    }
+    .core-dynamic-content-container {
+      text-align: center;
+      height: calc(100% - 50px);
+      .scroll-wrapper {
+        height: 100%;
+        overflow: auto;
+        .scroll-content {
+          color: #fff;
+          margin: 0 10px;
+          .active_right_item {
+            background: rgb(129, 122, 122) !important;
+          }
+        }
+        .scroll-content .name {
+          display: inline-block;
+          padding-left: 10px;
+          font-weight: 800;
+          text-align: left;
+          width: 45%;
+          height: 85px;
+        }
+        .scroll-content .num {
+          display: inline-block;
+          font-size: 25px;
+          color: #00ece4;
+          font-weight: 800;
+          text-align: center;
+          width: 50%;
+          height: 85px;
+        }
+        .scroll-item {
+          font-size: 24px;
+          font-weight: bold;
+          margin-top: 3px;
+          line-height: 85px;
+          background: rgba(36, 67, 116, 0.5);
+          border-radius: 5px;
+          text-align: center;
+        }
+        .scroll-item::before {
+          content: "";
+          float: left;
+          height: 86px;
+          width: 3px;
+        }
+
+        .scroll-item:hover {
+          background: rgba(36, 67, 116, 0.9) !important;
+          &::before {
+            background: rgba(11, 138, 180, 0.9) !important;
+          }
+        }
+      }
+    }
+  }
 }
 
-.tab-menu {
-  width: 100%;
-  height: 40px;
-  padding-top: 10px;
-  color: #f5f6f8;
-  display: flex;
-  justify-content: space-around;
-}
-
-.tab-menu-span {
-  width: 80px;
-  height: 30px;
-  line-height: 30px;
-  border-radius: 4px;
-  cursor: pointer;
-  text-align: center;
-}
-
-.tab-class {
-  width: 100%;
-  height: calc(100% - 90px);
-}
 .home {
   height: calc(100% - 90px);
+  .content {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+  }
 }
-.content {
-  display: flex;
-  justify-content: space-between;
-  height: 100%;
-}
+
 .active {
   background-color: #0c66a5 !important;
 }
