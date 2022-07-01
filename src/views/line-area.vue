@@ -53,11 +53,13 @@
         </div>
         <ul v-show="typeopen == 4" class="select_list">
           <li
-            v-for="(item, index) in arealist"
+            v-for="(item, index) in area_select_data"
             :key="index"
-            @click="toggleArea(item.name, item.value)"
+            @click="toggleArea(item.deptName, item.deptId)"
           >
-            {{ item.name }}
+            {{ item.deptName }}({{ item.carStatusfail }}/{{
+              item.carStatustotal
+            }})
           </li>
         </ul>
       </div>
@@ -146,6 +148,7 @@ export default {
       videoUrl: "",
       urlList: [],
       player: null,
+      area_select_data: [],
       arealist: [
         { name: "南湖", value: "410000000" },
         { name: "秀洲", value: "420000000" },
@@ -221,13 +224,14 @@ export default {
         ) {
           this.carlist = [];
           this.formfiled.vehicleName = "";
-          this.getcarteamTree();
+          this.getTree();
         }
       },
       deep: true,
     },
     "formfiled.vehicleName": function (val) {
       if (val) {
+        alert("换车");
         this.rightshow = true;
         setTimeout(() => {
           this.getTimelineData();
@@ -247,13 +251,13 @@ export default {
       }
     });
   },
-  beforeDestroy() {
-    this.tMap.clearLayers();
-    this.tMap.clearOverLays();
-    if (this.CarTrack) {
-      this.CarTrack.clear();
-    }
-  },
+  // beforeDestroy() {
+  //   this.tMap.clearLayers();
+  //   this.tMap.clearOverLays();
+  //   if (this.CarTrack) {
+  //     this.CarTrack.clear();
+  //   }
+  // },
   mounted() {
     this.gethuanjie();
     let script = document.createElement("script");
@@ -270,8 +274,8 @@ export default {
             this.loadJS(
               "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
               () => {
-                this.tMap = new T.Map("chart-box");
                 this.toggleArea(this.$route.query.areaName);
+                this.getcarteamTree();
               }
             );
           }
@@ -322,7 +326,10 @@ export default {
       document.getElementsByTagName("head")[0].appendChild(domScript);
     },
     //天地图
-    load() {
+    load(guiji_data) {
+      var el_old = document.getElementById("chart-box").childNodes;
+      console.log(el_old);
+      this.tMap = new T.Map("chart-box");
       this.tMap.clearLayers();
       this.tMap.clearOverLays();
       this.tMap.centerAndZoom(
@@ -348,6 +355,48 @@ export default {
       });
       //向地图上添加面
       this.tMap.addOverLay(polygon);
+      //画轨迹
+      if (guiji_data) {
+        var path = [];
+        guiji_data.forEach((item, index) => {
+          if (index < guiji_data.length - 1) {
+            if (
+              item[0] != guiji_data[index + 1][0] ||
+              item[1] != guiji_data[index + 1][1]
+            ) {
+              path.push({ lng: item[0], lat: item[1] });
+            }
+          }
+        });
+        var point = [];
+        for (var i = 0; i < path.length; i++) {
+          var poi = new T.LngLat(path[i].lng, path[i].lat);
+          point.push(poi);
+        }
+        let script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src =
+          "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/CarTrack.js";
+        document.body.appendChild(script);
+        script.onload = () => {
+          //加载完成去执行代码  ie中不能使用
+          this.CarTrack = new T.CarTrack(this.tMap, {
+            interval: 20,
+            speed: 10,
+            dynamicLine: true,
+            polylinestyle: { color: "#49d68f", weight: 5, opacity: 1 },
+            Datas: point,
+            carstyle: {
+              iconUrl: "car.png",
+              width: 52,
+              height: 26,
+            },
+          });
+          this.CarTrack.start();
+        };
+      } else {
+        console.log("暂无轨迹数据");
+      }
     },
     // 获取时间线节点数据
     getTimelineData() {
@@ -356,10 +405,8 @@ export default {
         url: "api/v1/jky/timeline",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
-          // date: "2022-04-12",
-          // carNum: "浙FF5129",
           date: this.formfiled1.selectdate,
-          carNum: this.formfiled1.vehicleModelList,
+          carNum: this.formfiled.vehicleName,
         },
       })
         .then((res) => {
@@ -386,7 +433,24 @@ export default {
         },
       })
         .then((res) => {
-          this.getTree();
+          if (typeof res.data === "string") {
+            var result = eval("(" + res.data + ")").result;
+            if (result) {
+              this.area_select_data = [];
+              Object.keys(result).forEach((key) => {
+                this.arealist.forEach((n) => {
+                  if (key == n.value) {
+                    this.area_select_data.push({
+                      deptName: n.name,
+                      deptId: key,
+                      carStatusfail: result[key].carStatusfail,
+                      carStatustotal: result[key].carStatustotal,
+                    });
+                  }
+                });
+              });
+            }
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -400,45 +464,8 @@ export default {
           // params
         )
         .then((res) => {
-          var data = res.data.result;
-          if (data) {
-            var path = [];
-            data.forEach((item, index) => {
-              if (index < data.length - 1) {
-                if (
-                  item[0] != data[index + 1][0] ||
-                  item[1] != data[index + 1][1]
-                ) {
-                  path.push({ lng: item[0], lat: item[1] });
-                }
-              }
-            });
-            // this.bmap.clearOverlays();
-            var point = [];
-            for (var i = 0; i < path.length; i++) {
-              var poi = new T.LngLat(path[i].lng, path[i].lat);
-              point.push(poi);
-            }
-            let script = document.createElement("script");
-            script.type = "text/javascript";
-            script.src =
-              "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/CarTrack.js";
-            document.body.appendChild(script);
-            script.onload = () => {
-              //加载完成去执行代码  ie中不能使用
-              this.CarTrack = new T.CarTrack(this.tMap, {
-                interval: 20,
-                speed: 10,
-                dynamicLine: true,
-                polylinestyle: { color: "#49d68f", weight: 5, opacity: 1 },
-                Datas: point,
-              });
-              this.CarTrack.start();
-            };
-          } else {
-            // alert("暂无轨迹数据");
-            console.log("暂无轨迹数据");
-          }
+          var guiji_data = res.data.result;
+          this.load(guiji_data);
         })
         .catch((err) => {
           console.log(err);
@@ -448,9 +475,7 @@ export default {
     getVideoUrl() {
       this.$http({
         method: "get",
-        url: `api/v1/jky/getGpsHslUrl/${
-          this.formfiled.vehicleName || "洒-浙FV2129"
-        }`,
+        url: `api/v1/jky/getGpsHslUrl/${this.formfiled.vehicleName}`,
         baseURL: "http://o792k95b.xiaomy.net/",
       })
         .then((res) => {
@@ -580,7 +605,8 @@ export default {
     // 获取车辆
     getTree() {
       let params = new FormData();
-      params.append("lnglatTime", this.formfiled1.selectdate || "2022-04-12");
+      params.append("lnglatTime", this.formfiled1.selectdate);
+      params.append("deptId", this.formfiled1.deptId);
       this.$http({
         method: "post",
         url: "api/v1/jky/pjcar/pjCarTreeVal",

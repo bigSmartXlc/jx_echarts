@@ -253,7 +253,7 @@ export default {
   },
   mounted() {
     this.getWieght();
-    this.drawFeixian();
+    this.getFeixian(40);
   },
   methods: {
     dateSwitch() {
@@ -285,7 +285,7 @@ export default {
           deptId: "400000000",
           ids: "400000000",
           weighType: "1",
-          rubbishTypes: [this.garbageType.toString()],
+          rubbishTypes: [this.garbageType],
           start: this.yesterday,
           end: this.yesterday,
           pageNum: 1,
@@ -293,6 +293,7 @@ export default {
         },
       }).then((res) => {
         if (res.data.result) {
+          res.data.result.list.shift();
           this.leftBottom1 = res.data.result.list;
         }
       });
@@ -302,7 +303,7 @@ export default {
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
           deptId: "400000000",
-          garbageType: this.garbageType.toString(),
+          garbageType: this.garbageType,
           deptIdEnd: "499999999",
           startTime: this.yesterday,
           pageNum: 1,
@@ -395,11 +396,11 @@ export default {
         };
       });
       const option = {
-        title: {
-          text: "当前位置-嘉兴市",
-          left: 200,
-          top: 160,
-        },
+        // title: {
+        //   text: "当前位置-嘉兴市",
+        //   left: 200,
+        //   top: 160,
+        // },
         geo3D: {
           map: "yls",
           show: false,
@@ -638,7 +639,7 @@ ul {
   color: #81703d;
 }
 .container1 {
-  height: calc(100% - 110px);
+  height: calc(100% - 90px);
   font-weight: 700%;
   width: 100%;
   .left {
@@ -730,8 +731,8 @@ ul {
           height: 70px;
           display: flex;
           justify-content: space-around;
-          margin-bottom: 30px;
-          background: rgba(255, 255, 255, 0.13);
+          margin-bottom: 5px;
+          background: rgba(114, 113, 113, 0.1);
           span {
             margin: auto;
             font-size: 14px;
