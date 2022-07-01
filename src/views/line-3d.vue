@@ -390,7 +390,7 @@ export default {
         return {
           name: geoAreaName,
           itemStyle: {
-            color: "#324ca4",
+            color: [0, 1, 255, 0.2],
           },
         };
       });
@@ -496,10 +496,10 @@ export default {
             //   textureTiling: 1, // 纹理平铺，1是拉伸，数字表示纹理平铺次数
             // },
             itemStyle: {
-              color: "#740be8",
+              // color: "#740be8",
               // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
               // areaColor: "#000", // 地图板块的颜色
-              opacity: 0.5, // 图形的不透明度 [ default: 1 ]
+              // opacity: 0.5, // 图形的不透明度 [ default: 1 ]
               borderWidth: 2, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
               borderColor: "#ffffff", // 图形描边的颜色。[ default: #333 ]
             },

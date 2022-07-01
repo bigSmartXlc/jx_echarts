@@ -422,7 +422,7 @@ export default {
           name: geoAreaName,
           // value: item.properties.centroid,
           itemStyle: {
-            color: "#0b7ef5",
+            color: [0, 1, 255, 0.2],
           },
         };
       });
@@ -441,24 +441,6 @@ export default {
           regionHeight: 6,
           zoom: 1,
           left: 0,
-          label: {
-            show: true,
-            distance: 0,
-            formatter(param) {
-              const city = param.name;
-              return `{sty1|${city}}`;
-            },
-            rich: {
-              sty1: {
-                color: "#8d0121",
-                align: "center",
-              },
-            },
-            textStyle: {
-              fontSize: 12,
-              color: "#f51c0b",
-            },
-          },
           viewControl: {
             distance: 110,
             zoomSensitivity: 1,
@@ -551,7 +533,6 @@ export default {
             itemStyle: {
               // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
               // areaColor: "#000", // 地图板块的颜色
-              opacity: 0.6, // 图形的不透明度 [ default: 1 ]
               borderWidth: 2, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
               borderColor: "#ffffff", // 图形描边的颜色。[ default: #333 ]
             },
@@ -825,12 +806,10 @@ export default {
   background-color: #0c66a5 !important;
 }
 .li_bg {
-  background: #113157;
-  opacity: 0.5;
+  background: rgba(94, 148, 219, 0.5);
 }
 .li_bg1 {
-  background: #041d4e;
-  opacity: 0.5;
+  background: rgba(17, 49, 87, 0.5);
 }
 .menu_active {
   border: solid 1px #0c66a5 !important;
