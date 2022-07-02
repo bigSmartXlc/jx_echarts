@@ -252,13 +252,14 @@ export default {
       }
     });
   },
-  // beforeDestroy() {
-  //   this.tMap.clearLayers();
-  //   this.tMap.clearOverLays();
-  //   if (this.CarTrack) {
-  //     this.CarTrack.clear();
-  //   }
-  // },
+  beforeDestroy() {
+    this.tMap.clearLayers();
+    this.tMap.clearOverLays();
+    if (this.CarTrack) {
+      this.CarTrack.stop();
+      this.CarTrack.clear();
+    }
+  },
   mounted() {
     this.gethuanjie();
     let script = document.createElement("script");
@@ -270,14 +271,11 @@ export default {
       //加载完成去执行代码  ie中不能使用
       this.loadJS("http://cdn.bootcss.com/d3/3.5.17/d3.js", () => {
         this.loadJS("D3SvgOverlay.js", () => {
-          this.loadJS(
-            "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/CarTrack.js",
-            () => {
-              this.tMap = new T.Map("chart-box");
-              this.toggleArea(this.$route.query.areaName);
-              this.getcarteamTree();
-            }
-          );
+          this.loadJS("CarTrack.js", () => {
+            this.tMap = new T.Map("chart-box");
+            this.toggleArea(this.$route.query.areaName);
+            this.getcarteamTree();
+          });
         });
       });
     };

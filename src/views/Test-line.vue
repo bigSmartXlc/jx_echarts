@@ -115,7 +115,7 @@
 // import * as echarts from "echarts/lib/echarts.js";
 import * as echarts from "echarts";
 import "echarts-gl";
-import yls_json from "./jx.json";
+import yls_json from "./ljpt_xz";
 import VueSeamlessScroll from "vue-seamless-scroll";
 import BScroll from "@better-scroll/core";
 export default {
