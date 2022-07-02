@@ -231,12 +231,13 @@ export default {
     },
     "formfiled.vehicleName": function (val) {
       if (val) {
-        alert("换车");
-        this.rightshow = true;
+        if (!this.rightshow) {
+          this.rightshow = true;
+        }
+        this.getlineport();
         setTimeout(() => {
           this.getTimelineData();
           this.getVideoUrl();
-          this.getlineport();
         }, 1000);
       }
     },
@@ -268,18 +269,16 @@ export default {
     script.onload = () => {
       //加载完成去执行代码  ie中不能使用
       this.loadJS("http://cdn.bootcss.com/d3/3.5.17/d3.js", () => {
-        this.loadJS(
-          "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
-          () => {
-            this.loadJS(
-              "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
-              () => {
-                this.toggleArea(this.$route.query.areaName);
-                this.getcarteamTree();
-              }
-            );
-          }
-        );
+        this.loadJS("D3SvgOverlay.js", () => {
+          this.loadJS(
+            "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/CarTrack.js",
+            () => {
+              this.tMap = new T.Map("chart-box");
+              this.toggleArea(this.$route.query.areaName);
+              this.getcarteamTree();
+            }
+          );
+        });
       });
     };
   },
@@ -306,6 +305,9 @@ export default {
         return item.properties.name.indexOf(areaName) != -1;
       });
       this.centerMap = this.mapdata.features[0].properties;
+      if (this.CarTrack != null) {
+        this.CarTrack.clear();
+      }
       this.load();
     },
     loadJS(url, success) {
@@ -326,10 +328,7 @@ export default {
       document.getElementsByTagName("head")[0].appendChild(domScript);
     },
     //天地图
-    load(guiji_data) {
-      var el_old = document.getElementById("chart-box").childNodes;
-      console.log(el_old);
-      this.tMap = new T.Map("chart-box");
+    load() {
       this.tMap.clearLayers();
       this.tMap.clearOverLays();
       this.tMap.centerAndZoom(
@@ -356,47 +355,6 @@ export default {
       //向地图上添加面
       this.tMap.addOverLay(polygon);
       //画轨迹
-      if (guiji_data) {
-        var path = [];
-        guiji_data.forEach((item, index) => {
-          if (index < guiji_data.length - 1) {
-            if (
-              item[0] != guiji_data[index + 1][0] ||
-              item[1] != guiji_data[index + 1][1]
-            ) {
-              path.push({ lng: item[0], lat: item[1] });
-            }
-          }
-        });
-        var point = [];
-        for (var i = 0; i < path.length; i++) {
-          var poi = new T.LngLat(path[i].lng, path[i].lat);
-          point.push(poi);
-        }
-        let script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src =
-          "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/CarTrack.js";
-        document.body.appendChild(script);
-        script.onload = () => {
-          //加载完成去执行代码  ie中不能使用
-          this.CarTrack = new T.CarTrack(this.tMap, {
-            interval: 20,
-            speed: 10,
-            dynamicLine: true,
-            polylinestyle: { color: "#49d68f", weight: 5, opacity: 1 },
-            Datas: point,
-            carstyle: {
-              iconUrl: "car.png",
-              width: 52,
-              height: 26,
-            },
-          });
-          this.CarTrack.start();
-        };
-      } else {
-        console.log("暂无轨迹数据");
-      }
     },
     // 获取时间线节点数据
     getTimelineData() {
@@ -458,6 +416,9 @@ export default {
     },
     // 获取轨迹点 || "洒-浙FV2129"  || "2022-06-13"
     getlineport() {
+      if (this.CarTrack != null) {
+        this.CarTrack.clear();
+      }
       this.$http
         .post(
           `http://o792k95b.xiaomy.net/api/v1/jky/siCarTrack/getPoints2?carNum=${this.formfiled.vehicleName}&date=${this.formfiled1.selectdate}`
@@ -465,7 +426,39 @@ export default {
         )
         .then((res) => {
           var guiji_data = res.data.result;
-          this.load(guiji_data);
+          if (guiji_data) {
+            var path = [];
+            guiji_data.forEach((item, index) => {
+              if (index < guiji_data.length - 1) {
+                if (
+                  item[0] != guiji_data[index + 1][0] ||
+                  item[1] != guiji_data[index + 1][1]
+                ) {
+                  path.push({ lng: item[0], lat: item[1] });
+                }
+              }
+            });
+            var point = [];
+            for (var i = 0; i < path.length; i++) {
+              var poi = new T.LngLat(path[i].lng, path[i].lat);
+              point.push(poi);
+            }
+            this.CarTrack = new T.CarTrack(this.tMap, {
+              interval: 20,
+              speed: 10,
+              dynamicLine: true,
+              polylinestyle: { color: "#49d68f", weight: 5, opacity: 1 },
+              Datas: point,
+              carstyle: {
+                iconUrl: "car.png",
+                width: 52,
+                height: 26,
+              },
+            });
+            this.CarTrack.start();
+          } else {
+            console.log("暂无轨迹数据");
+          }
         })
         .catch((err) => {
           console.log(err);
