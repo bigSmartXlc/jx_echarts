@@ -2,9 +2,7 @@
   <div class="fzjc">
     <div class="left">
       <div class="leftdiv">
-        <div class="enlargeTitle title_style" @click="enlarge('LT')">
-          垃圾清运量
-        </div>
+        <div class="title_style" @click="enlarge('LT')">垃圾清运量</div>
         <div class="btnlist">
           <span
             v-for="(item, index) in btnlist1"
@@ -82,9 +80,7 @@
     </div>
     <div class="right">
       <div class="rightdiv">
-        <div @click="enlarge('RT')" class="enlargeTitle title_style">
-          质量评价
-        </div>
+        <div @click="enlarge('RT')" class="title_style">质量评价</div>
         <div class="btnlist">
           <span
             @click="evaluationType = item.value"
@@ -1155,9 +1151,6 @@ export default {
     color: #0cb3df;
   }
 }
-.enlargeTitle {
-  cursor: pointer;
-}
 @keyframes fadenum {
   100% {
     transform: rotate(360deg);
@@ -1345,6 +1338,7 @@ export default {
     }
     .title_style {
       margin-left: 36%;
+      cursor: pointer;
     }
   }
 }
@@ -1398,13 +1392,13 @@ export default {
 .btnlist {
   margin: 5px auto;
   display: flex;
-  justify-content: space-around;
+  // justify-content: space-around;
   span {
     cursor: pointer;
     min-width: 30px;
     display: inline-block;
     color: #02a7f0;
-    font-size: 0.4rem;
+    font-size: 1rem;
     border: solid 1px #02a7f0;
     margin-right: 1px;
     padding: 0 2px;

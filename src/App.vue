@@ -353,6 +353,7 @@ export default {
     yjitemClick(item) {
       this.solution = item.solution;
       this.solutionShow = true;
+      this.yujingClick();
     },
     getYuJing() {
       var data;
