@@ -2,7 +2,7 @@
   <div class="fzjc">
     <div class="left">
       <div class="leftdiv">
-        <div class="enlargeTitle title_style" @click="enlarge('left')">
+        <div class="enlargeTitle title_style" @click="enlarge('LT')">
           垃圾清运量
         </div>
         <div class="btnlist">
@@ -14,10 +14,16 @@
             >{{ item.name }}</span
           >
         </div>
-        <div id="left_line_bar" class="map_border"></div>
+        <div id="leftbar" class="map_border"></div>
       </div>
       <div class="leftdiv">
-        <div style="margin-bottom: 10px" class="title_style">能力分析</div>
+        <div
+          style="margin-bottom: 10px"
+          class="title_style"
+          @click="enlarge('LB')"
+        >
+          能力分析
+        </div>
         <div class="leftbottom map_border">
           <div class="listhead">
             <span>序号</span>
@@ -76,7 +82,7 @@
     </div>
     <div class="right">
       <div class="rightdiv">
-        <div @click="enlarge('right')" class="enlargeTitle title_style">
+        <div @click="enlarge('RT')" class="enlargeTitle title_style">
           质量评价
         </div>
         <div class="btnlist">
@@ -91,7 +97,13 @@
         <div id="rightline" class="map_border"></div>
       </div>
       <div class="rightdiv">
-        <div class="title_style">红黑榜</div>
+        <div
+          class="title_style"
+          @click="enlarge('RB')"
+          style="margin-bottom: 10px"
+        >
+          红黑榜
+        </div>
         <div class="rightbottom map_border" :key="rightkey">
           <div
             v-show="table == true"
@@ -177,7 +189,110 @@
         </div>
         <!---->
       </div>
-      <div id="echarts_part"></div>
+      <div class="toggle_btn" v-show="enlarge_item == 'LT'">
+        <span
+          v-for="(item, index) in btnlist1"
+          @click="enlarge_bnt_click(item, 'LT')"
+          :class="{ dialog_btn_active: item.value == dialog_btn_item1 }"
+          :key="index"
+          >{{ item.name }}</span
+        >
+      </div>
+      <div class="toggle_btn" v-show="enlarge_item == 'RT'">
+        <span
+          v-for="(item, index) in btnlist2"
+          @click="enlarge_bnt_click(item, 'RT')"
+          :class="{ dialog_btn_active: item.value == dialog_btn_item2 }"
+          :key="index"
+          >{{ item.name }}</span
+        >
+      </div>
+      <div
+        v-show="enlarge_item == 'LT' || enlarge_item == 'RT'"
+        id="echarts_part"
+      ></div>
+      <div
+        class="rightbottom map_border"
+        :key="rightkey"
+        v-show="enlarge_item == 'RB'"
+      >
+        <div
+          v-show="table == true"
+          class="tableone animate__animated animate__fadeInRight"
+        >
+          <img src="../assets/images/red.svg" alt="" srcset="" />
+          <ul class="thead">
+            <span style="width: 50px">排名</span>
+            <span style="width: 110px">名称</span>
+            <span style="width: 70px">综合评分</span>
+            <span style="width: 145px">上榜理由</span>
+          </ul>
+          <VueSeamlessScroll
+            :data="redList"
+            :class-option="seamlessScrollOption"
+            key="bottom"
+            class="scroll"
+          >
+            <div class="table">
+              <div class="tbody" v-for="(item, index) in redList" :key="index">
+                <span style="width: 50px">{{ index + 1 }}</span>
+                <span style="width: 145px">{{ item.redblackName }}</span>
+                <span style="width: 70px">{{ item.score }}</span>
+                <span style="width: 145px">{{ item.remarks }}</span>
+              </div>
+            </div>
+          </VueSeamlessScroll>
+        </div>
+        <div
+          v-show="table == false"
+          class="tabletwo animate__animated animate__fadeInRight"
+        >
+          <img src="../assets/images/balck.svg" alt="" srcset="" />
+          <ul class="thead">
+            <span style="width: 50px">排名</span>
+            <span style="width: 110px">名称</span>
+            <span style="width: 70px">综合评分</span>
+            <span style="width: 145px">上榜理由</span>
+          </ul>
+          <VueSeamlessScroll
+            :data="blackList"
+            :class-option="seamlessScrollOption"
+            key="bottom"
+            class="scroll"
+          >
+            <div class="table">
+              <div
+                class="tbody"
+                v-for="(item, index) in blackList"
+                :key="index"
+              >
+                <span style="width: 50px">{{ index + 1 }}</span>
+                <span style="width: 145px">{{ item.redblackName }}</span>
+                <span style="width: 70px">{{ item.score }}</span>
+                <span style="width: 140px">{{ item.remarks }}</span>
+              </div>
+            </div>
+          </VueSeamlessScroll>
+        </div>
+      </div>
+      <div v-show="enlarge_item == 'LB'">
+        <div class="leftbottom map_border">
+          <div class="listhead">
+            <span>序号</span>
+            <span>指标名称</span>
+            <span>额定值</span>
+            <span>实际值</span>
+            <span>负载率 </span>
+          </div>
+          <div v-for="(item, index) in leftdivdata" :key="index">
+            <span>{{ index }}</span
+            ><span>{{ item.projectName }}</span
+            ><span>{{ item.projectValue }}</span
+            ><span>{{ item.pojectVaule2 }}</span
+            ><span>{{ item.rate * 100 }}%</span>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="yujin_bottom" @click="showYujing">
       <VueSeamlessScroll
@@ -200,7 +315,6 @@
 </template>
 
 <script>
-// import * as echarts from "echarts/lib/echarts.js";
 import * as echarts from "echarts";
 import yls_json from "./ljpt_xz.json";
 import "echarts-gl";
@@ -211,6 +325,9 @@ export default {
   },
   data() {
     return {
+      dialog_btn_item1: "",
+      dialog_btn_item2: "10",
+      enlarge_item: "",
       enlargeShow: false,
       enlargeTitle: null,
       charts_part_option: [],
@@ -256,17 +373,6 @@ export default {
         { name: "回收利用分析", value: 2 },
         { name: "易腐垃圾占比", value: 3 },
       ],
-      btnlist3: [
-        { deptName: "南湖", rowId: 410000000, rowIdEnd: 419999999 },
-        { deptName: "秀洲", rowId: 420000000, rowIdEnd: 429999999 },
-        { deptName: "嘉善", rowId: 430000000, rowIdEnd: 439999999 },
-        { deptName: "海盐", rowId: 440000000, rowIdEnd: 449999999 },
-        { deptName: "海宁", rowId: 450000000, rowIdEnd: 459999999 },
-        { deptName: "平湖", rowId: 460000000, rowIdEnd: 469999999 },
-        { deptName: "桐乡", rowId: 470000000, rowIdEnd: 479999999 },
-        { deptName: "经开", rowId: 480000000, rowIdEnd: 489999999 },
-        { deptName: "港区", rowId: 490000000, rowIdEnd: 499999999 },
-      ],
       blackList: [],
       redList: [],
       table: true,
@@ -294,12 +400,14 @@ export default {
   },
   watch: {
     garbageType: {
-      handler: function () {
-        this.getWeight();
+      handler: function (val) {
+        this.dialog_btn_item1 = val;
+        this.getWeight(val);
       },
     },
     evaluationType: {
       handler: function (val) {
+        this.dialog_btn_item2 = val;
         if (val == 10) {
           this.getEvaluation(
             "api/v1/jky/dailyEvaluation",
@@ -374,9 +482,9 @@ export default {
                 {
                   deptId: this.formfiled.deptId,
                   deptIdEnd: this.formfiled.deptIdEnd,
-                  // date: this.carrentDate,
+                  date: this.carrentDate,
                   // 测试数据
-                  date: "2022-05-17",
+                  // date: "2022-05-17",
                 },
                 10
               );
@@ -410,20 +518,105 @@ export default {
     },
   },
   methods: {
+    //图标切换
+    enlarge_bnt_click(item) {
+      if (this.enlarge_item == "LT") {
+        this.dialog_btn_item1 = item.value;
+        this.getWeight(this.dialog_btn_item1, "echarts_part");
+      } else if (this.enlarge_item == "RT") {
+        this.dialog_btn_item2 = item.value;
+        var val = item.value;
+        if (val == 10) {
+          this.getEvaluation(
+            "api/v1/jky/dailyEvaluation",
+            {
+              deptId: this.formfiled.deptId,
+              deptIdEnd: this.formfiled.deptIdEnd,
+              date: this.carrentDate,
+            },
+            val,
+            "echarts_part"
+          );
+        } else if (val == 20) {
+          this.getEvaluation(
+            "api/v1/jky/monthlyEvaluation",
+            {
+              deptId: this.formfiled.deptId,
+              deptIdEnd: this.formfiled.deptIdEnd,
+            },
+            val,
+            "echarts_part"
+          );
+        } else {
+          this.getEvaluation(
+            "api/v1/jky/qualityEvaluation",
+            {
+              deptId: this.formfiled.deptId,
+              deptIdEnd: this.formfiled.deptIdEnd,
+              type: val,
+            },
+            val,
+            "echarts_part"
+          );
+        }
+      }
+    },
+    //放大图表
     //放大图表
     enlarge(L) {
       this.enlargeShow = true;
-      this.charts_part_option =
-        L == "left" ? this.left_option : this.right_option;
-      this.enlargeTitle = L == "left" ? "垃圾清运量" : "质量评价";
-      setTimeout(() => {
-        var chartDom = document.getElementById("echarts_part");
-        var enlarge_chart = echarts.init(chartDom);
-        enlarge_chart.clear();
-        enlarge_chart.hideLoading();
-        this.charts_part_option &&
-          enlarge_chart.setOption(this.charts_part_option);
-      }, 200);
+      if (L == "LT") {
+        this.enlarge_item = "LT";
+        this.enlargeTitle = "垃圾清运量";
+        setTimeout(() => {
+          this.getWeight(this.dialog_btn_item1, "echarts_part");
+        }, 200);
+      } else if (L == "RT") {
+        this.enlarge_item = "RT";
+        this.enlargeTitle = "质量评价";
+        setTimeout(() => {
+          var val = this.dialog_btn_item2;
+          if (val == 10) {
+            this.getEvaluation(
+              "api/v1/jky/dailyEvaluation",
+              {
+                deptId: this.formfiled.deptId,
+                deptIdEnd: this.formfiled.deptIdEnd,
+                date: this.carrentDate,
+              },
+              val,
+              "echarts_part"
+            );
+          } else if (val == 20) {
+            this.getEvaluation(
+              "api/v1/jky/monthlyEvaluation",
+              {
+                deptId: this.formfiled.deptId,
+                deptIdEnd: this.formfiled.deptIdEnd,
+              },
+              val,
+              "echarts_part"
+            );
+          } else {
+            this.getEvaluation(
+              "api/v1/jky/qualityEvaluation",
+              {
+                deptId: this.formfiled.deptId,
+                deptIdEnd: this.formfiled.deptIdEnd,
+                type: val,
+              },
+              val,
+              "echarts_part"
+            );
+          }
+        }, 200);
+      } else if (L == "LB") {
+        this.enlarge_item = "LB";
+        this.enlargeTitle = "能力分析";
+      } else {
+        this.enlarge_item = "RB";
+        this.enlargeTitle = "红黑榜";
+      }
     },
     showYujing() {
       this.$store.commit("TOGGLE_YUJING", true);
@@ -491,10 +684,10 @@ export default {
         new T.LngLat(this.centerMap.centroid[0], this.centerMap.centroid[1]),
         11
       );
+      this.tMap.setStyle("indigo");
       document.getElementsByClassName(
         "tdt-control-copyright tdt-control"
       )[0].style.display = "none";
-      this.tMap.setStyle("indigo");
       var mapBorder = this.mapdata.features[0].geometry.coordinates[0];
       var points = [];
       mapBorder.forEach((item) => {
@@ -521,9 +714,9 @@ export default {
         data: {
           deptId: this.formfiled.deptId,
           deptIdEnd: this.formfiled.deptIdEnd,
-          // date: this.carrentDate,
+          date: this.carrentDate,
           // 测试数据
-          date: "2021-05-08",
+          // date: "2021-05-08",
         },
       })
         .then((res) => {
@@ -590,50 +783,34 @@ export default {
           console.log(err);
         });
     },
-    getWeight() {
-      var chartDom = document.getElementById("left_line_bar");
+    getWeight(val = "", id = "leftbar") {
+      var chartDom = document.getElementById(id);
       this.leftChart = echarts.init(chartDom);
       this.leftChart.showLoading();
       this.$http({
         method: "post",
-        url: "api/v1/jky/DwWeightCarMonthWeight/deptMonthWeight",
+        url: "api/v1/jky/DwWeightCarMonthWeight/deptMonthWeight2",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
           // 测试数据
           // deptId: "400000000",
           // deptIdEnd: "499999999",
-          deptId: this.formfiled.deptId,
-          deptIdEnd: this.formfiled.deptIdEnd,
-          weightMonth: this.carrentMounth,
-          garbageType: this.garbageType,
+          deptId: this.formfiled.deptId.toString(),
+          deptIdEnd: this.formfiled.deptIdEnd.toString(),
+          garbageType: val,
         },
       })
         .then((res) => {
           if (res.data.result) {
-            this.grabge.deptName = [
-              "2021-6",
-              "2021-7",
-              "2021-8",
-              "2021-9",
-              "2021-10",
-              "2021-11",
-              "2021-12",
-              "2022-1",
-              "2022-2",
-              "2022-3",
-              "2022-4",
-              "2022-5",
-            ];
             this.grabge.weight = [];
             this.grabge.lastYearMonthWeight = [];
             this.grabge.tong = [];
-            res.data.result.forEach((item) => {
-              if (item.deptName) {
-                // this.grabge.deptName.push(item.deptName);
-                this.grabge.weight.push(item.weight);
-                this.grabge.lastYearMonthWeight.push(item.lastYearMonthWeight);
-                this.grabge.tong.push(item.tong);
-              }
+            this.grabge.deptName = [];
+            res.data.result.weightList.forEach((item) => {
+              this.grabge.deptName.push(item.weightMonth);
+              this.grabge.weight.push(item.weight);
+              this.grabge.lastYearMonthWeight.push(item.lastYearMonthWeight);
+              this.grabge.tong.push(item.tong);
             });
             this.leftbar();
           }
@@ -642,8 +819,8 @@ export default {
           console.log(err);
         });
     },
-    getEvaluation(url, data, type) {
-      var chartDom = document.getElementById("rightline");
+    getEvaluation(url, data, type, id = "rightline") {
+      var chartDom = document.getElementById(id);
       this.rightChart = echarts.init(chartDom);
       this.rightChart.showLoading();
       this.$http({
@@ -884,6 +1061,9 @@ export default {
         tooltip: {
           trigger: "axis",
         },
+        grid: {
+          bottom: 40,
+        },
         legend: {
           data: ["当月产生量", "去年同期产生量", "同比增长率"],
           textStyle: {
@@ -964,6 +1144,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.toggle_btn {
+  background: url("../assets/images/toggle_btn_bg.svg");
+  span {
+    display: inline-block;
+    cursor: pointer;
+    padding: 0 10px;
+    font-weight: 800;
+    height: 28px;
+    color: #0cb3df;
+  }
+}
 .enlargeTitle {
   cursor: pointer;
 }
@@ -974,7 +1165,7 @@ export default {
 }
 .rightbottom {
   z-index: 10;
-  height: calc(100% - 108px);
+  height: calc(100% - 104px);
   overflow: hidden;
   .tableone {
     text-align: left;
@@ -991,9 +1182,9 @@ export default {
   .thead {
     padding: 0;
     display: flex;
-    height: 40px;
+    height: 30px;
     margin: 0;
-    line-height: 40px;
+    line-height: 30px;
     justify-content: space-around;
   }
   .thead span {
@@ -1137,7 +1328,7 @@ export default {
       width: 100%;
       .map_border {
         width: 100%;
-        height: calc(100% - 108px);
+        height: calc(100% - 104px);
       }
     }
   }
@@ -1148,9 +1339,8 @@ export default {
       width: 100%;
       height: 50%;
       #rightline {
-        border: solid 1px #0167dd;
         width: 100%;
-        height: calc(100% - 98px);
+        height: calc(100% - 104px);
       }
     }
     .title_style {
@@ -1224,5 +1414,9 @@ export default {
 .active {
   background: #02a7f0;
   color: #fff !important;
+}
+.dialog_btn_active {
+  background: rgb(40, 139, 128);
+  color: rgb(255, 255, 255) !important;
 }
 </style>

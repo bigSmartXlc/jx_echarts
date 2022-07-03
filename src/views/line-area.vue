@@ -361,13 +361,33 @@ export default {
         url: "api/v1/jky/timeline",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
-          date: this.formfiled1.selectdate,
-          carNum: this.formfiled.vehicleName,
+          // date: this.formfiled1.selectdate,
+          // carId: this.formfiled.vehicleName,
+          date: "2022-05-18",
+          carId: "6656",
         },
       })
         .then((res) => {
-          if (res.data.result) {
-            this.timelineData = res.data.result;
+          // if (res.data.result) {
+          //   this.timelineData = res.data.result;
+          // }
+          if (typeof res.data === "string") {
+            var result = eval("(" + res.data + ")").result;
+            if (result) {
+              this.area_select_data = [];
+              Object.keys(result).forEach((key) => {
+                this.arealist.forEach((n) => {
+                  if (key == n.value) {
+                    this.area_select_data.push({
+                      deptName: n.name,
+                      deptId: key,
+                      carStatusfail: result[key].carStatusfail,
+                      carStatustotal: result[key].carStatustotal,
+                    });
+                  }
+                });
+              });
+            }
           }
           this.drawTimeline();
         })
