@@ -31,7 +31,7 @@
             <span>负载率 </span>
           </div>
           <div v-for="(item, index) in leftdivdata" :key="index">
-            <span>{{ index }}</span
+            <span>{{ index + 1 }}</span
             ><span>{{ item.projectName }}</span
             ><span>{{ item.projectValue }}</span
             ><span>{{ item.pojectVaule2 }}</span
@@ -750,6 +750,9 @@ export default {
         method: "get",
         url: "api/v1/jky/capabilityAnalysis",
         baseURL: "http://o792k95b.xiaomy.net/",
+        params: {
+          deptId: this.$route.query.deptId,
+        },
       })
         .then((res) => {
           this.leftdivdata = res.data.result;
