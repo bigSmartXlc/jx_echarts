@@ -303,8 +303,8 @@ export default {
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
           deptId: "400000000",
-          garbageType: this.garbageType,
           deptIdEnd: "499999999",
+          garbageType: this.garbageType,
           startTime: this.yesterday,
           pageNum: 1,
           pageSize: 20,
@@ -324,8 +324,8 @@ export default {
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
           deptId: "400000000",
-          garbageType: garbageType.toString(),
           deptIdEnd: "499999999",
+          garbageType: garbageType.toString(),
         },
       })
         .then((res) => {

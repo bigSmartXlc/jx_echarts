@@ -319,6 +319,7 @@ export default {
   components: {
     VueSeamlessScroll,
   },
+  name: "AboutViewDetail",
   data() {
     return {
       dialog_btn_item1: "",
@@ -1348,7 +1349,6 @@ export default {
   div {
     display: flex;
     justify-content: space-around;
-    height: 20%;
     span {
       margin-left: 2px;
       display: inline-block;

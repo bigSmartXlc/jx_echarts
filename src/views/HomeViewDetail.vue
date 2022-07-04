@@ -136,8 +136,8 @@
                   v-for="(item, index) in dataList1"
                   :key="index"
                 >
-                  <span class="name"> {{ item.projectName }}</span
-                  ><span class="num">{{ item.projectValueTotal }}</span>
+                  <span class="name"> {{ item.projectName }}</span>
+                  <span class="num">{{ item.projectValueTotal }}</span>
                 </div>
               </div>
               <div class="scroll-content" v-show="tabContent === 3">
@@ -258,24 +258,24 @@
         </div>
         <div class="tab_content" v-show="dialog_tab_num == 1">
           <div class="aimg_content">
-            <img :src="current_img_url" alt="" srcset="" />
+            <img :src="current_img_url" alt="现场图片" srcset="" />
           </div>
           <div class="img_list">
             <ul>
               <li
                 v-for="(item, index) in imgUrlList"
                 :key="index"
-                @click="current_img_url = item.url"
-                :class="{ video_active: current_img_url == item.url }"
+                @click="current_img_url = item.addUrl"
+                :class="{ video_active: current_img_url == item.addUrl }"
               >
-                <img :src="item.url" alt="" srcset="" />
+                <img :src="item.url" alt="现场图片" srcset="" />
               </li>
             </ul>
           </div>
         </div>
         <div class="tab_content" v-show="dialog_tab_num == 2">
           <div class="aimg_content">
-            <img :src="current_live_img_url" alt="" srcset="" />
+            <img :src="current_live_img_url" alt="定时抓拍" srcset="" />
           </div>
           <div class="img_list">
             <ul>
@@ -285,7 +285,7 @@
                 :class="{ video_active: current_live_img_url == item.url }"
                 @click="current_live_img_url = item.url"
               >
-                <img :src="item.url" alt="" srcset="" />
+                <img :src="item.url" alt="定时抓拍" srcset="" />
                 <p>{{ item.dateTime }}</p>
               </li>
             </ul>
@@ -310,7 +310,7 @@
                 :class="{ video_active: video_active_item == index }"
               >
                 <div class="video_name">
-                  {{ item.cameraName }}
+                  {{ item.cameraAddr }}
                 </div>
               </li>
             </ul>
@@ -329,7 +329,7 @@ export default {
   components: {
     VueSeamlessScroll,
   },
-  name: "HomeView",
+  name: "HomeViewDetail",
   computed: {
     seamlessScrollOption() {
       return {
@@ -361,6 +361,8 @@ export default {
       solution: null,
       solution_title: null,
       tMap: null,
+      label: null,
+      infoWin: null,
       mapdata: [],
       centerMap: [],
       myChart: null,
@@ -384,6 +386,19 @@ export default {
   created() {
     this.deptId = this.$route.query.deptId;
     this.deptIdEnd = this.$route.query.deptIdEnd;
+  },
+  watch: {
+    dialog_tab_num: {
+      handler: function (val) {
+        if (val == 1 && this.imgUrlList.length > 0) {
+          this.current_img_url = this.imgUrlList[0].addUrl;
+        } else if (val == 2 && this.liveUrlList.length > 0) {
+          this.current_live_img_url = this.liveUrlList[0].url;
+        } else if (val == 3 && this.videoUrlList.length > 0) {
+          this.video_select(this.videoUrlList[0], 0);
+        }
+      },
+    },
   },
   mounted() {
     let script = document.createElement("script");
@@ -450,8 +465,8 @@ export default {
         url: "api/v1/jky/basicInformation",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
-          // villageId: this.villageId,
-          villageId: "400211963",
+          villageId: this.villageId,
+          // villageId: "400211963",
         },
       })
         .then((res) => {
@@ -468,8 +483,8 @@ export default {
         url: "api/v1/jky/livePicture",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
-          villageId: "400012965",
-          // villageId: this.villageId,
+          // villageId: "400012965",
+          villageId: this.villageId,
         },
       })
         .then((res) => {
@@ -488,8 +503,8 @@ export default {
         url: "api/v1/jky/queryCameraImgByVillageId",
         baseURL: "http://o792k95b.xiaomy.net/",
         params: {
-          // villageId: this.villageId,
-          villageId: "400011841",
+          villageId: this.villageId,
+          // villageId: "400011841",
         },
       })
         .then((res) => {
@@ -508,15 +523,14 @@ export default {
         url: "/api/v1/jky/queryCameraByVillageId",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
-          // villageId: this.villageId,
-          villageId: "400223319",
+          villageId: this.villageId,
+          // villageId: "400223319",
         },
       })
         .then((res) => {
           if (res.data.result) {
             this.videoUrlList = res.data.result;
           }
-          console.log(res);
         })
         .catch((err) => {
           console.log(err);
@@ -562,7 +576,6 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res.data.result);
           if (res.data.result) {
             this.leftBottom = res.data.result;
           }
@@ -583,7 +596,6 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res);
           if (res.data.result) {
             this.lefttopdata = res.data.result;
           }
@@ -592,13 +604,14 @@ export default {
           console.log(err);
         });
     },
+    //切换tab
     dialog_title_click(item, index) {
-      console.log(item);
       this.dialog_tab_num = index;
       if (this.player) {
         this.player.pause();
       }
     },
+    //基础资源点击事件
     right_item_click(index, item, tabContent) {
       this.active_right_item = index;
       this.subpageMapPoints(item, tabContent);
@@ -635,12 +648,26 @@ export default {
         //向地图上添加标注
         this.tMap.addOverLay(marker);
         marker.addEventListener("click", this.marker_click);
+        marker.addEventListener("mouseover", this.point_hover);
+        marker.addEventListener("mouseout", this.point_out);
       });
     },
+    //
+    point_out(e) {
+      // this.tMap.removeOverLay(this.label);
+      this.tMap.removeOverLay(this.infoWin);
+    },
+    //站点hover事件
+    point_hover(e) {
+      this.infoWin = new T.InfoWindow(`<b>${e.target.info.projectName}</b>`);
+      e.target.openInfoWindow(this.infoWin);
+    },
+    //点位点击事件
     marker_click(e) {
       var p = e.target;
       this.villageId = p.info.rowId;
       this.point_click_show = true;
+      this.dialog_tab_num = 0;
       this.basicInformation();
       this.livePicture();
       this.queryCameraImgByVillageId();

@@ -316,6 +316,7 @@ export default {
   components: {
     VueSeamlessScroll,
   },
+  name: "AboutView",
   data() {
     return {
       dialog_btn_item1: "",
@@ -1218,7 +1219,7 @@ export default {
 }
 .rightbottom {
   z-index: 10;
-  height: calc(100% - 112px);
+  height: calc(100% - 113px);
   overflow: hidden;
   .tableone {
     text-align: left;
@@ -1277,7 +1278,6 @@ export default {
 .title_style {
   cursor: pointer;
   margin: 0;
-  margin-top: 10px;
   height: 70px;
   color: #fff;
   font-size: 40px;
@@ -1380,9 +1380,30 @@ export default {
     .leftdiv {
       height: 50%;
       width: 100%;
-      .map_border {
+      #leftbar {
         width: 100%;
-        height: calc(100% - 104px);
+        height: calc(100% - 113px);
+      }
+      .leftbottom {
+        height: calc(100% - 90px);
+        div {
+          display: flex;
+          justify-content: space-around;
+          span {
+            margin-left: 2px;
+            display: inline-block;
+            height: 50px;
+            line-height: 50px;
+            color: #fff;
+          }
+        }
+        .listhead {
+          span {
+            font-size: 25px;
+            font-weight: 700;
+            color: #02a7f0;
+          }
+        }
       }
     }
   }
@@ -1394,33 +1415,11 @@ export default {
       height: 50%;
       #rightline {
         width: 100%;
-        height: calc(100% - 104px);
+        height: calc(100% - 113px);
       }
     }
     .title_style {
       margin-left: 36%;
-    }
-  }
-}
-.leftbottom {
-  height: calc(100% - 78px);
-  div {
-    display: flex;
-    justify-content: space-around;
-    height: 20%;
-    span {
-      margin-left: 2px;
-      display: inline-block;
-      height: 50px;
-      line-height: 50px;
-      color: #fff;
-    }
-  }
-  .listhead {
-    span {
-      font-size: 25px;
-      font-weight: 700;
-      color: #02a7f0;
     }
   }
 }

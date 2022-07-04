@@ -180,8 +180,8 @@
                   v-for="(item, index) in dataList4"
                   :key="index"
                 >
-                  <span class="name"> {{ item.projectName }}</span
-                  ><span class="num">{{ item.projectValueTotal }}</span>
+                  <span class="name"> {{ item.projectName }}</span>
+                  <span class="num">{{ item.projectValueTotal }}</span>
                 </div>
               </div>
             </div>
@@ -320,7 +320,6 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res.data.result);
           this.leftBottom = res.data.result;
           // this.lefttopdata = res.data.result;
         })
@@ -372,7 +371,6 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res);
           this.lefttopdata = res.data.result;
         })
         .catch((err) => {

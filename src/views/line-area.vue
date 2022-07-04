@@ -57,7 +57,7 @@
             :key="index"
             @click="toggleArea(item.deptName, item.deptId)"
           >
-            {{ item.deptName }}({{ item.carStatusfail }}/{{
+            {{ item.deptName }}({{ item.carStatussuc }}/{{
               item.carStatustotal
             }})
           </li>
@@ -409,7 +409,7 @@ export default {
                     this.area_select_data.push({
                       deptName: n.name,
                       deptId: key,
-                      carStatusfail: result[key].carStatusfail,
+                      carStatussuc: result[key].carStatussuc,
                       carStatustotal: result[key].carStatustotal,
                     });
                   }
