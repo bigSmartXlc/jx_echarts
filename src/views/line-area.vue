@@ -226,6 +226,7 @@ export default {
           this.formfiled.vehicleName = "";
           this.formfiled.carId = "";
           this.getTree();
+          this.getcarteamTree();
         }
       },
       deep: true,

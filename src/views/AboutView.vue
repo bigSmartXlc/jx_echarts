@@ -312,6 +312,7 @@ import * as echarts from "echarts";
 import "echarts-gl";
 import yls_json from "./ljpt_xz.json";
 import VueSeamlessScroll from "vue-seamless-scroll";
+import { delObjectKey } from "@/utils/delObjectKey.js";
 export default {
   components: {
     VueSeamlessScroll,
@@ -692,15 +693,16 @@ export default {
       var chartDom = document.getElementById(id);
       this.leftChart = echarts.init(chartDom);
       this.leftChart.showLoading();
+      var data = {
+        deptId: "400000000",
+        deptIdEnd: "499999999",
+        garbageType: val,
+      };
       this.$http({
         method: "post",
         url: "api/v1/jky/DwWeightCarMonthWeight/deptMonthWeight2",
         baseURL: "http://o792k95b.xiaomy.net/",
-        data: {
-          deptId: "400000000",
-          deptIdEnd: "499999999",
-          garbageType: val,
-        },
+        data: delObjectKey(data),
       })
         .then((res) => {
           if (res.data.result) {
