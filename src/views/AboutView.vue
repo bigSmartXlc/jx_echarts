@@ -312,10 +312,12 @@ import * as echarts from "echarts";
 import "echarts-gl";
 import yls_json from "./ljpt_xz.json";
 import VueSeamlessScroll from "vue-seamless-scroll";
+import { delObjectKey } from "@/utils/delObjectKey.js";
 export default {
   components: {
     VueSeamlessScroll,
   },
+  name: "AboutView",
   data() {
     return {
       dialog_btn_item1: "",
@@ -691,15 +693,16 @@ export default {
       var chartDom = document.getElementById(id);
       this.leftChart = echarts.init(chartDom);
       this.leftChart.showLoading();
+      var data = {
+        deptId: "400000000",
+        deptIdEnd: "499999999",
+        garbageType: val,
+      };
       this.$http({
         method: "post",
         url: "api/v1/jky/DwWeightCarMonthWeight/deptMonthWeight2",
         baseURL: "http://o792k95b.xiaomy.net/",
-        data: {
-          deptId: "400000000",
-          deptIdEnd: "499999999",
-          garbageType: val,
-        },
+        data: delObjectKey(data),
       })
         .then((res) => {
           if (res.data.result) {
@@ -1052,49 +1055,31 @@ export default {
       var linedata = [];
       const map3Ddata = yls_json.features.map((item) => {
         if (item.properties.centroid) {
-          linedata.push([...item.properties.centroid, 0]);
+          linedata.push([...item.properties.centroid, item.properties.name]);
         }
         const geoAreaName = item.properties.name; // geo文件中的地理名称
         return {
           name: geoAreaName,
           // value: item.properties.centroid,
           itemStyle: {
-            color: "#0b7ef5",
+            color: [0, 1, 255, 0.3],
           },
         };
       });
       const option = {
-        title: {
-          text: "当前位置-嘉兴市",
-          left: "35%",
-          top: 160,
-          textStyle: {
-            color: "#fff",
-          },
-        },
+        // title: {
+        //   text: "当前位置-嘉兴市",
+        //   left: "35%",
+        //   top: 160,
+        //   textStyle: {
+        //     color: "#fff",
+        //   },
+        // },
         geo3D: {
           map: "yls",
           show: false,
-          regionHeight: 3,
           left: 0,
-          label: {
-            show: false,
-            distance: 0,
-            formatter(param) {
-              const city = param.name;
-              return `{sty1|${city}}`;
-            },
-            rich: {
-              sty1: {
-                color: "#8d0121",
-                align: "center",
-              },
-            },
-            textStyle: {
-              fontSize: 12,
-              color: "#f51c0b",
-            },
-          },
+          regionHeight: 6,
           viewControl: {
             distance: 130,
             zoomSensitivity: 1,
@@ -1112,9 +1097,25 @@ export default {
             symbolSize: 20,
             animation: true,
             zlevel: -8,
+            label: {
+              show: true,
+              position: "top",
+              formatter(param) {
+                console.log(param);
+                const city = param.data[2];
+                return `{sty1|${city}}`;
+              },
+              rich: {
+                sty1: {
+                  color: "#fff",
+                  fontSize: 18,
+                  fontWeight: 600,
+                },
+              },
+            },
             emphasis: {
               label: {
-                show: false,
+                show: true,
               },
             },
             itemStyle: {
@@ -1128,10 +1129,9 @@ export default {
             type: "map3D", // map3D / map
             map: "yls",
             zlevel: -9,
-            boxHeight: 20,
-            regionHeight: 3,
+            regionHeight: 4,
             label: {
-              show: true,
+              show: false,
               distance: 5,
               formatter(param) {
                 const city = param.name;
@@ -1140,13 +1140,16 @@ export default {
               rich: {
                 sty1: {
                   color: "#fff",
-                  fontSize: 22,
-                  fontWeight: 700,
+                  fontSize: 18,
+                  fontWeight: 600,
                 },
               },
             },
             emphasis: {
               // 鼠标 hover 高亮时图形和标签的样式 (当鼠标放上去时 label和itemStyle 的样式)
+              label: {
+                show: false,
+              },
               itemStyle: {
                 color: "#0b7ef5",
                 opacity: 0.5,
@@ -1160,7 +1163,7 @@ export default {
             itemStyle: {
               // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
               // areaColor: "#000", // 地图板块的颜色
-              opacity: 0.6, // 图形的不透明度 [ default: 1 ]
+              // opacity: 0.6, // 图形的不透明度 [ default: 1 ]
               borderWidth: 2, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
               borderColor: "#ffffff", // 图形描边的颜色。[ default: #333 ]
             },
@@ -1201,6 +1204,7 @@ export default {
 <style scoped lang="scss">
 .toggle_btn {
   background: url("../assets/images/toggle_btn_bg.svg");
+  display: flex;
   span {
     display: inline-block;
     cursor: pointer;
@@ -1217,7 +1221,7 @@ export default {
 }
 .rightbottom {
   z-index: 10;
-  height: calc(100% - 112px);
+  height: calc(100% - 113px);
   overflow: hidden;
   .tableone {
     text-align: left;
@@ -1274,8 +1278,8 @@ export default {
   border-radius: 5px;
 }
 .title_style {
+  cursor: pointer;
   margin: 0;
-  margin-top: 10px;
   height: 70px;
   color: #fff;
   font-size: 40px;
@@ -1378,9 +1382,30 @@ export default {
     .leftdiv {
       height: 50%;
       width: 100%;
-      .map_border {
+      #leftbar {
         width: 100%;
-        height: calc(100% - 104px);
+        height: calc(100% - 113px);
+      }
+      .leftbottom {
+        height: calc(100% - 90px);
+        div {
+          display: flex;
+          justify-content: space-around;
+          span {
+            margin-left: 2px;
+            display: inline-block;
+            height: 50px;
+            line-height: 50px;
+            color: #fff;
+          }
+        }
+        .listhead {
+          span {
+            font-size: 25px;
+            font-weight: 700;
+            color: #02a7f0;
+          }
+        }
       }
     }
   }
@@ -1392,34 +1417,11 @@ export default {
       height: 50%;
       #rightline {
         width: 100%;
-        height: calc(100% - 104px);
+        height: calc(100% - 113px);
       }
     }
     .title_style {
       margin-left: 36%;
-      cursor: pointer;
-    }
-  }
-}
-.leftbottom {
-  height: calc(100% - 78px);
-  div {
-    display: flex;
-    justify-content: space-around;
-    height: 20%;
-    span {
-      margin-left: 2px;
-      display: inline-block;
-      height: 50px;
-      line-height: 50px;
-      color: #fff;
-    }
-  }
-  .listhead {
-    span {
-      font-size: 25px;
-      font-weight: 700;
-      color: #02a7f0;
     }
   }
 }

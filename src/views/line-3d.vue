@@ -303,16 +303,15 @@ export default {
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
           deptId: "400000000",
-          garbageType: this.garbageType,
           deptIdEnd: "499999999",
+          garbageType: this.garbageType,
           startTime: this.yesterday,
           pageNum: 1,
           pageSize: 20,
         },
       }).then((res) => {
-        console.log(2, res);
         if (res.data.result) {
-          res.data.result.list.forEach((item) => {});
+          // res.data.result.list.forEach((item) => {});
           this.leftBottom2 = res.data.result.list;
         }
       });
@@ -325,8 +324,8 @@ export default {
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
           deptId: "400000000",
-          garbageType: garbageType.toString(),
           deptIdEnd: "499999999",
+          garbageType: garbageType.toString(),
         },
       })
         .then((res) => {

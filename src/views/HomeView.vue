@@ -180,8 +180,8 @@
                   v-for="(item, index) in dataList4"
                   :key="index"
                 >
-                  <span class="name"> {{ item.projectName }}</span
-                  ><span class="num">{{ item.projectValueTotal }}</span>
+                  <span class="name"> {{ item.projectName }}</span>
+                  <span class="num">{{ item.projectValueTotal }}</span>
                 </div>
               </div>
             </div>
@@ -320,7 +320,6 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res.data.result);
           this.leftBottom = res.data.result;
           // this.lefttopdata = res.data.result;
         })
@@ -372,7 +371,6 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res);
           this.lefttopdata = res.data.result;
         })
         .catch((err) => {
@@ -427,14 +425,14 @@ export default {
         };
       });
       const option = {
-        title: {
-          text: "当前位置-嘉兴市",
-          left: "35%",
-          top: 160,
-          textStyle: {
-            color: "#fff",
-          },
-        },
+        // title: {
+        //   text: "当前位置-嘉兴市",
+        //   left: "35%",
+        //   top: 160,
+        //   textStyle: {
+        //     color: "#fff",
+        //   },
+        // },
         geo3D: {
           map: "yls",
           show: false,
@@ -455,7 +453,7 @@ export default {
             name: "yls",
             coordinateSystem: "geo3D",
             symbol: "pin",
-            symbolSize: 15,
+            symbolSize: 20,
             animation: true,
             zlevel: -8,
             itemStyle: {
@@ -488,7 +486,7 @@ export default {
             // regionHeight: 5,
             label: {
               show: true,
-              distance: 0,
+              distance: 5,
               formatter(param) {
                 const city = param.name;
                 return `{sty1|${city}}`;

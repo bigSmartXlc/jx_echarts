@@ -315,10 +315,12 @@ import * as echarts from "echarts";
 import yls_json from "./ljpt_xz.json";
 import "echarts-gl";
 import VueSeamlessScroll from "vue-seamless-scroll";
+import { delObjectKey } from "@/utils/delObjectKey.js";
 export default {
   components: {
     VueSeamlessScroll,
   },
+  name: "AboutViewDetail",
   data() {
     return {
       dialog_btn_item1: "",
@@ -786,18 +788,29 @@ export default {
       var chartDom = document.getElementById(id);
       this.leftChart = echarts.init(chartDom);
       this.leftChart.showLoading();
+      // this.$http({
+      //   method: "post",
+      //   url: "api/v1/jky/DwWeightCarMonthWeight/deptMonthWeight2",
+      //   baseURL: "http://o792k95b.xiaomy.net/",
+      //   data: {
+      //     // 测试数据
+      //     // deptId: "400000000",
+      //     // deptIdEnd: "499999999",
+      //     deptId: this.formfiled.deptId.toString(),
+      //     deptIdEnd: this.formfiled.deptIdEnd.toString(),
+      //     garbageType: val,
+      //   },
+      // })
+      var data = {
+        deptId: this.formfiled.deptId.toString(),
+        deptIdEnd: this.formfiled.deptIdEnd.toString(),
+        garbageType: val,
+      };
       this.$http({
         method: "post",
         url: "api/v1/jky/DwWeightCarMonthWeight/deptMonthWeight2",
         baseURL: "http://o792k95b.xiaomy.net/",
-        data: {
-          // 测试数据
-          // deptId: "400000000",
-          // deptIdEnd: "499999999",
-          deptId: this.formfiled.deptId.toString(),
-          deptIdEnd: this.formfiled.deptIdEnd.toString(),
-          garbageType: val,
-        },
+        data: delObjectKey(data),
       })
         .then((res) => {
           if (res.data.result) {
@@ -1145,6 +1158,7 @@ export default {
 <style scoped lang="scss">
 .toggle_btn {
   background: url("../assets/images/toggle_btn_bg.svg");
+  display: flex;
   span {
     display: inline-block;
     cursor: pointer;
@@ -1218,6 +1232,7 @@ export default {
   border-radius: 5px;
 }
 .title_style {
+  cursor: pointer;
   margin: 0;
   margin-top: 10px;
   height: 70px;
@@ -1341,7 +1356,6 @@ export default {
     }
     .title_style {
       margin-left: 36%;
-      cursor: pointer;
     }
   }
 }
@@ -1350,7 +1364,6 @@ export default {
   div {
     display: flex;
     justify-content: space-around;
-    height: 20%;
     span {
       margin-left: 2px;
       display: inline-block;
