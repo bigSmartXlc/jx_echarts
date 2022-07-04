@@ -427,14 +427,14 @@ export default {
         };
       });
       const option = {
-        title: {
-          text: "当前位置-嘉兴市",
-          left: "35%",
-          top: 160,
-          textStyle: {
-            color: "#fff",
-          },
-        },
+        // title: {
+        //   text: "当前位置-嘉兴市",
+        //   left: "35%",
+        //   top: 160,
+        //   textStyle: {
+        //     color: "#fff",
+        //   },
+        // },
         geo3D: {
           map: "yls",
           show: false,
@@ -455,7 +455,7 @@ export default {
             name: "yls",
             coordinateSystem: "geo3D",
             symbol: "pin",
-            symbolSize: 15,
+            symbolSize: 20,
             animation: true,
             zlevel: -8,
             itemStyle: {
@@ -488,7 +488,7 @@ export default {
             // regionHeight: 5,
             label: {
               show: true,
-              distance: 0,
+              distance: 5,
               formatter(param) {
                 const city = param.name;
                 return `{sty1|${city}}`;

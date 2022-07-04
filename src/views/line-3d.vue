@@ -310,9 +310,8 @@ export default {
           pageSize: 20,
         },
       }).then((res) => {
-        console.log(2, res);
         if (res.data.result) {
-          res.data.result.list.forEach((item) => {});
+          // res.data.result.list.forEach((item) => {});
           this.leftBottom2 = res.data.result.list;
         }
       });

@@ -128,16 +128,15 @@ import videojs from "video.js";
 import "echarts-gl";
 require("echarts/extension/bmap/bmap");
 import yls_json from "./ljpt_xz.json";
-// import Select from "@/components/Select";
 export default {
   components: {
     VueDatepickerLocal,
-    // Select,
   },
   data() {
     return {
       tk: "647102ae07da59b5275736577f63c21e",
       ak: "eae1ItjXiOnR6CvVFg5iR4WuGfG6d380",
+      timeLineChart: null,
       rightshow: false,
       tMap: null,
       CarTrack: null,
@@ -175,6 +174,7 @@ export default {
         garbageName: "请选择回收类型",
         vehicleModelListName: "请选择回收环节",
         vehicleName: "",
+        carId: "",
         deptName: "",
       },
       formfiled1: {
@@ -206,7 +206,7 @@ export default {
       scatter_coord: [],
       selectcity: null,
       centerMap: {},
-      timelineData: [],
+      timelineData: null,
     };
   },
   watch: {
@@ -224,6 +224,7 @@ export default {
         ) {
           this.carlist = [];
           this.formfiled.vehicleName = "";
+          this.formfiled.carId = "";
           this.getTree();
         }
       },
@@ -231,10 +232,15 @@ export default {
     },
     "formfiled.vehicleName": function (val) {
       if (val) {
-        if (!this.rightshow) {
-          this.rightshow = true;
-        }
+        this.rightshow = true;
         this.getlineport();
+        if (this.CarTrack) {
+          this.CarTrack.stop();
+          this.CarTrack.clear();
+        }
+        if (this.player) {
+          this.player.pause();
+        }
         setTimeout(() => {
           this.getTimelineData();
           this.getVideoUrl();
@@ -251,14 +257,6 @@ export default {
         this.formfiled.garbageName = item.name;
       }
     });
-  },
-  beforeDestroy() {
-    this.tMap.clearLayers();
-    this.tMap.clearOverLays();
-    if (this.CarTrack) {
-      this.CarTrack.stop();
-      this.CarTrack.clear();
-    }
   },
   mounted() {
     this.gethuanjie();
@@ -280,8 +278,16 @@ export default {
       });
     };
   },
+  beforeRouteLeave(to, from, next) {
+    this.tMap.clearLayers();
+    this.tMap.clearOverLays();
+    if (this.CarTrack) {
+      this.CarTrack.stop();
+      this.CarTrack.clear();
+    }
+    next();
+  },
   methods: {
-    //切换区域
     toggleArea(areaName, val) {
       this.formfiled.deptName = areaName;
       if (val) {
@@ -356,40 +362,24 @@ export default {
     },
     // 获取时间线节点数据
     getTimelineData() {
+      this.timeLineChart = echarts.init(document.getElementById("topchart"));
+      this.timeLineChart.showLoading();
       this.$http({
         method: "post",
         url: "api/v1/jky/timeline",
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
-          // date: this.formfiled1.selectdate,
-          // carId: this.formfiled.vehicleName,
-          date: "2022-05-18",
-          carId: "6656",
+          date: this.formfiled1.selectdate,
+          carId: this.formfiled.carId.toString(),
         },
       })
         .then((res) => {
-          // if (res.data.result) {
-          //   this.timelineData = res.data.result;
-          // }
-          if (typeof res.data === "string") {
-            var result = eval("(" + res.data + ")").result;
-            if (result) {
-              this.area_select_data = [];
-              Object.keys(result).forEach((key) => {
-                this.arealist.forEach((n) => {
-                  if (key == n.value) {
-                    this.area_select_data.push({
-                      deptName: n.name,
-                      deptId: key,
-                      carStatusfail: result[key].carStatusfail,
-                      carStatustotal: result[key].carStatustotal,
-                    });
-                  }
-                });
-              });
-            }
+          if (res.data.result) {
+            this.timelineData = res.data.result;
+            this.drawTimeline();
+          } else {
+            this.timeLineChart.hideLoading();
           }
-          this.drawTimeline();
         })
         .catch((err) => {
           console.log(err);
@@ -598,6 +588,7 @@ export default {
     },
     carSelect(item) {
       this.formfiled.vehicleName = item.vehicleName;
+      this.formfiled.carId = item.rowId;
     },
     // 获取流程环节
     gethuanjie() {
@@ -646,21 +637,18 @@ export default {
         });
     },
     drawTimeline() {
-      var timeLineChart = echarts.init(document.getElementById("topchart"));
-      // var timeLinePart = echarts.init(document.getElementById("timeline"));
-      timeLineChart.showLoading();
-      const data = [];
+      const data = Object.keys(this.timelineData);
       const data1 = [];
-      this.timelineData.forEach((item) => {
-        data.push(item.weight);
-        data1.push(item.deptName);
+      data.forEach((item) => {
+        data1.push(this.timelineData[item].sum);
       });
+      this.timelineData;
       const option = {
         xAxis: { max: "dataMax", show: false },
         yAxis: {
           type: "category",
           show: true,
-          data: data1,
+          data: data.reverse(),
           axisLabel: {
             color: "#66c9fb",
           },
@@ -668,14 +656,14 @@ export default {
         grid: {
           left: 70,
           bottom: 30,
-          right: 10,
+          right: 50,
         },
         series: [
           {
             // realtimeSort: true,
             name: "X",
             type: "bar",
-            data: data,
+            data: data1.reverse(),
             label: {
               show: true,
               position: "right",
@@ -716,7 +704,6 @@ export default {
       //     label: {
       //       position: "left",
       //       formatter: (val) => {
-      //         console.log(val);
       //         return `{textStyle|${
       //           val.split("/")[0] + "\n" + val.split("/")[1]
       //         }}`;
@@ -745,9 +732,9 @@ export default {
       //     data: data1,
       //   },
       // };
-      timeLineChart.clear();
-      timeLineChart.hideLoading();
-      timeLineChart.setOption(option);
+      this.timeLineChart.clear();
+      this.timeLineChart.hideLoading();
+      this.timeLineChart.setOption(option);
       // timeLinePart.setOption(lineOption);
     },
   },

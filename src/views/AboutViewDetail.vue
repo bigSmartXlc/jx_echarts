@@ -1142,6 +1142,7 @@ export default {
 <style scoped lang="scss">
 .toggle_btn {
   background: url("../assets/images/toggle_btn_bg.svg");
+  display: flex;
   span {
     display: inline-block;
     cursor: pointer;
@@ -1215,6 +1216,7 @@ export default {
   border-radius: 5px;
 }
 .title_style {
+  cursor: pointer;
   margin: 0;
   margin-top: 10px;
   height: 70px;
@@ -1338,7 +1340,6 @@ export default {
     }
     .title_style {
       margin-left: 36%;
-      cursor: pointer;
     }
   }
 }
