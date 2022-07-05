@@ -134,13 +134,12 @@ export default {
   },
   data() {
     return {
-      tk: "647102ae07da59b5275736577f63c21e",
-      ak: "eae1ItjXiOnR6CvVFg5iR4WuGfG6d380",
+      // tk: "647102ae07da59b5275736577f63c21e",
       timeLineChart: null,
       rightshow: false,
       tMap: null,
       CarTrack: null,
-      bmap: null,
+      // bmap: null,
       isactive: false,
       cpmpomentDate: "",
       carlist: [],
@@ -188,7 +187,6 @@ export default {
       echarts,
       data: {},
       mapdata: {},
-      table: 1,
       color: [
         "#4d82c1",
         "#c84139",
@@ -201,10 +199,6 @@ export default {
         "#97885e",
       ],
       chart: null,
-      lines_coord: [],
-      scatter_coords: [],
-      scatter_coord: [],
-      selectcity: null,
       centerMap: {},
       timelineData: null,
     };
@@ -223,6 +217,7 @@ export default {
           newval.selectdate != ""
         ) {
           this.carlist = [];
+          this.area_select_data = [];
           this.formfiled.vehicleName = "";
           this.formfiled.carId = "";
           this.getTree();
@@ -259,16 +254,12 @@ export default {
       }
     });
   },
+  // "http://api.tianditu.gov.cn/api?v=4.0&tk=647102ae07da59b5275736577f63c21e",
   mounted() {
     this.gethuanjie();
-    let script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src =
-      "http://api.tianditu.gov.cn/api?v=4.0&tk=647102ae07da59b5275736577f63c21e";
-    document.body.appendChild(script);
-    script.onload = () => {
+    this.loadJS("TiandituGovApi.js", () => {
       //加载完成去执行代码  ie中不能使用
-      this.loadJS("http://cdn.bootcss.com/d3/3.5.17/d3.js", () => {
+      this.loadJS("D3.js", () => {
         this.loadJS("D3SvgOverlay.js", () => {
           this.loadJS("CarTrack.js", () => {
             this.tMap = new T.Map("chart-box");
@@ -277,7 +268,7 @@ export default {
           });
         });
       });
-    };
+    });
   },
   beforeRouteLeave(to, from, next) {
     this.tMap.clearLayers();
@@ -315,7 +306,24 @@ export default {
       }
       this.load();
     },
+    isInclude(name) {
+      var es = document.getElementsByTagName("script");
+      for (var i = 0; i < es.length; i++) {
+        if (es[i]["src"]) {
+          if (es[i]["src"].indexOf(name) != -1) {
+            return true;
+          }
+        }
+      }
+      return false;
+    },
+    //加载js
     loadJS(url, success) {
+      if (this.isInclude(url)) {
+        console.log(url + "已加载");
+        success();
+        return;
+      }
       var domScript = document.createElement("script");
       domScript.src = url;
       success = success || function () {};

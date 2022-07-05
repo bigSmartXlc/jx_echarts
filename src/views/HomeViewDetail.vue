@@ -401,27 +401,19 @@ export default {
     },
   },
   mounted() {
-    let script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src =
-      "http://api.tianditu.gov.cn/api?v=4.0&tk=647102ae07da59b5275736577f63c21e";
-    document.body.appendChild(script);
-    script.onload = () => {
-      //加载完成去执行代码  ie中不能使用
-      this.loadJS("http://cdn.bootcss.com/d3/3.5.17/d3.js", () => {
-        this.loadJS(
-          "http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/D3SvgOverlay.js",
-          () => {
-            console.log("天地图准备完毕");
-            this.tMap = new T.Map("chart-city");
-            this.toggleArea(this.$route.query.areaName);
-            this.planningGuidance();
-            this.projectConstruction();
-            this.basicResources(2);
-          }
-        );
+    //加载完成去执行代码  ie中不能使用
+    this.loadJS("TiandituGovApi.js", () => {
+      this.loadJS("D3.js", () => {
+        this.loadJS("D3SvgOverlay.js", () => {
+          console.log("天地图准备完毕");
+          this.tMap = new T.Map("chart-city");
+          this.toggleArea(this.$route.query.areaName);
+          this.planningGuidance();
+          this.projectConstruction();
+          this.basicResources(2);
+        });
       });
-    };
+    });
   },
   methods: {
     //视频选择
@@ -653,9 +645,9 @@ export default {
       });
     },
     //
-    point_out(e) {
-      // this.tMap.removeOverLay(this.label);
+    point_out() {
       this.tMap.removeOverLay(this.infoWin);
+      // this.tMap.removeOverLay(this.label);
     },
     //站点hover事件
     point_hover(e) {
@@ -725,8 +717,24 @@ export default {
       this.tMap.addOverLay(polygon);
       //创建标注对象
     },
+    isInclude(name) {
+      var es = document.getElementsByTagName("script");
+      for (var i = 0; i < es.length; i++) {
+        if (es[i]["src"]) {
+          if (es[i]["src"].indexOf(name) != -1) {
+            return true;
+          }
+        }
+      }
+      return false;
+    },
     //加载js
     loadJS(url, success) {
+      if (this.isInclude(url)) {
+        console.log(url + "已加载");
+        success();
+        return;
+      }
       var domScript = document.createElement("script");
       domScript.src = url;
       success = success || function () {};

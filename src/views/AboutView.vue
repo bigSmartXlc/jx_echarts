@@ -1101,7 +1101,6 @@ export default {
               show: true,
               position: "top",
               formatter(param) {
-                console.log(param);
                 const city = param.data[2];
                 return `{sty1|${city}}`;
               },
