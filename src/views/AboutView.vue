@@ -1385,26 +1385,26 @@ export default {
         width: 100%;
         height: calc(100% - 113px);
       }
-      .leftbottom {
-        height: calc(100% - 90px);
-        div {
-          display: flex;
-          justify-content: space-around;
-          span {
-            margin-left: 2px;
-            display: inline-block;
-            height: 50px;
-            line-height: 50px;
-            color: #fff;
-          }
-        }
-        .listhead {
-          span {
-            font-size: 25px;
-            font-weight: 700;
-            color: #02a7f0;
-          }
-        }
+    }
+  }
+  .leftbottom {
+    height: calc(100% - 90px);
+    div {
+      display: flex;
+      justify-content: space-around;
+      span {
+        margin-left: 2px;
+        display: inline-block;
+        height: 50px;
+        line-height: 50px;
+        color: #fff;
+      }
+    }
+    .listhead {
+      span {
+        font-size: 25px;
+        font-weight: 700;
+        color: #02a7f0;
       }
     }
   }
