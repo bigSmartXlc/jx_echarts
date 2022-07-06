@@ -507,25 +507,28 @@ export default {
                 const key_array = Object.keys(this.timelineData);
                 var data = this.timelineData;
                 if (this.timelineData) {
-                  key_array.forEach((item) => {
-                    if (
+                  var fittle_area = key_array.find((item) => {
+                    return (
                       data[item].lng == lnglat.lng &&
                       data[item].lat == lnglat.lat
-                    ) {
-                      console.log(item);
-                      var marker = new T.Marker(
-                        new T.LngLat(data[item].lng, data[item].lat)
-                      ); // 创建标注
-                      this.tMap.addOverLay(marker); // 将标注添加到地图中
-                      var label = new T.Label({
-                        text: item,
-                        position: new T.LngLat(data[item].lng, data[item].lat),
-                        offset: new T.Point(3, -30),
-                      });
-                      //创建地图文本对象
-                      this.tMap.addOverLay(label);
-                    }
+                    );
                   });
+                  if (fittle_area) {
+                    var marker = new T.Marker(
+                      new T.LngLat(data[fittle_area].lng, data[fittle_area].lat)
+                    ); // 创建标注
+                    this.tMap.addOverLay(marker); // 将标注添加到地图中
+                    var label = new T.Label({
+                      text: fittle_area,
+                      position: new T.LngLat(
+                        data[fittle_area].lng,
+                        data[fittle_area].lat
+                      ),
+                      offset: new T.Point(3, -30),
+                    });
+                    //创建地图文本对象
+                    this.tMap.addOverLay(label);
+                  }
                 }
               },
             });
