@@ -226,7 +226,6 @@ export default {
     "formfiled.vehicleName": function (val) {
       if (val) {
         this.rightshow = true;
-        this.getlineport();
         if (this.CarTrack) {
           this.CarTrack.stop();
           this.CarTrack.clear();
@@ -349,6 +348,10 @@ export default {
         "tdt-control-copyright tdt-control"
       )[0].style.display = "none";
       this.tMap.setStyle("indigo");
+      this.drawPolygon();
+    },
+    //画覆盖物
+    drawPolygon() {
       var mapBorder = this.mapdata.features[0].geometry.coordinates[0];
       var points = [];
       mapBorder.forEach((item) => {
@@ -377,11 +380,14 @@ export default {
         data: {
           date: this.formfiled1.selectdate,
           carId: this.formfiled.carId.toString(),
+          // date: "2022-07-01",
+          // carId: "2708",
         },
       })
         .then((res) => {
           if (res.data.result) {
             this.timelineData = res.data.result;
+            this.getlineport();
             this.drawTimeline();
           } else {
             this.timeLineChart.hideLoading();
@@ -433,9 +439,12 @@ export default {
       if (this.CarTrack != null) {
         this.CarTrack.clear();
       }
+      this.tMap.clearOverLays();
+      this.drawPolygon();
       this.$http
         .post(
           `http://o792k95b.xiaomy.net/api/v1/jky/siCarTrack/getPoints2?carNum=${this.formfiled.vehicleName}&date=${this.formfiled1.selectdate}`
+          // `http://o792k95b.xiaomy.net/api/v1/jky/siCarTrack/getPoints2?carNum=浙B3P568&date=2022-07-01`
           // params
         )
         .then((res) => {
@@ -472,7 +481,52 @@ export default {
                 if (index + 1 == length) {
                   this.CarTrack.stop();
                 }
-                // console.log(lnglat, index, length);
+                // var data = {
+                //   一小区: {
+                //     lat: "30.75255",
+                //     lng: "120.81699",
+                //   },
+                //   二小区: {
+                //     lat: "30.78751",
+                //     lng: "120.79571",
+                //   },
+                //   三小区: {
+                //     lat: "30.79898",
+                //     lng: "120.78695",
+                //   },
+                //   四小区: {
+                //     lat: "30.80319",
+                //     lng: "120.7681",
+                //   },
+                //   五小区: {
+                //     lat: "30.80319",
+                //     lng: "120.74603",
+                //   },
+                // };
+                // const key_array = Object.keys(data);
+                const key_array = Object.keys(this.timelineData);
+                var data = this.timelineData;
+                if (this.timelineData) {
+                  key_array.forEach((item) => {
+                    if (
+                      data[item].lng == lnglat.lng &&
+                      data[item].lat == lnglat.lat
+                    ) {
+                      console.log(item);
+                      var marker = new T.Marker(
+                        new T.LngLat(data[item].lng, data[item].lat)
+                      ); // 创建标注
+                      this.tMap.addOverLay(marker); // 将标注添加到地图中
+                      var label = new T.Label({
+                        text: item,
+                        position: new T.LngLat(data[item].lng, data[item].lat),
+                        offset: new T.Point(3, -30),
+                      });
+                      //创建地图文本对象
+                      this.tMap.addOverLay(label);
+                    }
+                  });
+                }
               },
             });
             this.CarTrack.start();

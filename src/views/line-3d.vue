@@ -325,7 +325,7 @@ export default {
         data: {
           deptId: "400000000",
           deptIdEnd: "499999999",
-          garbageType: garbageType.toString(),
+          garbageType: garbageType ? garbageType.toString() : "",
         },
       })
         .then((res) => {

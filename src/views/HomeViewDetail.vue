@@ -623,7 +623,7 @@ export default {
           deptIdEnd: this.deptIdEnd,
           projectName: item.projectName,
           projectType: item.projectType,
-          state: state,
+          groupCode: item.groupCode,
         },
       })
         .then((res) => {
