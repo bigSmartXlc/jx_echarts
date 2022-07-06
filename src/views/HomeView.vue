@@ -16,17 +16,21 @@
                 text-align: center;
               "
             >
-              <ul class="tbody">
-                <li
+              <table class="tbody">
+                <tr
                   v-for="(item, index) in lefttopdata"
                   :key="index"
                   :class="{ li_bg: index % 2 == 0, li_bg1: index % 2 == 1 }"
                   @click="yjitemClick(item)"
                 >
-                  <div class="l_top_cityname">{{ item.cityName }}</div>
-                  <div class="l_top_title">{{ item.title }}</div>
-                </li>
-              </ul>
+                  <td class="city_container">
+                    <div class="l_top_cityname">{{ item.cityName }}</div>
+                  </td>
+                  <td class="title_container">
+                    <div class="l_top_title">{{ item.title }}</div>
+                  </td>
+                </tr>
+              </table>
             </VueSeamlessScroll>
           </div>
         </div>
@@ -584,6 +588,7 @@ export default {
   text-align: center;
 }
 .map_border {
+  overflow: hidden;
   border: solid 2px #0167dd;
   background: linear-gradient(270deg, #0267d8, #0267d8) 0 0 no-repeat,
     linear-gradient(180deg, #0267d8, #0267d8) 0 0 no-repeat,
@@ -616,25 +621,29 @@ export default {
       .tbody {
         margin: 0;
         padding: 0;
-        li {
-          list-style: none;
+        tr {
           font-size: 14px;
           height: 90px;
-          line-height: 90px;
-          margin: 0 auto;
-          .l_top_cityname {
-            display: inline-block;
-            width: 12%;
-            vertical-align: top;
+          margin: auto;
+          td {
+            padding: 0 !important;
+            border: none;
           }
-          .l_top_title {
-            display: inline-block;
-            width: 88%;
-            overflow: hidden;
-            /*文本不会换行*/
-            white-space: nowrap;
-            /*当文本溢出包含元素时，以省略号表示超出的文本*/
-            text-overflow: ellipsis;
+          .city_container {
+            width: 90px;
+            .l_top_cityname {
+              width: 100%;
+              vertical-align: middle;
+            }
+          }
+          .title_container {
+            .l_top_title {
+              display: -webkit-box; //将对象作为弹性伸缩盒子模型显示。
+              -webkit-box-orient: vertical; //从上到下垂直排列子元素（设置伸缩盒子的子元素排列方式）
+              -webkit-line-clamp: 2; //限制行数
+              overflow: hidden; //超出部分隐藏
+              text-overflow: ellipsis; //用一个省略号代替超出的内容
+            }
           }
         }
       }
@@ -647,6 +656,7 @@ export default {
     }
     .thead {
       padding: 0;
+      margin-left: -80px;
       span {
         display: inline-block;
         text-align: center;
@@ -671,6 +681,7 @@ export default {
           width: 100%;
           height: 50px;
           margin-bottom: 10px;
+          margin-left: -80px;
           span {
             display: inline-block;
             height: 100%;

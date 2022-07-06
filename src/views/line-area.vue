@@ -20,10 +20,7 @@
         </ul>
       </div>
       <div class="dateselect">
-        <vue-datepicker-local
-          v-model="cpmpomentDate"
-          format="YYYY-MM-DD HH:mm:ss"
-        />
+        <vue-datepicker-local v-model="cpmpomentDate" format="YYYY-MM-DD" />
       </div>
       <div class="huanjie select_container">
         <div>
@@ -463,13 +460,19 @@ export default {
             this.CarTrack = new T.CarTrack(this.tMap, {
               interval: 20,
               speed: 10,
-              dynamicLine: true,
+              dynamicLine: false,
               polylinestyle: { color: "#49d68f", weight: 5, opacity: 1 },
               Datas: point,
               carstyle: {
                 iconUrl: "car.png",
                 width: 52,
                 height: 26,
+              },
+              passOneNode: (lnglat, index, length) => {
+                if (index + 1 == length) {
+                  this.CarTrack.stop();
+                }
+                // console.log(lnglat, index, length);
               },
             });
             this.CarTrack.start();

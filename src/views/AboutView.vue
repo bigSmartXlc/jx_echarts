@@ -35,7 +35,7 @@
             ><span>{{ item.projectName }}</span
             ><span>{{ item.projectValue }}</span
             ><span>{{ item.pojectVaule2 }}</span
-            ><span>{{ item.rate * 100 }}%</span>
+            ><span>{{ (item.rate * 100).toFixed(2) }}%</span>
           </div>
         </div>
       </div>
@@ -299,7 +299,7 @@
             ><span>{{ item.projectName }}</span
             ><span>{{ item.projectValue }}</span
             ><span>{{ item.pojectVaule2 }}</span
-            ><span>{{ item.rate * 100 }}%</span>
+            ><span>{{ (item.rate * 100).toFixed(2) }}%</span>
           </div>
         </div>
       </div>

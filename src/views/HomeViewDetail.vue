@@ -16,17 +16,21 @@
                 text-align: center;
               "
             >
-              <ul class="tbody">
-                <li
+              <table class="tbody">
+                <tr
                   v-for="(item, index) in lefttopdata"
                   :key="index"
                   :class="{ li_bg: index % 2 == 0, li_bg1: index % 2 == 1 }"
                   @click="yjitemClick(item)"
                 >
-                  <div class="l_top_cityname">{{ item.cityName }}</div>
-                  <div class="l_top_title">{{ item.title }}</div>
-                </li>
-              </ul>
+                  <td class="city_container">
+                    <div class="l_top_cityname">{{ item.cityName }}</div>
+                  </td>
+                  <td class="title_container">
+                    <div class="l_top_title">{{ item.title }}</div>
+                  </td>
+                </tr>
+              </table>
             </VueSeamlessScroll>
           </div>
         </div>
@@ -334,7 +338,7 @@ export default {
     seamlessScrollOption() {
       return {
         step: 0.2, // 数值越大速度滚动越快
-        limitMoveNum: 2, // 开始无缝滚动的数据量 this.dataList.length
+        limitMoveNum: 4, // 开始无缝滚动的数据量 this.dataList.length
         hoverStop: true, // 是否开启鼠标悬停stop
         direction: 1, // 0向下 1向上 2向左 3向右
       };
@@ -634,6 +638,8 @@ export default {
     },
     // 天地图添加标记并绑定点击事件
     drawPoint(data) {
+      this.tMap.clearOverLays();
+      this.draw_map();
       data.forEach((item) => {
         var marker = new T.Marker(new T.LngLat(item.lng, item.lat));
         marker.info = item;
@@ -700,6 +706,12 @@ export default {
         "tdt-control-copyright tdt-control"
       )[0].style.display = "none";
       this.tMap.setStyle("indigo");
+
+      //创建标注对象
+      this.draw_map();
+    },
+    //区域描边
+    draw_map() {
       var mapBorder = this.mapdata.features[0].geometry.coordinates[0];
       var points = [];
       mapBorder.forEach((item) => {
@@ -715,7 +727,6 @@ export default {
       });
       //向地图上添加面
       this.tMap.addOverLay(polygon);
-      //创建标注对象
     },
     isInclude(name) {
       var es = document.getElementsByTagName("script");
@@ -858,25 +869,29 @@ export default {
       .tbody {
         margin: 0;
         padding: 0;
-        li {
-          list-style: none;
+        tr {
           font-size: 14px;
           height: 90px;
-          line-height: 90px;
-          margin: 0 auto;
-          .l_top_cityname {
-            display: inline-block;
-            width: 12%;
-            vertical-align: top;
+          margin: auto;
+          td {
+            padding: 0;
+            border: none;
           }
-          .l_top_title {
-            display: inline-block;
-            width: 88%;
-            overflow: hidden;
-            /*文本不会换行*/
-            white-space: nowrap;
-            /*当文本溢出包含元素时，以省略号表示超出的文本*/
-            text-overflow: ellipsis;
+          .city_container {
+            width: 90px;
+            .l_top_cityname {
+              width: 100%;
+              vertical-align: middle;
+            }
+          }
+          .title_container {
+            .l_top_title {
+              display: -webkit-box; //将对象作为弹性伸缩盒子模型显示。
+              -webkit-box-orient: vertical; //从上到下垂直排列子元素（设置伸缩盒子的子元素排列方式）
+              -webkit-line-clamp: 2; //限制行数
+              overflow: hidden; //超出部分隐藏
+              text-overflow: ellipsis; //用一个省略号代替超出的内容
+            }
           }
         }
       }
@@ -889,6 +904,7 @@ export default {
     }
     .thead {
       padding: 0;
+      margin-left: -80px;
       span {
         display: inline-block;
         text-align: center;
@@ -913,6 +929,7 @@ export default {
           width: 100%;
           height: 50px;
           margin-bottom: 10px;
+          margin-left: -80px;
           span {
             display: inline-block;
             height: 100%;
@@ -1046,12 +1063,10 @@ export default {
   background-color: #0c66a5 !important;
 }
 .li_bg {
-  background: #113157;
-  opacity: 0.5;
+  background: rgba(94, 148, 219, 0.5);
 }
 .li_bg1 {
-  background: #041d4e;
-  opacity: 0.5;
+  background: rgba(17, 49, 87, 0.5);
 }
 .menu_active {
   border: solid 1px #0c66a5 !important;
