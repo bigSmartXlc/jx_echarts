@@ -399,16 +399,25 @@ export default {
     },
     //获取车辆组织树
     getcarteamTree() {
+      let params = new FormData();
+      params.append("lnglatTime", this.formfiled1.selectdate);
+      params.append("deptId", this.formfiled1.deptId);
+      params.append("vehicleModelList", this.formfiled1.vehicleModelList);
+      params.append("garbageType", this.formfiled1.garbageType);
       this.$http({
         method: "post",
         url: "api/v1/jky/pjcar/pjcarTree",
         baseURL: "http://o792k95b.xiaomy.net/",
-        data: {
-          lnglatTime: this.formfiled1.selectdate,
-          deptId: this.formfiled1.deptId,
-          vehicleModelList: this.formfiled1.vehicleModelList,
-          garbageType: this.formfiled1.garbageType,
+        // data: {
+        //   lnglatTime: this.formfiled1.selectdate,
+        //   deptId: this.formfiled1.deptId,
+        //   vehicleModelList: this.formfiled1.vehicleModelList,
+        //   garbageType: this.formfiled1.garbageType,
+        // },
+        headers: {
+          "Content-Type": " multipart/form-data",
         },
+        data: params,
       })
         .then((res) => {
           if (typeof res.data === "string") {
@@ -706,6 +715,8 @@ export default {
       let params = new FormData();
       params.append("lnglatTime", this.formfiled1.selectdate);
       params.append("deptId", this.formfiled1.deptId);
+      params.append("vehicleModelList", this.formfiled1.vehicleModelList);
+      params.append("garbageType", this.formfiled1.garbageType);
       this.$http({
         method: "post",
         url: "api/v1/jky/pjcar/pjCarTreeVal",
