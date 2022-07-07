@@ -4,7 +4,7 @@
       <div class="left">
         <div class="left_top">
           <div class="enlargeTitle title_style">规划引领</div>
-          <div id="review_box">
+          <div id="review_box" @click="handleClick($event)">
             <VueSeamlessScroll
               :data="lefttopdata"
               :class-option="seamlessScrollOption"
@@ -21,13 +21,19 @@
                   v-for="(item, index) in lefttopdata"
                   :key="index"
                   :class="{ li_bg: index % 2 == 0, li_bg1: index % 2 == 1 }"
-                  @click="yjitemClick(item)"
                 >
                   <td class="city_container">
-                    <div class="l_top_cityname">{{ item.cityName }}</div>
+                    <div
+                      class="l_top_cityname"
+                      :data-dept="JSON.stringify(item)"
+                    >
+                      {{ item.cityName }}
+                    </div>
                   </td>
                   <td class="title_container">
-                    <div class="l_top_title">{{ item.title }}</div>
+                    <div class="l_top_title" :data-dept="JSON.stringify(item)">
+                      {{ item.title }}
+                    </div>
                   </td>
                 </tr>
               </table>
@@ -390,7 +396,10 @@ export default {
       this.tabContent = val;
       this.active_right_item = null;
     },
-    yjitemClick(item) {
+    handleClick(event) {
+      //防止重复点击某一条数据
+      //获取点击的list对象
+      let item = JSON.parse(event.target.dataset.dept);
       this.solution = item.content;
       this.solution_title = item.title;
       this.solutionShow = true;
@@ -622,6 +631,7 @@ export default {
         margin: 0;
         padding: 0;
         tr {
+          cursor: pointer;
           font-size: 14px;
           height: 90px;
           margin: auto;

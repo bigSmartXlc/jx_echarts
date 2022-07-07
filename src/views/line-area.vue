@@ -387,11 +387,11 @@ export default {
         .then((res) => {
           if (res.data.result) {
             this.timelineData = res.data.result;
-            this.getlineport();
             this.drawTimeline();
           } else {
             this.timeLineChart.hideLoading();
           }
+          this.getlineport();
         })
         .catch((err) => {
           console.log(err);
@@ -504,9 +504,9 @@ export default {
                 //   },
                 // };
                 // const key_array = Object.keys(data);
-                const key_array = Object.keys(this.timelineData);
-                var data = this.timelineData;
                 if (this.timelineData) {
+                  const key_array = Object.keys(this.timelineData);
+                  var data = this.timelineData;
                   var fittle_area = key_array.find((item) => {
                     return (
                       data[item].lng == lnglat.lng &&
@@ -517,6 +517,16 @@ export default {
                     var marker = new T.Marker(
                       new T.LngLat(data[fittle_area].lng, data[fittle_area].lat)
                     ); // 创建标注
+                    // var marker = new T.Circle(
+                    //   new T.LngLat(data[fittle_area].lng, data[fittle_area].lat),
+                    //   100,
+                    //   {
+                    //     color: "#f70404",
+                    //     weight:30,
+                    //     fillColor: "f70404",
+                    //     fillOpacity: 0,
+                    //   }
+                    // ); // 创建标注
                     this.tMap.addOverLay(marker); // 将标注添加到地图中
                     var label = new T.Label({
                       text: fittle_area,
@@ -634,14 +644,12 @@ export default {
       var d = date.getDate();
       d = d < 10 ? "0" + d : d;
       //    'h+': date.getHours(), // 小时
-      var h = date.getHours();
-      h = h < 10 ? "0" + h : h;
-      var m = date.getMinutes();
-      m = m < 10 ? "0" + m : m;
-      var s = date.getSeconds();
-      s = s < 10 ? "0" + s : s;
-      // 'm+': date.getMinutes(), // 分
-      // 's+': date.getSeconds(), // 秒
+      // var h = date.getHours();
+      // h = h < 10 ? "0" + h : h;
+      // var m = date.getMinutes();
+      // m = m < 10 ? "0" + m : m;
+      // var s = date.getSeconds();
+      // s = s < 10 ? "0" + s : s;
       // return y + "-" + M + "-" + d + " " + h + ":" + m + ":" + s;
       return y + "-" + M + "-" + d;
     },

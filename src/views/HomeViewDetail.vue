@@ -4,7 +4,7 @@
       <div class="left">
         <div class="left_top">
           <div class="enlargeTitle title_style">规划引领</div>
-          <div id="review_box">
+          <div id="review_box" @click="handleClick($event)">
             <VueSeamlessScroll
               :data="lefttopdata"
               :class-option="seamlessScrollOption"
@@ -21,13 +21,19 @@
                   v-for="(item, index) in lefttopdata"
                   :key="index"
                   :class="{ li_bg: index % 2 == 0, li_bg1: index % 2 == 1 }"
-                  @click="yjitemClick(item)"
                 >
                   <td class="city_container">
-                    <div class="l_top_cityname">{{ item.cityName }}</div>
+                    <div
+                      class="l_top_cityname"
+                      :data-dept="JSON.stringify(item)"
+                    >
+                      {{ item.cityName }}
+                    </div>
                   </td>
                   <td class="title_container">
-                    <div class="l_top_title">{{ item.title }}</div>
+                    <div class="l_top_title" :data-dept="JSON.stringify(item)">
+                      {{ item.title }}
+                    </div>
                   </td>
                 </tr>
               </table>
@@ -251,13 +257,13 @@
       <div class="dialog_body" style="height: calc(100% - 108px)">
         <div class="tab_content" v-show="dialog_tab_num == 0">
           <ul class="info">
-            <li>站点类型：{{ info_object.paramName }}</li>
-            <li>站点名称：{{ info_object.projectName }}</li>
-            <li>站点地址：{{ info_object.projectAddress }}</li>
-            <li>总投资额：{{ info_object.money }}</li>
-            <li>占地面积：{{ info_object.buildArea }}</li>
-            <li>投运日期：{{ info_object.endDate }}</li>
-            <li>运营单位：{{ info_object.operationUnit }}</li>
+            <li>站点类型：{{ init_info.paramName }}</li>
+            <li>站点名称：{{ init_info.projectName }}</li>
+            <li>站点地址：{{ init_info.projectAddress }}</li>
+            <li>总投资额：{{ init_info.money }}</li>
+            <li>占地面积：{{ init_info.buildArea }}</li>
+            <li>投运日期：{{ init_info.endDate }}</li>
+            <li>运营单位：{{ init_info.operationUnit }}</li>
           </ul>
         </div>
         <div class="tab_content" v-show="dialog_tab_num == 1">
@@ -376,6 +382,15 @@ export default {
       leftBottom: [],
       active_right_item: null,
       villageId: "",
+      init_info: {
+        paramName: "暂无信息",
+        projectName: "暂无信息",
+        projectAddress: "暂无信息",
+        money: "暂无信息",
+        buildArea: "暂无信息",
+        endDate: "暂无信息",
+        operationUnit: "暂无信息",
+      },
       info_object: {
         paramName: "暂无信息",
         projectName: "暂无信息",
@@ -420,6 +435,14 @@ export default {
     });
   },
   methods: {
+    handleClick(event) {
+      //防止重复点击某一条数据
+      //获取点击的list对象
+      let item = JSON.parse(event.target.dataset.dept);
+      this.solution = item.content;
+      this.solution_title = item.title;
+      this.solutionShow = true;
+    },
     //视频选择
     video_select(item, index) {
       this.video_active_item = index;
@@ -466,7 +489,8 @@ export default {
         },
       })
         .then((res) => {
-          Object.assign(this.info_object, res.data.result);
+          this.init_info = JSON.parse(JSON.stringify(this.info_object));
+          Object.assign(this.init_info, res.data.result);
         })
         .catch((err) => {
           console.log(err);
@@ -676,11 +700,12 @@ export default {
       this.tabContent = val;
       this.active_right_item = null;
     },
-    yjitemClick(item) {
-      this.solution = item.content;
-      this.solution_title = item.title;
-      this.solutionShow = true;
-    },
+    // yjitemClick(item) {
+    //   console.log("打开弹窗");
+    //   this.solution = item.content;
+    //   this.solution_title = item.title;
+    //   this.solutionShow = true;
+    // },
     toggleArea(areaName) {
       this.mapdata = {
         type: "FeatureCollection",
@@ -870,6 +895,7 @@ export default {
         margin: 0;
         padding: 0;
         tr {
+          cursor: pointer;
           font-size: 14px;
           height: 90px;
           margin: auto;
