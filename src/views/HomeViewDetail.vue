@@ -320,7 +320,7 @@
                 :class="{ video_active: video_active_item == index }"
               >
                 <div class="video_name">
-                  {{ item.cameraAddr }}
+                  {{ item.cameraName }}
                 </div>
               </li>
             </ul>

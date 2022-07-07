@@ -466,6 +466,25 @@ export default {
               var poi = new T.LngLat(path[i].lng, path[i].lat);
               point.push(poi);
             }
+            //测试画点
+            if (this.timelineData) {
+              const key_array = Object.keys(this.timelineData);
+              var data = this.timelineData;
+              key_array.forEach((item) => {
+                var marker = new T.Marker(
+                  new T.LngLat(data[item].lng, data[item].lat)
+                ); // 创建标注
+                this.tMap.addOverLay(marker); // 将标注添加到地图中
+                var label = new T.Label({
+                  text: item,
+                  position: new T.LngLat(data[item].lng, data[item].lat),
+                  offset: new T.Point(3, -30),
+                });
+                //创建地图文本对象
+                this.tMap.addOverLay(label);
+              });
+            }
+            //移动轨迹
             this.CarTrack = new T.CarTrack(this.tMap, {
               interval: 20,
               speed: 10,
@@ -477,70 +496,71 @@ export default {
                 width: 52,
                 height: 26,
               },
-              passOneNode: (lnglat, index, length) => {
-                if (index + 1 == length) {
-                  this.CarTrack.stop();
-                }
-                // var data = {
-                //   一小区: {
-                //     lat: "30.75255",
-                //     lng: "120.81699",
-                //   },
-                //   二小区: {
-                //     lat: "30.78751",
-                //     lng: "120.79571",
-                //   },
-                //   三小区: {
-                //     lat: "30.79898",
-                //     lng: "120.78695",
-                //   },
-                //   四小区: {
-                //     lat: "30.80319",
-                //     lng: "120.7681",
-                //   },
-                //   五小区: {
-                //     lat: "30.80319",
-                //     lng: "120.74603",
-                //   },
-                // };
-                // const key_array = Object.keys(data);
-                if (this.timelineData) {
-                  const key_array = Object.keys(this.timelineData);
-                  var data = this.timelineData;
-                  var fittle_area = key_array.find((item) => {
-                    return (
-                      data[item].lng == lnglat.lng &&
-                      data[item].lat == lnglat.lat
-                    );
-                  });
-                  if (fittle_area) {
-                    var marker = new T.Marker(
-                      new T.LngLat(data[fittle_area].lng, data[fittle_area].lat)
-                    ); // 创建标注
-                    // var marker = new T.Circle(
-                    //   new T.LngLat(data[fittle_area].lng, data[fittle_area].lat),
-                    //   100,
-                    //   {
-                    //     color: "#f70404",
-                    //     weight:30,
-                    //     fillColor: "f70404",
-                    //     fillOpacity: 0,
-                    //   }
-                    // ); // 创建标注
-                    this.tMap.addOverLay(marker); // 将标注添加到地图中
-                    var label = new T.Label({
-                      text: fittle_area,
-                      position: new T.LngLat(
-                        data[fittle_area].lng,
-                        data[fittle_area].lat
-                      ),
-                      offset: new T.Point(3, -30),
-                    });
-                    //创建地图文本对象
-                    this.tMap.addOverLay(label);
-                  }
-                }
-              },
+              // passOneNode: (lnglat, index, length) => {
+              //   if (index + 1 == length) {
+              //     this.CarTrack.stop();
+              //   }
+              //   //测试数据
+              //   // var data = {
+              //   //   一小区: {
+              //   //     lat: "30.75255",
+              //   //     lng: "120.81699",
+              //   //   },
+              //   //   二小区: {
+              //   //     lat: "30.78751",
+              //   //     lng: "120.79571",
+              //   //   },
+              //   //   三小区: {
+              //   //     lat: "30.79898",
+              //   //     lng: "120.78695",
+              //   //   },
+              //   //   四小区: {
+              //   //     lat: "30.80319",
+              //   //     lng: "120.7681",
+              //   //   },
+              //   //   五小区: {
+              //   //     lat: "30.80319",
+              //   //     lng: "120.74603",
+              //   //   },
+              //   // };
+              //   // const key_array = Object.keys(data);
+              //   if (this.timelineData) {
+              //     const key_array = Object.keys(this.timelineData);
+              //     var data = this.timelineData;
+              //     var fittle_area = key_array.find((item) => {
+              //       return (
+              //         data[item].lng == lnglat.lng &&
+              //         data[item].lat == lnglat.lat
+              //       );
+              //     });
+              //     if (fittle_area) {
+              //       var marker = new T.Marker(
+              //         new T.LngLat(data[fittle_area].lng, data[fittle_area].lat)
+              //       ); // 创建标注
+              //       // var marker = new T.Circle(
+              //       //   new T.LngLat(data[fittle_area].lng, data[fittle_area].lat),
+              //       //   100,
+              //       //   {
+              //       //     color: "#f70404",
+              //       //     weight:30,
+              //       //     fillColor: "f70404",
+              //       //     fillOpacity: 0,
+              //       //   }
+              //       // ); // 创建标注
+              //       this.tMap.addOverLay(marker); // 将标注添加到地图中
+              //       var label = new T.Label({
+              //         text: fittle_area,
+              //         position: new T.LngLat(
+              //           data[fittle_area].lng,
+              //           data[fittle_area].lat
+              //         ),
+              //         offset: new T.Point(3, -30),
+              //       });
+              //       //创建地图文本对象
+              //       this.tMap.addOverLay(label);
+              //     }
+              //   }
+              // },
             });
             this.CarTrack.start();
           } else {
