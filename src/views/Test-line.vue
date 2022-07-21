@@ -428,17 +428,19 @@ export default {
           itemStyle: {
             normal: {
               borderColor: "rgba(255,209,163, .5)", //区域边框颜色
-              areaColor: "rgba(73,86,166,.1)", //区域颜色
-              borderWidth: 1, //区域边框宽度
+              areaColor: "rgba(73,86,166,.2)", //区域颜色
+              borderWidth: 2, //区域边框宽度
               shadowBlur: 5,
-              shadowColor: "rgba(107,91,237,.7)",
+              shadowColor: "#70d1f3",
+              shadowOffsetY: 10,
             },
             emphasis: {
               borderColor: "#FFD1A3",
               areaColor: "rgba(102,105,240,.3)",
               borderWidth: 1,
               shadowBlur: 5,
-              shadowColor: "rgba(135,138,255,.5)",
+              shadowColor: "#70d1f3",
+              shadowOffsetY: 10,
             },
           },
         },
@@ -451,6 +453,10 @@ export default {
             zlevel: 2,
             rippleEffect: {
               brushType: "stroke",
+              color: "#ffeb3b87",
+              // brushType: "fill",
+              number: 2,
+              scale: 20,
             },
             label: {
               normal: {
@@ -463,11 +469,11 @@ export default {
                 },
               },
             },
-            symbolSize: 15,
+            symbolSize: 3,
             showEffectOn: "render",
             itemStyle: {
               normal: {
-                color: "#00eaff",
+                color: "#bfdd1d",
               },
             },
             data: coords_data,
@@ -491,13 +497,15 @@ export default {
           {
             type: "lines",
             coordinateSystem: "geo",
+            symbol: "circle",
             zlevel: 15,
             effect: {
               show: true,
+              color: "#fff93be3",
               constantSpeed: 50,
-              symbol: "arrow",
-              symbolSize: 7,
-              trailLength: 0,
+              symbol: "rect",
+              symbolSize: 4,
+              trailLength: 0.4,
             },
             lineStyle: {
               normal: {
@@ -509,17 +517,17 @@ export default {
                   [
                     {
                       offset: 0,
-                      color: "#00eaff",
+                      color: "#fff93be3",
                     },
                     {
                       offset: 1,
-                      color: "#00eaff",
+                      color: "#fff93be3",
                     },
                   ],
                   false
                 ),
-                width: 2,
-                opacity: 0.4,
+                width: 1,
+                opacity: 0.1,
                 curveness: 0.2,
               },
             },
