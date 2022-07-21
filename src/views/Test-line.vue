@@ -95,7 +95,7 @@
         </VueSeamlessScroll>
       </div>
     </div>
-    <div class="core-dynamic-content-container">
+    <!-- <div class="core-dynamic-content-container">
       <div class="scroll-wrapper" ref="scroll">
         <div class="scroll-content c1" key="1" v-if="!switcher">
           <div class="scroll-item" v-for="n in nums1" :key="n">{{ n }}</div>
@@ -107,7 +107,7 @@
         </div>
       </div>
       <button class="btn" @click="handleClick">switch content element</button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -124,6 +124,17 @@ export default {
   },
   data() {
     return {
+      color: [
+        "#5470c6",
+        "#91cc75",
+        "#fac858",
+        "#ee6666",
+        "#73c0de",
+        "#3ba272",
+        "#fc8452",
+        "#9a60b4",
+        "#ea7ccc",
+      ],
       nums1: 30,
       nums2: 60,
       switcher: false,
@@ -133,7 +144,40 @@ export default {
       table: 1,
       garbageType: 10,
       chart: null,
-      lines_coord: [],
+      lines_coord: [
+        [
+          [120.732776, 30.728946],
+          [120.842186, 30.711139],
+        ],
+        [
+          [120.902273, 30.8996],
+          [120.842186, 30.711139],
+        ],
+        [
+          [120.623277, 30.425793],
+          [120.842186, 30.711139],
+        ],
+        [
+          [120.709047, 30.764811],
+          [120.842186, 30.711139],
+        ],
+        [
+          [120.483541, 30.606055],
+          [120.842186, 30.711139],
+        ],
+        [
+          [120.929474, 30.474419],
+          [120.842186, 30.711139],
+        ],
+        [
+          [121.103, 30.61039],
+          [120.842186, 30.711139],
+        ],
+        [
+          [121.103105, 30.705649],
+          [120.842186, 30.711139],
+        ],
+      ],
       leftBottom: [
         {
           index: 1,
@@ -251,13 +295,13 @@ export default {
     },
   },
   mounted() {
-    // this.drawFeixian();
-    this.getFeixian().then(() => {
-      setTimeout(() => {
-        this.drawFeixian();
-        this.init();
-      }, 1000);
-    });
+    this.drawFeixian();
+    // this.getFeixian().then(() => {
+    //   setTimeout(() => {
+    //     this.drawFeixian();
+    //     this.init();
+    //   }, 1000);
+    // });
     // this.getWieght();
   },
   methods: {
@@ -345,15 +389,18 @@ export default {
     },
 
     drawFeixian() {
-      console.log(this.lines_coord);
       let data = yls_json;
       echarts.registerMap("yls", data);
       this.chart = echarts.init(document.getElementById("chart-box"));
       this.chart.showLoading();
       //地市取简称
-      // data.features.forEach(v => {
-      //     v.properties.name = v.properties.name.indexOf('版纳')>-1 ?v.properties.name.substr(0,4) : v.properties.name.substr(0,2);
-      // })
+      const coords_data = [];
+      data.features.forEach((v) => {
+        if (v.properties.centroid) {
+          coords_data.push(v.properties.centroid);
+        }
+        // v.properties.name = v.properties.name.indexOf('版纳')>-1 ?v.properties.name.substr(0,4) : v.properties.name.substr(0,2);
+      });
 
       const option = {
         title: {
@@ -382,7 +429,7 @@ export default {
             normal: {
               borderColor: "rgba(255,209,163, .5)", //区域边框颜色
               areaColor: "rgba(73,86,166,.1)", //区域颜色
-              borderWidth: 0.5, //区域边框宽度
+              borderWidth: 1, //区域边框宽度
               shadowBlur: 5,
               shadowColor: "rgba(107,91,237,.7)",
             },
@@ -396,34 +443,35 @@ export default {
           },
         },
         series: [
-          //   {
-          //     name: "地点",
-          //     type: "effectScatter",
-          //     coordinateSystem: "geo",
-          //     zlevel: 2,
-          //     rippleEffect: {
-          //       brushType: "stroke",
-          //     },
-          //     label: {
-          //       normal: {
-          //         show: true,
-          //         formatter: "{b}",
-          //         position: "right",
-          //         textStyle: {
-          //           color: "#fff",
-          //           fontSize: 9,
-          //         },
-          //       },
-          //     },
-          //     symbolSize: 8,
-          //     showEffectOn: "render",
-          //     itemStyle: {
-          //       normal: {
-          //         color: "#46bee9",
-          //       },
-          //     },
-          //     data: coord.slice(0, 3),
-          //   },
+          {
+            name: "地点",
+            type: "effectScatter",
+            coordinateSystem: "geo",
+            colorBy: "data",
+            zlevel: 2,
+            rippleEffect: {
+              brushType: "stroke",
+            },
+            label: {
+              normal: {
+                show: true,
+                formatter: "{b}",
+                position: "right",
+                textStyle: {
+                  color: "#fff",
+                  fontSize: 9,
+                },
+              },
+            },
+            symbolSize: 15,
+            showEffectOn: "render",
+            itemStyle: {
+              normal: {
+                color: "#00eaff",
+              },
+            },
+            data: coords_data,
+          },
           // {
           //   type: "effectScatter",
           //   coordinateSystem: "geo",
@@ -446,9 +494,9 @@ export default {
             zlevel: 15,
             effect: {
               show: true,
-              constantSpeed: 80,
-              symbol: "pin",
-              symbolSize: 10,
+              constantSpeed: 50,
+              symbol: "arrow",
+              symbolSize: 7,
               trailLength: 0,
             },
             lineStyle: {
@@ -461,18 +509,18 @@ export default {
                   [
                     {
                       offset: 0,
-                      color: "#58B3CC",
+                      color: "#00eaff",
                     },
                     {
                       offset: 1,
-                      color: "#F58158",
+                      color: "#00eaff",
                     },
                   ],
                   false
                 ),
                 width: 2,
                 opacity: 0.4,
-                curveness: 0.3,
+                curveness: 0.2,
               },
             },
             // label: {
