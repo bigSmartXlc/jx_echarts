@@ -387,21 +387,128 @@ export default {
           console.log(err);
         });
     },
-
     drawFeixian() {
       let data = yls_json;
       echarts.registerMap("yls", data);
       this.chart = echarts.init(document.getElementById("chart-box"));
       this.chart.showLoading();
       //地市取简称
+      const color = [
+        "#db1b6b",
+        "#9a1bdb",
+        "#1bdb33",
+        "#dbd51b",
+        "#e55009",
+        "#3ba272",
+        "#fc8452",
+        "#9a60b4",
+        "#ea7ccc",
+      ];
       const coords_data = [];
       data.features.forEach((v) => {
         if (v.properties.centroid) {
-          coords_data.push(v.properties.centroid);
+          coords_data.push([v.properties.centroid]);
         }
-        // v.properties.name = v.properties.name.indexOf('版纳')>-1 ?v.properties.name.substr(0,4) : v.properties.name.substr(0,2);
       });
-
+      var series = [];
+      this.lines_coord.forEach((item, index) => {
+        series.push({
+          type: "lines",
+          coordinateSystem: "geo",
+          symbol: ["none", "circle"],
+          zlevel: 15,
+          effect: {
+            show: true,
+            color: color[index % 9],
+            constantSpeed: 30,
+            symbol: "pin",
+            symbolSize: 11,
+            trailLength: 0.8,
+          },
+          lineStyle: {
+            normal: {
+              color: new echarts.graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [
+                  {
+                    offset: 0,
+                    color: color[index % 9],
+                  },
+                  {
+                    offset: 1,
+                    color: color[index % 9],
+                  },
+                ],
+                false
+              ),
+              width: 1,
+              opacity: 0.1,
+              curveness: 0.2,
+            },
+          },
+          emphasis: {
+            lineStyle: {
+              disabled: false,
+              color: "#cb7f26",
+            },
+          },
+          data: [item],
+        });
+      });
+      // coords_data.forEach((item, index) => {
+      //   series.push({
+      //     name: "地点",
+      //     type: "effectScatter",
+      //     coordinateSystem: "geo",
+      //     colorBy: "data",
+      //     zlevel: 2,
+      //     rippleEffect: {
+      //       brushType: "fill",
+      //       color: {
+      //         type: "radial",
+      //         x: 0.5,
+      //         y: 0.5,
+      //         r: 0.5,
+      //         colorStops: [
+      //           {
+      //             offset: 0,
+      //             color: "#4c502c00", // 0% 处的颜色
+      //           },
+      //           {
+      //             offset: 1,
+      //             color: color[index % 9], // 100% 处的颜色
+      //           },
+      //         ],
+      //         global: false, // 缺省为 false
+      //       },
+      //       // brushType: "fill",
+      //       number: 3,
+      //       scale: 130 + index * 20,
+      //     },
+      //     label: {
+      //       normal: {
+      //         show: true,
+      //         formatter: "{b}",
+      //         position: "right",
+      //         textStyle: {
+      //           color: "#fff",
+      //           fontSize: 9,
+      //         },
+      //       },
+      //     },
+      //     symbolSize: 1,
+      //     showEffectOn: "render",
+      //     itemStyle: {
+      //       normal: {
+      //         color: "#bfdd1d",
+      //       },
+      //     },
+      //     data: item,
+      //   });
+      // });
       const option = {
         title: {
           text: "当前位置-嘉兴市",
@@ -409,6 +516,24 @@ export default {
           textStyle: {
             color: "#fff",
           },
+        },
+        backgroundColor: {
+          type: "linear",
+          x: 0,
+          y: 0,
+          x2: 1,
+          y2: 1,
+          colorStops: [
+            {
+              offset: 0,
+              color: "#05153a", // 0% 处的颜色
+            },
+            {
+              offset: 1,
+              color: "#062959", // 100% 处的颜色
+            },
+          ],
+          globalCoord: false, // 缺省为 false
         },
         geo: {
           map: "yls",
@@ -418,7 +543,7 @@ export default {
               show: true,
               textStyle: {
                 fontSize: 12,
-                color: "#43D0D6",
+                color: "#fff",
               },
             },
             emphasis: {
@@ -427,127 +552,21 @@ export default {
           },
           itemStyle: {
             normal: {
-              borderColor: "rgba(255,209,163, .5)", //区域边框颜色
-              areaColor: "rgba(73,86,166,.2)", //区域颜色
-              borderWidth: 2, //区域边框宽度
-              shadowBlur: 5,
-              shadowColor: "#70d1f3",
-              shadowOffsetY: 10,
+              areaColor: "#21729a",
+              borderColor: "#68ebf0", //线
+              borderWidth: 0,
+              borderJoin: "round",
+              shadowColor: "rgba(18, 216, 250, 1)", //外发光
+              shadowOffsetX: -3,
+              shadowOffsetY: 5,
+              shadowBlur: 2, //图形阴影的模糊大小
             },
             emphasis: {
-              borderColor: "#FFD1A3",
-              areaColor: "rgba(102,105,240,.3)",
-              borderWidth: 1,
-              shadowBlur: 5,
-              shadowColor: "#70d1f3",
-              shadowOffsetY: 10,
+              areaColor: "#2f9eff",
             },
           },
         },
-        series: [
-          {
-            name: "地点",
-            type: "effectScatter",
-            coordinateSystem: "geo",
-            colorBy: "data",
-            zlevel: 2,
-            rippleEffect: {
-              brushType: "stroke",
-              color: "#ffeb3b87",
-              // brushType: "fill",
-              number: 2,
-              scale: 20,
-            },
-            label: {
-              normal: {
-                show: true,
-                formatter: "{b}",
-                position: "right",
-                textStyle: {
-                  color: "#fff",
-                  fontSize: 9,
-                },
-              },
-            },
-            symbolSize: 3,
-            showEffectOn: "render",
-            itemStyle: {
-              normal: {
-                color: "#bfdd1d",
-              },
-            },
-            data: coords_data,
-          },
-          // {
-          //   type: "effectScatter",
-          //   coordinateSystem: "geo",
-          //   zlevel: 15,
-          //   symbolSize: 12,
-          //   rippleEffect: {
-          //     period: 6,
-          //     brushType: "stroke",
-          //     scale: 8,
-          //   },
-          //   itemStyle: {
-          //     color: "#FF5722",
-          //     opacity: 1,
-          //   },
-          //   data: lines_coord.slice(0, 4),
-          // },
-          {
-            type: "lines",
-            coordinateSystem: "geo",
-            symbol: "circle",
-            zlevel: 15,
-            effect: {
-              show: true,
-              color: "#fff93be3",
-              constantSpeed: 50,
-              symbol: "rect",
-              symbolSize: 4,
-              trailLength: 0.4,
-            },
-            lineStyle: {
-              normal: {
-                color: new echarts.graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [
-                    {
-                      offset: 0,
-                      color: "#fff93be3",
-                    },
-                    {
-                      offset: 1,
-                      color: "#fff93be3",
-                    },
-                  ],
-                  false
-                ),
-                width: 1,
-                opacity: 0.1,
-                curveness: 0.2,
-              },
-            },
-            // label: {
-            //   show: true,
-            //   position: "middle",
-            //   formatter: (params) => {
-            //     console.log(params);
-            //     return params.data.coords[0];
-            //   },
-            // },
-            emphasis: {
-              lineStyle: {
-                disabled: false,
-                color: "#cb7f26",
-              },
-            },
-            data: this.lines_coord,
-          },
-        ],
+        series: series,
       };
       this.chart.hideLoading();
       this.chart.setOption(option);

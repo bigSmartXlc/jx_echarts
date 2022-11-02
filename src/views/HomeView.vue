@@ -232,6 +232,10 @@
 import * as echarts from "echarts";
 import VueSeamlessScroll from "vue-seamless-scroll";
 import yls_json from "./ljpt_xz.json";
+import json11 from "./mock/1.1.json";
+import json12 from "./mock/1.2.json";
+import json13 from "./mock/1.3.json";
+import json14 from "./mock/1.4.json";
 import "echarts-gl";
 // import BScroll from "@better-scroll/core";
 export default {
@@ -313,8 +317,13 @@ export default {
             this.dataList4 = res.data.result;
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          var res = json13;
+          console.log(res);
+          this.dataList1 = res.result;
+          this.dataList2 = res.result;
+          this.dataList3 = res.result;
+          this.dataList4 = res.result;
         });
     },
     //项目建设
@@ -334,7 +343,9 @@ export default {
           // this.lefttopdata = res.data.result;
         })
         .catch((err) => {
-          console.log(err);
+          var res = json12;
+          console.log(res);
+          this.leftBottom = res.result;
         });
     },
     //地图点位信息查询
@@ -366,7 +377,17 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
+          var res = json14;
+          var data = res.result;
+          data.forEach((item) => {
+            this.btnlist3.forEach((n) => {
+              if (n.rowId == item.deptId) {
+                item.deptName = n.deptName;
+              }
+            });
+          });
+          this.areaNumList = data;
+          this.map();
         });
     },
     // 规划引领
@@ -384,7 +405,8 @@ export default {
           this.lefttopdata = res.data.result;
         })
         .catch((err) => {
-          console.log(err);
+          var res = json11;
+          this.lefttopdata = res.result;
         });
     },
     right_item_click(index, item, tabContent) {

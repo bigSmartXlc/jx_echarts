@@ -125,6 +125,9 @@ import videojs from "video.js";
 import "echarts-gl";
 require("echarts/extension/bmap/bmap");
 import yls_json from "./ljpt_xz.json";
+import json321 from "./mock/3.21.json";
+import json323 from "./mock/3.23.json";
+import json325 from "./mock/3.25.json";
 export default {
   components: {
     VueDatepickerLocal,
@@ -379,9 +382,9 @@ export default {
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
           date: this.formfiled1.selectdate,
-          carId: this.formfiled.carId.toString(),
+          // carId: this.formfiled.carId.toString(),
           // date: "2022-07-01",
-          // carId: "2708",
+          carId: "2708",
         },
       })
         .then((res) => {
@@ -394,7 +397,10 @@ export default {
           this.getlineport();
         })
         .catch((err) => {
-          console.log(err);
+          var res = json325;
+          this.timelineData = res.result;
+          this.drawTimeline();
+          this.getlineport();
         });
     },
     //获取车辆组织树
@@ -408,12 +414,6 @@ export default {
         method: "post",
         url: "api/v1/jky/pjcar/pjcarTree",
         baseURL: "http://o792k95b.xiaomy.net/",
-        // data: {
-        //   lnglatTime: this.formfiled1.selectdate,
-        //   deptId: this.formfiled1.deptId,
-        //   vehicleModelList: this.formfiled1.vehicleModelList,
-        //   garbageType: this.formfiled1.garbageType,
-        // },
         headers: {
           "Content-Type": " multipart/form-data",
         },
@@ -439,8 +439,21 @@ export default {
             }
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          var result = json321.result;
+          this.area_select_data = [];
+          Object.keys(result).forEach((key) => {
+            this.arealist.forEach((n) => {
+              if (key == n.value) {
+                this.area_select_data.push({
+                  deptName: n.name,
+                  deptId: key,
+                  carStatussuc: result[key].carStatussuc,
+                  carStatustotal: result[key].carStatustotal,
+                });
+              }
+            });
+          });
         });
     },
     // 获取轨迹点 || "洒-浙FV2129"  || "2022-06-13"
@@ -453,8 +466,6 @@ export default {
       this.$http
         .post(
           `http://o792k95b.xiaomy.net/api/v1/jky/siCarTrack/getPoints2?carNum=${this.formfiled.vehicleName}&date=${this.formfiled1.selectdate}`
-          // `http://o792k95b.xiaomy.net/api/v1/jky/siCarTrack/getPoints2?carNum=浙B3P568&date=2022-07-01`
-          // params
         )
         .then((res) => {
           var guiji_data = res.data.result;
@@ -505,79 +516,63 @@ export default {
                 width: 52,
                 height: 26,
               },
-              // passOneNode: (lnglat, index, length) => {
-              //   if (index + 1 == length) {
-              //     this.CarTrack.stop();
-              //   }
-              //   //测试数据
-              //   // var data = {
-              //   //   一小区: {
-              //   //     lat: "30.75255",
-              //   //     lng: "120.81699",
-              //   //   },
-              //   //   二小区: {
-              //   //     lat: "30.78751",
-              //   //     lng: "120.79571",
-              //   //   },
-              //   //   三小区: {
-              //   //     lat: "30.79898",
-              //   //     lng: "120.78695",
-              //   //   },
-              //   //   四小区: {
-              //   //     lat: "30.80319",
-              //   //     lng: "120.7681",
-              //   //   },
-              //   //   五小区: {
-              //   //     lat: "30.80319",
-              //   //     lng: "120.74603",
-              //   //   },
-              //   // };
-              //   // const key_array = Object.keys(data);
-              //   if (this.timelineData) {
-              //     const key_array = Object.keys(this.timelineData);
-              //     var data = this.timelineData;
-              //     var fittle_area = key_array.find((item) => {
-              //       return (
-              //         data[item].lng == lnglat.lng &&
-              //         data[item].lat == lnglat.lat
-              //       );
-              //     });
-              //     if (fittle_area) {
-              //       var marker = new T.Marker(
-              //         new T.LngLat(data[fittle_area].lng, data[fittle_area].lat)
-              //       ); // 创建标注
-              //       // var marker = new T.Circle(
-              //       //   new T.LngLat(data[fittle_area].lng, data[fittle_area].lat),
-              //       //   100,
-              //       //   {
-              //       //     color: "#f70404",
-              //       //     weight:30,
-              //       //     fillColor: "f70404",
-              //       //     fillOpacity: 0,
-              //       //   }
-              //       // ); // 创建标注
-              //       this.tMap.addOverLay(marker); // 将标注添加到地图中
-              //       var label = new T.Label({
-              //         text: fittle_area,
-              //         position: new T.LngLat(
-              //           data[fittle_area].lng,
-              //           data[fittle_area].lat
-              //         ),
-              //         offset: new T.Point(3, -30),
-              //       });
-              //       //创建地图文本对象
-              //       this.tMap.addOverLay(label);
-              //     }
-              //   }
-              // },
             });
             this.CarTrack.start();
           } else {
             console.log("暂无轨迹数据");
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          var guiji_data = json323.result;
+          var path = [];
+          guiji_data.forEach((item, index) => {
+            if (index < guiji_data.length - 1) {
+              if (
+                item[0] != guiji_data[index + 1][0] ||
+                item[1] != guiji_data[index + 1][1]
+              ) {
+                path.push({ lng: item[0], lat: item[1] });
+              }
+            }
+          });
+          console.log(guiji_data);
+          var point = [];
+          for (var i = 0; i < path.length; i++) {
+            var poi = new T.LngLat(path[i].lng, path[i].lat);
+            point.push(poi);
+          }
+          //测试画点
+          if (this.timelineData) {
+            const key_array = Object.keys(this.timelineData);
+            var data = this.timelineData;
+            key_array.forEach((item) => {
+              var marker = new T.Marker(
+                new T.LngLat(data[item].lng, data[item].lat)
+              ); // 创建标注
+              this.tMap.addOverLay(marker); // 将标注添加到地图中
+              var label = new T.Label({
+                text: item,
+                position: new T.LngLat(data[item].lng, data[item].lat),
+                offset: new T.Point(3, -30),
+              });
+              //创建地图文本对象
+              this.tMap.addOverLay(label);
+            });
+          }
+          //移动轨迹
+          this.CarTrack = new T.CarTrack(this.tMap, {
+            interval: 20,
+            speed: 10,
+            dynamicLine: false,
+            polylinestyle: { color: "#49d68f", weight: 5, opacity: 1 },
+            Datas: point,
+            carstyle: {
+              iconUrl: "car.png",
+              width: 52,
+              height: 26,
+            },
+          });
+          this.CarTrack.start();
         });
     },
     //获取汽车实时画面
@@ -740,12 +735,13 @@ export default {
             // this.drawFeixian();
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          this.carlist.push({ vehicleName: "测试", flag: 0 });
         });
     },
     drawTimeline() {
       const data = Object.keys(this.timelineData);
+      console.log(data);
       const data1 = [];
       data.forEach((item) => {
         data1.push(this.timelineData[item].sum);

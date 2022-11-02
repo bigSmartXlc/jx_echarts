@@ -313,6 +313,12 @@ import "echarts-gl";
 import yls_json from "./ljpt_xz.json";
 import VueSeamlessScroll from "vue-seamless-scroll";
 import { delObjectKey } from "@/utils/delObjectKey.js";
+import json51 from "./mock/5.1.json";
+import json52 from "./mock/5.2.json";
+import json53 from "./mock/5.3.json";
+import json55 from "./mock/5.5.json";
+import json542 from "./mock/5.42.json";
+import json543 from "./mock/5.43.json";
 export default {
   components: {
     VueSeamlessScroll,
@@ -630,7 +636,9 @@ export default {
           this.redList = res.data.result.redList;
         })
         .catch((err) => {
-          console.log(err);
+          var res = json52;
+          this.blackList = res.result.blackList;
+          this.redList = res.result.redList;
         });
     },
     //日期月份转换
@@ -665,7 +673,8 @@ export default {
           this.leftdivdata = res.data.result;
         })
         .catch((err) => {
-          console.log(err);
+          var res = json55;
+          this.leftdivdata = res.result;
         });
     },
     getSanlv() {
@@ -685,8 +694,12 @@ export default {
           this.sanlv.joinRate = Math.floor(joinRate * 100);
           this.sanlv.rightRate = Math.floor(rightRate * 100);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          var res = json53;
+          const { knowRate, joinRate, rightRate } = res.result;
+          this.sanlv.knowRate = Math.floor(knowRate * 100);
+          this.sanlv.joinRate = Math.floor(joinRate * 100);
+          this.sanlv.rightRate = Math.floor(rightRate * 100);
         });
     },
     getWeight(val = "", id = "leftbar") {
@@ -719,8 +732,19 @@ export default {
             this.leftbar();
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          var res = json51;
+          this.grabge.weight = [];
+          this.grabge.lastYearMonthWeight = [];
+          this.grabge.tong = [];
+          this.grabge.deptName = [];
+          res.result.weightList.forEach((item) => {
+            this.grabge.deptName.push(item.weightMonth);
+            this.grabge.weight.push(item.weight);
+            this.grabge.lastYearMonthWeight.push(item.lastYearMonthWeight);
+            this.grabge.tong.push(item.tong);
+          });
+          this.leftbar();
         });
     },
     getEvaluation(url, data, type, id = "rightline") {
@@ -746,8 +770,12 @@ export default {
             console.log(res.data);
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          if (type == 20) {
+            this.rightline(json542.result, type);
+          } else if (type == 1 || type == 2 || type == 3) {
+            this.rightline(json543.result, type);
+          }
         });
     },
     rightline(result, type) {

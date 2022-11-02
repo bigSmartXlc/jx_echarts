@@ -335,6 +335,12 @@
 import VueSeamlessScroll from "vue-seamless-scroll";
 import yls_json from "./ljpt_xz.json";
 import videojs from "video.js";
+import json11 from "./mock/1.1.json";
+import json12 from "./mock/1.2.json";
+import json13 from "./mock/1.3.json";
+import json14 from "./mock/1.4.json";
+import json15 from "./mock/1.5.json";
+import json151 from "./mock/1.51.json";
 export default {
   components: {
     VueSeamlessScroll,
@@ -485,7 +491,6 @@ export default {
         baseURL: "http://o792k95b.xiaomy.net/",
         data: {
           villageId: this.villageId,
-          // villageId: "400211963",
         },
       })
         .then((res) => {
@@ -493,7 +498,9 @@ export default {
           Object.assign(this.init_info, res.data.result);
         })
         .catch((err) => {
-          console.log(err);
+          var res = json151;
+          this.init_info = JSON.parse(JSON.stringify(this.info_object));
+          Object.assign(this.init_info, res.result);
         });
     },
     //现场图片
@@ -580,7 +587,12 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
+          var res = json13;
+          console.log(res);
+          this.dataList1 = res.result;
+          this.dataList2 = res.result;
+          this.dataList3 = res.result;
+          this.dataList4 = res.result;
         });
     },
     //项目建设
@@ -601,7 +613,9 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
+          var res = json12;
+          console.log(res);
+          this.leftBottom = res.result;
         });
     },
     // 规划引领
@@ -621,7 +635,8 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
+          var res = json11;
+          this.lefttopdata = res.result;
         });
     },
     //切换tab
@@ -657,7 +672,8 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
+          var res = json15;
+          this.drawPoint(res.result);
         });
     },
     // 天地图添加标记并绑定点击事件

@@ -316,6 +316,12 @@ import yls_json from "./ljpt_xz.json";
 import "echarts-gl";
 import VueSeamlessScroll from "vue-seamless-scroll";
 import { delObjectKey } from "@/utils/delObjectKey.js";
+import json51 from "./mock/5.1.json";
+import json52 from "./mock/5.2.json";
+import json53 from "./mock/5.3.json";
+import json55 from "./mock/5.5.json";
+import json542 from "./mock/5.42.json";
+import json543 from "./mock/5.43.json";
 export default {
   components: {
     VueSeamlessScroll,
@@ -728,8 +734,10 @@ export default {
           this.blackList = res.data.result.blackList;
           this.redList = res.data.result.redList;
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          var res = json52;
+          this.blackList = res.result.blackList;
+          this.redList = res.result.redList;
         });
     },
     //日期月份转换
@@ -766,8 +774,9 @@ export default {
         .then((res) => {
           this.leftdivdata = res.data.result;
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          var res = json55;
+          this.leftdivdata = res.result;
         });
     },
     getSanlv() {
@@ -787,27 +796,18 @@ export default {
           this.sanlv.joinRate = Math.floor(joinRate * 100);
           this.sanlv.rightRate = Math.floor(rightRate * 100);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          var res = json53;
+          const { knowRate, joinRate, rightRate } = res.result;
+          this.sanlv.knowRate = Math.floor(knowRate * 100);
+          this.sanlv.joinRate = Math.floor(joinRate * 100);
+          this.sanlv.rightRate = Math.floor(rightRate * 100);
         });
     },
     getWeight(val = "", id = "leftbar") {
       var chartDom = document.getElementById(id);
       this.leftChart = echarts.init(chartDom);
       this.leftChart.showLoading();
-      // this.$http({
-      //   method: "post",
-      //   url: "api/v1/jky/DwWeightCarMonthWeight/deptMonthWeight2",
-      //   baseURL: "http://o792k95b.xiaomy.net/",
-      //   data: {
-      //     // 测试数据
-      //     // deptId: "400000000",
-      //     // deptIdEnd: "499999999",
-      //     deptId: this.formfiled.deptId.toString(),
-      //     deptIdEnd: this.formfiled.deptIdEnd.toString(),
-      //     garbageType: val,
-      //   },
-      // })
       var data = {
         deptId: this.formfiled.deptId.toString(),
         deptIdEnd: this.formfiled.deptIdEnd.toString(),
@@ -834,8 +834,19 @@ export default {
             this.leftbar();
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          var res = json51;
+          this.grabge.weight = [];
+          this.grabge.lastYearMonthWeight = [];
+          this.grabge.tong = [];
+          this.grabge.deptName = [];
+          res.result.weightList.forEach((item) => {
+            this.grabge.deptName.push(item.weightMonth);
+            this.grabge.weight.push(item.weight);
+            this.grabge.lastYearMonthWeight.push(item.lastYearMonthWeight);
+            this.grabge.tong.push(item.tong);
+          });
+          this.leftbar();
         });
     },
     getEvaluation(url, data, type, id = "rightline") {
@@ -861,8 +872,12 @@ export default {
             console.log(res.data);
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          if (type == 20) {
+            this.rightline(json542.result, type);
+          } else if (type == 1 || type == 2 || type == 3) {
+            this.rightline(json543.result, type);
+          }
         });
     },
     rightline(result, type) {
