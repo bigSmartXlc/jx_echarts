@@ -46,14 +46,14 @@ export default {
       //   })
       // ),
     });
-    // viewer.imageryLayers.addImageryProvider(
-    //   new Cesium.UrlTemplateImageryProvider({
-    //     //调用天地图矢量地图中文注记服务
-    //     url: "http://t0.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=5805c29bcd848140544fb2bcc8390889",
-    //     minimumLevel: 1,
-    //     maximumLevel: 18,
-    //   })
-    // );
+    viewer.imageryLayers.addImageryProvider(
+      new Cesium.UrlTemplateImageryProvider({
+        //调用天地图矢量地图中文注记服务
+        url: "http://t0.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=5805c29bcd848140544fb2bcc8390889",
+        minimumLevel: 1,
+        maximumLevel: 18,
+      })
+    );
     this.addWorldTerrainAsync(viewer);
   },
   methods: {
