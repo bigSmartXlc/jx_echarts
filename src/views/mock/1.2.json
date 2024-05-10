@@ -1,1 +1,43 @@
-{"code":"0","message":"请求成功","result":[{"projectValue":20,"projectValue2":10,"completionSchedule":"50.00%","projectName":"嘉兴秀洲高照街道"},{"projectValue":18,"projectValue2":7,"completionSchedule":"38.89%","projectName":"嘉兴秀洲高新区"},{"projectValue":12,"projectValue2":8,"completionSchedule":"66.67%","projectName":"嘉兴南湖建设街道"},{"projectValue":18,"projectValue2":7,"completionSchedule":"38.89%","projectName":"嘉兴南湖解放街道"},{"projectValue":16,"projectValue2":10,"completionSchedule":"62.50%","projectName":"嘉兴南湖新嘉街道"},{"projectValue":13,"projectValue2":10,"completionSchedule":"76.92%","projectName":"嘉兴南湖南湖街道"}],"timeStamp":1657164305708}
+{
+    "code": "0",
+    "message": "请求成功",
+    "result": [
+        {
+            "projectValue": 20,
+            "projectValue2": 10,
+            "completionSchedule": "50.00%",
+            "projectName": "嘉兴秀洲高照街道"
+        },
+        {
+            "projectValue": 18,
+            "projectValue2": 7,
+            "completionSchedule": "38.89%",
+            "projectName": "嘉兴秀洲高新区"
+        },
+        {
+            "projectValue": 12,
+            "projectValue2": 8,
+            "completionSchedule": "66.67%",
+            "projectName": "嘉兴南湖建设街道"
+        },
+        {
+            "projectValue": 18,
+            "projectValue2": 7,
+            "completionSchedule": "38.89%",
+            "projectName": "嘉兴南湖解放街道"
+        },
+        {
+            "projectValue": 16,
+            "projectValue2": 10,
+            "completionSchedule": "62.50%",
+            "projectName": "嘉兴南湖新嘉街道"
+        },
+        {
+            "projectValue": 13,
+            "projectValue2": 10,
+            "completionSchedule": "76.92%",
+            "projectName": "嘉兴南湖南湖街道"
+        }
+    ],
+    "timeStamp": 1657164305708
+}

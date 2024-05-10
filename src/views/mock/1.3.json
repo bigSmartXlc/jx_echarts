@@ -1,1 +1,229 @@
-{"code":"0","message":"请求成功","result":[{"projectType":"100","projectName":"生活垃圾投放点","projectValueTotal":5563,"groupCode":"1"},{"projectType":"1002","projectName":"劝导员","projectValueTotal":350,"groupCode":"pest_code"},{"projectType":"1503","projectName":"注册户数","projectValueTotal":88888,"groupCode":"bigscreen"},{"projectType":"109","projectName":"回收分拣中心","projectValueTotal":505,"groupCode":"1"},{"projectType":"107","projectName":"银行","projectValueTotal":578,"groupCode":"place_type"},{"projectType":"1103","projectName":"小绿桶示范小区","projectValueTotal":52,"groupCode":"12"},{"projectType":"1102","projectName":"高标准示范小区","projectValueTotal":30,"groupCode":"12"},{"projectType":"1101","projectName":"一般小区","projectValueTotal":198,"groupCode":"12"},{"projectType":"1100","projectName":"定时定点小区","projectValueTotal":2509,"groupCode":"12"},{"projectType":"102","projectName":"机关单位","projectValueTotal":1307,"groupCode":"place_type"},{"projectType":"103","projectName":"社团组织","projectValueTotal":302,"groupCode":"place_type"},{"projectType":"104","projectName":"规模以上企业","projectValueTotal":3486,"groupCode":"place_type"},{"projectType":"105","projectName":"中小企业","projectValueTotal":18219,"groupCode":"place_type"},{"projectType":"106","projectName":"沿街商铺","projectValueTotal":46158,"groupCode":"place_type"},{"projectType":"108","projectName":"办事窗口","projectValueTotal":525,"groupCode":"place_type"},{"projectType":"110","projectName":"学校","projectValueTotal":758,"groupCode":"place_type"},{"projectType":"111","projectName":"展馆类","projectValueTotal":67,"groupCode":"place_type"},{"projectType":"112","projectName":"车站","projectValueTotal":48,"groupCode":"place_type"},{"projectType":"113","projectName":"体育场馆","projectValueTotal":28,"groupCode":"place_type"},{"projectType":"114","projectName":"演出场馆","projectValueTotal":24,"groupCode":"place_type"},{"projectType":"115","projectName":"图书馆","projectValueTotal":73,"groupCode":"place_type"},{"projectType":"116","projectName":"购物中心","projectValueTotal":700,"groupCode":"place_type"},{"projectType":"117","projectName":"商场超市","projectValueTotal":597,"groupCode":"place_type"},{"projectType":"118","projectName":"餐饮服务业","projectValueTotal":7690,"groupCode":"place_type"},{"projectType":"119","projectName":"娱乐场所","projectValueTotal":920,"groupCode":"place_type"},{"projectType":"120","projectName":"专业市场","projectValueTotal":819,"groupCode":"place_type"},{"projectType":"121","projectName":"农贸市场","projectValueTotal":568,"groupCode":"place_type"},{"projectType":"122","projectName":"商用写字楼","projectValueTotal":790,"groupCode":"place_type"},{"projectType":"123","projectName":"物流","projectValueTotal":172,"groupCode":"place_type"},{"projectType":"124","projectName":"快递站","projectValueTotal":257,"groupCode":"place_type"},{"projectType":"125","projectName":"广场","projectValueTotal":64,"groupCode":"place_type"},{"projectType":"126","projectName":"公园景点","projectValueTotal":160,"groupCode":"place_type"},{"projectType":"127","projectName":"码头","projectValueTotal":63,"groupCode":"7"},{"projectType":"128","projectName":"宗教","projectValueTotal":93,"groupCode":"place_type"},{"projectType":"129","projectName":"加油站","projectValueTotal":196,"groupCode":"place_type"},{"projectType":"130","projectName":"道路","projectValueTotal":1079,"groupCode":"place_type"},{"projectType":"131","projectName":"果壳箱","projectValueTotal":0,"groupCode":"place_type"}],"timeStamp":1657164334682}
+{
+    "code": "0",
+    "message": "请求成功",
+    "result": [
+        {
+            "projectType": "100",
+            "projectName": "生活垃圾投放点",
+            "projectValueTotal": 5563,
+            "groupCode": "1"
+        },
+        {
+            "projectType": "1002",
+            "projectName": "劝导员",
+            "projectValueTotal": 350,
+            "groupCode": "pest_code"
+        },
+        {
+            "projectType": "1503",
+            "projectName": "注册户数",
+            "projectValueTotal": 88888,
+            "groupCode": "bigscreen"
+        },
+        {
+            "projectType": "109",
+            "projectName": "回收分拣中心",
+            "projectValueTotal": 505,
+            "groupCode": "1"
+        },
+        {
+            "projectType": "107",
+            "projectName": "银行",
+            "projectValueTotal": 578,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "1103",
+            "projectName": "小绿桶示范小区",
+            "projectValueTotal": 52,
+            "groupCode": "12"
+        },
+        {
+            "projectType": "1102",
+            "projectName": "高标准示范小区",
+            "projectValueTotal": 30,
+            "groupCode": "12"
+        },
+        {
+            "projectType": "1101",
+            "projectName": "一般小区",
+            "projectValueTotal": 198,
+            "groupCode": "12"
+        },
+        {
+            "projectType": "1100",
+            "projectName": "定时定点小区",
+            "projectValueTotal": 2509,
+            "groupCode": "12"
+        },
+        {
+            "projectType": "102",
+            "projectName": "机关单位",
+            "projectValueTotal": 1307,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "103",
+            "projectName": "社团组织",
+            "projectValueTotal": 302,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "104",
+            "projectName": "规模以上企业",
+            "projectValueTotal": 3486,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "105",
+            "projectName": "中小企业",
+            "projectValueTotal": 18219,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "106",
+            "projectName": "沿街商铺",
+            "projectValueTotal": 46158,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "108",
+            "projectName": "办事窗口",
+            "projectValueTotal": 525,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "110",
+            "projectName": "学校",
+            "projectValueTotal": 758,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "111",
+            "projectName": "展馆类",
+            "projectValueTotal": 67,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "112",
+            "projectName": "车站",
+            "projectValueTotal": 48,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "113",
+            "projectName": "体育场馆",
+            "projectValueTotal": 28,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "114",
+            "projectName": "演出场馆",
+            "projectValueTotal": 24,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "115",
+            "projectName": "图书馆",
+            "projectValueTotal": 73,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "116",
+            "projectName": "购物中心",
+            "projectValueTotal": 700,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "117",
+            "projectName": "商场超市",
+            "projectValueTotal": 597,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "118",
+            "projectName": "餐饮服务业",
+            "projectValueTotal": 7690,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "119",
+            "projectName": "娱乐场所",
+            "projectValueTotal": 920,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "120",
+            "projectName": "专业市场",
+            "projectValueTotal": 819,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "121",
+            "projectName": "农贸市场",
+            "projectValueTotal": 568,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "122",
+            "projectName": "商用写字楼",
+            "projectValueTotal": 790,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "123",
+            "projectName": "物流",
+            "projectValueTotal": 172,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "124",
+            "projectName": "快递站",
+            "projectValueTotal": 257,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "125",
+            "projectName": "广场",
+            "projectValueTotal": 64,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "126",
+            "projectName": "公园景点",
+            "projectValueTotal": 160,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "127",
+            "projectName": "码头",
+            "projectValueTotal": 63,
+            "groupCode": "7"
+        },
+        {
+            "projectType": "128",
+            "projectName": "宗教",
+            "projectValueTotal": 93,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "129",
+            "projectName": "加油站",
+            "projectValueTotal": 196,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "130",
+            "projectName": "道路",
+            "projectValueTotal": 1079,
+            "groupCode": "place_type"
+        },
+        {
+            "projectType": "131",
+            "projectName": "果壳箱",
+            "projectValueTotal": 0,
+            "groupCode": "place_type"
+        }
+    ],
+    "timeStamp": 1657164334682
+}

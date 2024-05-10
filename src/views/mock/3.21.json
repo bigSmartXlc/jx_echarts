@@ -1,1 +1,57 @@
-{"code":"0","message":"请求成功","result":{"410000000":{"carStatusfail":161,"carStatussuc":0,"carStatustotal":161},"420000000":{"carStatusfail":589,"carStatussuc":0,"carStatustotal":589},"480000000":{"carStatusfail":253,"carStatussuc":0,"carStatustotal":253},"430000000":{"carStatusfail":331,"carStatussuc":0,"carStatustotal":331},"460000000":{"carStatusfail":291,"carStatussuc":0,"carStatustotal":291},"440000000":{"carStatusfail":109,"carStatussuc":0,"carStatustotal":109},"450000000":{"carStatusfail":182,"carStatussuc":0,"carStatustotal":182},"470000000":{"carStatusfail":39,"carStatussuc":0,"carStatustotal":39},"490000000":{"carStatusfail":33,"carStatussuc":0,"carStatustotal":33},"400000000":{"carStatusfail":1988,"carStatussuc":0,"carStatustotal":1988}},"timeStamp":1657166056768}
+{
+    "code": "0",
+    "message": "请求成功",
+    "result": {
+        "410000000": {
+            "carStatusfail": 161,
+            "carStatussuc": 0,
+            "carStatustotal": 161
+        },
+        "420000000": {
+            "carStatusfail": 589,
+            "carStatussuc": 0,
+            "carStatustotal": 589
+        },
+        "480000000": {
+            "carStatusfail": 253,
+            "carStatussuc": 0,
+            "carStatustotal": 253
+        },
+        "430000000": {
+            "carStatusfail": 331,
+            "carStatussuc": 0,
+            "carStatustotal": 331
+        },
+        "460000000": {
+            "carStatusfail": 291,
+            "carStatussuc": 0,
+            "carStatustotal": 291
+        },
+        "440000000": {
+            "carStatusfail": 109,
+            "carStatussuc": 0,
+            "carStatustotal": 109
+        },
+        "450000000": {
+            "carStatusfail": 182,
+            "carStatussuc": 0,
+            "carStatustotal": 182
+        },
+        "470000000": {
+            "carStatusfail": 39,
+            "carStatussuc": 0,
+            "carStatustotal": 39
+        },
+        "490000000": {
+            "carStatusfail": 33,
+            "carStatussuc": 0,
+            "carStatustotal": 33
+        },
+        "400000000": {
+            "carStatusfail": 1988,
+            "carStatussuc": 0,
+            "carStatustotal": 1988
+        }
+    },
+    "timeStamp": 1657166056768
+}

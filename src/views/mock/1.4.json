@@ -1,1 +1,106 @@
-{"code":"0","message":"请求成功","result":[{"deptId":410000000,"parentId":0,"projectName":"","projectType":"","projectValue":1379,"projectValue2":0,"rowId":0,"state":0,"status":0},{"deptId":420000000,"parentId":0,"projectName":"","projectType":"","projectValue":745,"projectValue2":0,"rowId":0,"state":0,"status":0},{"deptId":430000000,"parentId":0,"projectName":"","projectType":"","projectValue":526,"projectValue2":0,"rowId":0,"state":0,"status":0},{"deptId":440000000,"parentId":0,"projectName":"","projectType":"","projectValue":410,"projectValue2":0,"rowId":0,"state":0,"status":0},{"deptId":450000000,"parentId":0,"projectName":"","projectType":"","projectValue":513,"projectValue2":0,"rowId":0,"state":0,"status":0},{"deptId":470000000,"parentId":0,"projectName":"","projectType":"","projectValue":312,"projectValue2":0,"rowId":0,"state":0,"status":0},{"deptId":480000000,"parentId":0,"projectName":"","projectType":"","projectValue":916,"projectValue2":0,"rowId":0,"state":0,"status":0},{"deptId":490000000,"parentId":0,"projectName":"","projectType":"","projectValue":148,"projectValue2":0,"rowId":0,"state":0,"status":0},{"deptId":460000000,"parentId":0,"projectName":"","projectType":"","projectValue":614,"projectValue2":0,"rowId":0,"state":0,"status":0}],"timeStamp":1657164659786}
+{
+    "code": "0",
+    "message": "请求成功",
+    "result": [
+        {
+            "deptId": 410000000,
+            "parentId": 0,
+            "projectName": "",
+            "projectType": "",
+            "projectValue": 1379,
+            "projectValue2": 0,
+            "rowId": 0,
+            "state": 0,
+            "status": 0
+        },
+        {
+            "deptId": 420000000,
+            "parentId": 0,
+            "projectName": "",
+            "projectType": "",
+            "projectValue": 745,
+            "projectValue2": 0,
+            "rowId": 0,
+            "state": 0,
+            "status": 0
+        },
+        {
+            "deptId": 430000000,
+            "parentId": 0,
+            "projectName": "",
+            "projectType": "",
+            "projectValue": 526,
+            "projectValue2": 0,
+            "rowId": 0,
+            "state": 0,
+            "status": 0
+        },
+        {
+            "deptId": 440000000,
+            "parentId": 0,
+            "projectName": "",
+            "projectType": "",
+            "projectValue": 410,
+            "projectValue2": 0,
+            "rowId": 0,
+            "state": 0,
+            "status": 0
+        },
+        {
+            "deptId": 450000000,
+            "parentId": 0,
+            "projectName": "",
+            "projectType": "",
+            "projectValue": 513,
+            "projectValue2": 0,
+            "rowId": 0,
+            "state": 0,
+            "status": 0
+        },
+        {
+            "deptId": 470000000,
+            "parentId": 0,
+            "projectName": "",
+            "projectType": "",
+            "projectValue": 312,
+            "projectValue2": 0,
+            "rowId": 0,
+            "state": 0,
+            "status": 0
+        },
+        {
+            "deptId": 480000000,
+            "parentId": 0,
+            "projectName": "",
+            "projectType": "",
+            "projectValue": 916,
+            "projectValue2": 0,
+            "rowId": 0,
+            "state": 0,
+            "status": 0
+        },
+        {
+            "deptId": 490000000,
+            "parentId": 0,
+            "projectName": "",
+            "projectType": "",
+            "projectValue": 148,
+            "projectValue2": 0,
+            "rowId": 0,
+            "state": 0,
+            "status": 0
+        },
+        {
+            "deptId": 460000000,
+            "parentId": 0,
+            "projectName": "",
+            "projectType": "",
+            "projectValue": 614,
+            "projectValue2": 0,
+            "rowId": 0,
+            "state": 0,
+            "status": 0
+        }
+    ],
+    "timeStamp": 1657164659786
+}
